@@ -19,6 +19,12 @@ The one thing that does act for you is auto-RTP, which repeats the single comman
 you configured at the interval you chose. Whether that is allowed differs per
 server; on DonutSMP it is. Check your server's rules.
 
+![The all-sessions map](docs/img/map-all-sessions.png)
+
+*Every landing ever recorded, over DonutSMP's grid of 81 server cells. The
+board bottom left tracks which cells have been reached, the red leg points at
+the newest landing, and the open menu filters by biome.*
+
 ## Contents
 
 - [Requirements](#requirements)
@@ -379,6 +385,17 @@ nothing on screen to tell them apart. Measuring the distance to the nearest
 landing turns the absence itself into a value that can be shaded, ranked and read
 off.
 
+![The gap field under the 5k scale](docs/img/gap-map-field.png)
+
+*Under the 5k scale: shaded by distance to the nearest landing, dark where they
+are dense, amber where nothing has ever come up. The eight biggest holes are
+ringed and listed with their coordinates.*
+
+![The gap tiles past the 5k scale](docs/img/gap-map-tiles.png)
+
+*Past it: the same ground cut into fixed world tiles, each carrying its own
+landing count.*
+
 Two pictures, one measurement. Up to the 5k scale the field is shaded, because
 close in a hole is a shape with edges. Past 5k the same ground is cut into fixed
 world tiles carrying their own landing count in four bands - none, one, two to
@@ -511,6 +528,10 @@ another server cell. A repaint measures under 3 ms with two thousand landings on
 it. What is redrawn per frame is your marker, up to sixteen cell numbers and the
 caption — some fifty rectangles, about what one vanilla HUD widget costs.
 
+![The minimap's content switches](docs/img/settings-minimap.png)
+
+*What the plate draws is switched row by row under **Settings → HUD**.*
+
 Its position works exactly like the text overlay's: **Settings → HUD → Place the
 overlays** puts both boxes on the running game to be dragged, `Tab` switches
 between them, and each is stored as a corner plus an offset so it stays put
@@ -559,6 +580,16 @@ a reason to stop because the run found what it was sent out for. Under
 - **Target point and radius** - stop within so many blocks of a coordinate;
   **Target = my position** fills it in from where you stand.
 
+![The Auto-RTP tab](docs/img/settings-auto-rtp.png)
+
+*The Auto-RTP tab with the search order still off: the run stops only for the
+usual reasons.*
+
+![The search order switched on](docs/img/settings-search-order.png)
+
+*Switched on, every condition is available. The red frame is drawn on the
+screenshot, not by the mod.*
+
 **Combine** decides whether one satisfied condition is enough or all of them
 have to hold at once, and **Give up after** ends a run that has turned down that
 many landings - without it a search order for a rare target runs until something
@@ -577,6 +608,13 @@ a biome the search has never reached. Several may be ticked at once, in one
 family or across many, and the menu stays open while they are. That is the
 difference between hunting for "something rare" and hunting for the Pale
 Garden.
+
+![The biome picker](docs/img/settings-biome-picker.png)
+
+*The `Rare` family opened, with the German interface the mod ships with:
+**Blasser Garten** has been landed in once, **Pilzland** five times,
+**Kirschberghain** ten. The line at the bottom names everything the run will
+stop on.*
 
 ### Biome colours and filters
 
