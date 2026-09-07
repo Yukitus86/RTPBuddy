@@ -385,16 +385,16 @@ nothing on screen to tell them apart. Measuring the distance to the nearest
 landing turns the absence itself into a value that can be shaded, ranked and read
 off.
 
-![The gap field under the 5k scale](docs/img/gap-map-field.png)
-
-*Under the 5k scale: shaded by distance to the nearest landing, dark where they
-are dense, amber where nothing has ever come up. The eight biggest holes are
-ringed and listed with their coordinates.*
-
 ![The gap tiles past the 5k scale](docs/img/gap-map-tiles.png)
 
-*Past it: the same ground cut into fixed world tiles, each carrying its own
-landing count.*
+*Zoomed out past the 5k scale: the ground is cut into fixed world tiles, each
+carrying its own landing count in four bands.*
+
+![The gap field under the 5k scale](docs/img/gap-map-field.png)
+
+*Zoomed in under it: the field itself is shaded by distance to the nearest
+landing, dark where they are dense, amber where nothing has ever come up. The
+eight biggest holes are ringed and listed with their coordinates.*
 
 Two pictures, one measurement. Up to the 5k scale the field is shaded, because
 close in a hole is a shape with edges. Past 5k the same ground is cut into fixed
