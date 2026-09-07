@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "rtpbuddy",
+  "version": "${version}",
+  "name": "RTPBuddy",
+  "description": "Client-side random-teleport mapper. Records every RTP landing and draws a highly detailed session map plus an aggregated all-session map, with an optional auto-RTP loop that is off until you start it by hand.",
+  "authors": [
+    "RTPBuddy contributors"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/rtpbuddy/icon.png",
+  "environment": "client",
+  "mixins": [
+    {
+      "config": "rtpbuddy.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "entrypoints": {
+    "client": [
+      "dev.rtpbuddy.RTPBuddyClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

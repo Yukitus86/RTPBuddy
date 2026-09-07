@@ -1,0 +1,74 @@
+[
+  {
+    "id": "overworld",
+    "label": "Overworld",
+    "commandPattern": "^(rtp|wild|wilderness)( +(overworld|ow))? *$",
+    "command": "rtp",
+    "dimension": "minecraft:overworld",
+    "color": -13260212
+  },
+  {
+    "id": "nether",
+    "label": "Nether",
+    "commandPattern": "^(rtp|wild|wilderness) +(nether|hell) *$",
+    "command": "rtp nether",
+    "dimension": "minecraft:the_nether",
+    "color": -3070404
+  },
+  {
+    "id": "end",
+    "label": "The End",
+    "commandPattern": "^(rtp|wild|wilderness) +(end|the_end) *$",
+    "command": "rtp end",
+    "dimension": "minecraft:the_end",
+    "color": -5231181
+  },
+  {
+    "id": "asia",
+    "label": "Asia",
+    "commandPattern": "^(rtp|wild|wilderness) +asia *$",
+    "command": "rtp asia",
+    "dimension": "minecraft:overworld",
+    "color": -9091112
+  },
+  {
+    "id": "na_east",
+    "label": "NA East",
+    "commandPattern": "^(rtp|wild|wilderness) +(na +)?east *$",
+    "command": "rtp east",
+    "dimension": "minecraft:overworld",
+    "color": -2598108
+  },
+  {
+    "id": "na_west",
+    "label": "NA West",
+    "commandPattern": "^(rtp|wild|wilderness) +(na +)?west *$",
+    "command": "rtp west",
+    "dimension": "minecraft:overworld",
+    "color": -2250446
+  },
+  {
+    "id": "eu_central",
+    "label": "EU Central",
+    "commandPattern": "^(rtp|wild|wilderness) +eu[ _]+central *$",
+    "command": "rtp eu central",
+    "dimension": "minecraft:overworld",
+    "color": -13338412
+  },
+  {
+    "id": "eu_west",
+    "label": "EU West",
+    "commandPattern": "^(rtp|wild|wilderness) +eu[ _]+west *$",
+    "command": "rtp eu west",
+    "dimension": "minecraft:overworld",
+    "color": -12605875
+  },
+  {
+    "id": "oceania",
+    "label": "Oceania",
+    "commandPattern": "^(rtp|wild|wilderness) +oceania *$",
+    "command": "rtp oceania",
+    "dimension": "minecraft:overworld",
+    "color": -3382693
+  }
+]

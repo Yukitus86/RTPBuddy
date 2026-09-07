@@ -1,0 +1,1566 @@
+<title>RTPBuddy Release Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* Same tokens as RTPBuddy-Settings.html: these notes are part of the
+     same product and must not read as a different program. Three semantic
+     hues are added on top, one per kind of change, kept apart from the accent. */
+  :root {
+    --ground:      #F4F6F8;
+    --surface:     #FFFFFF;
+    --surface-alt: #EDF1F5;
+    --line:        #D8DFE7;
+    --line-soft:   #E6EBF0;
+    --ink:         #161A20;
+    --ink-soft:    #414B58;
+    --ink-mute:    #6B7787;
+    --accent:      #17628F;
+    --accent-soft: #E3F0F8;
+    --mono-bg:     #EEF2F6;
+    --shadow:      0 1px 2px rgba(22, 26, 32, .06), 0 8px 24px -18px rgba(22, 26, 32, .5);
+
+    --tag-new:       #146A47;
+    --tag-new-bg:    #E1F2EA;
+    --tag-new-line:  #A9D8C2;
+    --tag-chg:       #17628F;
+    --tag-chg-bg:    #E3F0F8;
+    --tag-chg-line:  #A9CFE5;
+    --tag-fix:       #8A5A00;
+    --tag-fix-bg:    #F8EFDC;
+    --tag-fix-line:  #E0BE72;
+    --tag-gone:      #8A3A32;
+    --tag-gone-bg:   #F8E6E3;
+    --tag-gone-line: #E0A79F;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E1116;
+      --surface:     #161B22;
+      --surface-alt: #1C232C;
+      --line:        #2B3542;
+      --line-soft:   #222A34;
+      --ink:         #E7ECF2;
+      --ink-soft:    #B4BFCC;
+      --ink-mute:    #808D9C;
+      --accent:      #74C0F0;
+      --accent-soft: #16303F;
+      --mono-bg:     #1E2632;
+      --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+
+      --tag-new:       #5FD08A;
+      --tag-new-bg:    #16301F;
+      --tag-new-line:  #2E5A3F;
+      --tag-chg:       #74C0F0;
+      --tag-chg-bg:    #16303F;
+      --tag-chg-line:  #2C5570;
+      --tag-fix:       #FFD166;
+      --tag-fix-bg:    #302713;
+      --tag-fix-line:  #6B5620;
+      --tag-gone:      #E86A5C;
+      --tag-gone-bg:   #331B18;
+      --tag-gone-line: #6E3830;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0E1116;
+    --surface:     #161B22;
+    --surface-alt: #1C232C;
+    --line:        #2B3542;
+    --line-soft:   #222A34;
+    --ink:         #E7ECF2;
+    --ink-soft:    #B4BFCC;
+    --ink-mute:    #808D9C;
+    --accent:      #74C0F0;
+    --accent-soft: #16303F;
+    --mono-bg:     #1E2632;
+    --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+
+    --tag-new:       #5FD08A;
+    --tag-new-bg:    #16301F;
+    --tag-new-line:  #2E5A3F;
+    --tag-chg:       #74C0F0;
+    --tag-chg-bg:    #16303F;
+    --tag-chg-line:  #2C5570;
+    --tag-fix:       #FFD166;
+    --tag-fix-bg:    #302713;
+    --tag-fix-line:  #6B5620;
+    --tag-gone:      #E86A5C;
+    --tag-gone-bg:   #331B18;
+    --tag-gone-line: #6E3830;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 96px;
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ---------------------------------------------------------------- masthead */
+
+  .masthead {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 20px;
+    padding-bottom: 22px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .masthead h1 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 42px);
+    letter-spacing: -.02em;
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead .span {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 14px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .masthead .lede {
+    flex-basis: 100%;
+    margin: 10px 0 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 72ch;
+  }
+
+  /* ------------------------------------------------------------------ index */
+
+  .index { position: sticky; top: 28px; font-size: 14px; }
+
+  .index h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 10px;
+  }
+
+  .index ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+  .index a {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 5px 10px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 2px solid var(--line);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    transition: color .12s, border-color .12s, background .12s;
+  }
+
+  .index a:hover,
+  .index a:focus-visible {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .index .n { color: var(--ink-mute); font-size: 11.5px; }
+
+  /* --------------------------------------------------------------- releases */
+
+  main { min-width: 0; display: flex; flex-direction: column; gap: 44px; }
+
+  .release { scroll-margin-top: 24px; }
+
+  .rel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 4px; }
+
+  .rel-head h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 600;
+    font-size: 23px;
+    letter-spacing: -.01em;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .date {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rel-lede { margin: 0 0 18px; color: var(--ink-soft); max-width: 70ch; }
+
+  .entries { display: flex; flex-direction: column; gap: 10px; }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 4px 14px;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    padding: 14px 16px 15px;
+    box-shadow: var(--shadow);
+  }
+
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 3px 0 2px;
+    border-radius: 3px;
+    align-self: start;
+    margin-top: 2px;
+  }
+
+  .tag.new  { color: var(--tag-new);  background: var(--tag-new-bg);  border: 1px solid var(--tag-new-line); }
+  .tag.chg  { color: var(--tag-chg);  background: var(--tag-chg-bg);  border: 1px solid var(--tag-chg-line); }
+  .tag.fix  { color: var(--tag-fix);  background: var(--tag-fix-bg);  border: 1px solid var(--tag-fix-line); }
+  .tag.gone { color: var(--tag-gone); background: var(--tag-gone-bg); border: 1px solid var(--tag-gone-line); }
+
+  .entry h3 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -.005em;
+    margin: 0;
+  }
+
+  .entry .body { grid-column: 2; }
+  .entry p { margin: 6px 0 0; color: var(--ink-soft); max-width: 66ch; font-size: 15px; }
+  .entry p + p { margin-top: 8px; }
+  .entry strong { color: var(--ink); font-weight: 600; }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+    font-variant-ligatures: none;
+    background: var(--mono-bg);
+    padding: .1em .35em;
+    border-radius: 3px;
+    font-size: .88em;
+  }
+
+  /* ------------------------------------------------------------------- note */
+
+  .note {
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 5px 5px 0;
+    color: var(--ink-soft);
+    max-width: 74ch;
+  }
+
+  .note h2 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 6px;
+  }
+
+  .note p { margin: 0; font-size: 15px; }
+  .note p + p { margin-top: 8px; }
+  .note strong { color: var(--ink); }
+
+  /* ------------------------------------------------------------------ footer */
+
+  footer {
+    grid-column: 1 / -1;
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-mute);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+
+  a { color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .page { grid-template-columns: minmax(0, 1fr); gap: 30px; padding: 28px 18px 72px; }
+    .index { position: static; }
+    .index ol { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .index a { border-left: 0; border: 1px solid var(--line); border-radius: 4px; }
+    .index .n { display: none; }
+    .entry { grid-template-columns: minmax(0, 1fr); }
+    .tag { justify-self: start; padding-left: 8px; padding-right: 8px; }
+    .entry .body { grid-column: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <h1>RTPBuddy Release Notes</h1>
+    <span class="span">1.5.8 &rarr; 1.6.14</span>
+    <p class="lede">
+      Everything that changed since 1.5.8, newest first. Sixteen releases over three
+      days &mdash; nearly every one of them came out of something that showed up
+      while actually playing on donutsmp.net.
+    </p>
+  </header>
+
+  <nav class="index" aria-label="Versions">
+    <h2>Versions</h2>
+    <ol>
+      <li><a href="#v1614">1.6.14 <span class="n">2 items</span></a></li>
+      <li><a href="#v1613">1.6.13 <span class="n">1 item</span></a></li>
+      <li><a href="#v1612">1.6.12 <span class="n">2 items</span></a></li>
+      <li><a href="#v1611">1.6.11 <span class="n">3 items</span></a></li>
+      <li><a href="#v1610">1.6.10 <span class="n">5 items</span></a></li>
+      <li><a href="#v169">1.6.9 <span class="n">2 items</span></a></li>
+      <li><a href="#v168">1.6.8 <span class="n">2 items</span></a></li>
+      <li><a href="#v167">1.6.7 <span class="n">1 item</span></a></li>
+      <li><a href="#v166">1.6.6 <span class="n">4 items</span></a></li>
+      <li><a href="#v165">1.6.5 <span class="n">2 items</span></a></li>
+      <li><a href="#v164">1.6.4 <span class="n">1 item</span></a></li>
+      <li><a href="#v163">1.6.3 <span class="n">4 items</span></a></li>
+      <li><a href="#v162">1.6.2 <span class="n">2 items</span></a></li>
+      <li><a href="#v161">1.6.1 <span class="n">3 items</span></a></li>
+      <li><a href="#v160">1.6.0 <span class="n">3 items</span></a></li>
+      <li><a href="#v159">1.5.9 <span class="n">3 items</span></a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <div class="note">
+      <h2>The thread running through it: the sitting</h2>
+      <p>
+        Four of the fourteen releases circle the same thing. A <strong>sitting</strong>
+        is one stretch of play, and you want to be able to name it, continue it,
+        fold several together, and trust the numbers on it. Up to 1.5.8 a sitting
+        was simply whatever happened between logging in and logging out.
+      </p>
+      <p>
+        On numbering: every landing carries two. The <strong>global</strong> one
+        lives in the file, stays unique and is never reused &mdash; the CSV, the
+        viewer and the delete dialog all mean that one. What is shown instead is
+        the position <strong>within the sitting</strong>, as soon as only one
+        sitting is on the plot. Since 1.6.2 the plot decides that, not the view
+        you happen to have picked.
+      </p>
+    </div>
+
+    <!-- =============================================================== 1.6.14 -->
+    <section class="release" id="v1614">
+      <div class="rel-head">
+        <h2>1.6.14</h2>
+        <span class="date">6 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        Nobody sends a run out to find &ldquo;something rare&rdquo;.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>The search order finds single biomes</h3>
+          <div class="body">
+            <p>
+              The eighteen biome families were tick rows: switch on
+              <em>Rare</em> and the run stopped on mushroom fields, a cherry
+              grove <em>or</em> a pale garden. A family is a colour band on the
+              map, and for that it is right. For a search order it is the wrong
+              grain &mdash; what is being hunted is the Pale Garden, and the
+              family is only how you get there.
+            </p>
+            <p>
+              Every family row now opens its biomes: the <strong>whole
+              family</strong> on top as before, and under it every single biome
+              with the number of landings already recorded in it. Several may be
+              ticked at once, in one family or across many, and the menu stays
+              open while you tick them &mdash; three biomes are three ticks, not
+              three trips through the same menu. The row itself then says what is
+              picked: <em>off</em>, <em>whole family</em>, the biome's name, or a
+              count.
+            </p>
+            <p>
+              The list comes from the <strong>server's own biome
+              registry</strong>, not from your landings. That is the whole point:
+              a list built from the recordings holds exactly the biomes you
+              already have, and therefore never the one you are looking for.
+              Recorded biomes are folded in on top, so a name cannot vanish
+              because you happen to be on a different server. Which makes the
+              <strong>0</strong> behind a biome the interesting number: that is
+              where the search has never been.
+            </p>
+            <p>
+              The value already lived in <code>config.json</code> as
+              <code>autoRtp.findBiomes</code> and was already tested against
+              &mdash; all that was missing was any way to set it with a mouse.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The mangrove swamp was a snow biome</h3>
+          <div class="body">
+            <p>
+              Families are decided by substrings, and the rule for
+              <code>grove</code> matched in the middle of
+              <code>mangrove_swamp</code>. The mangrove swamp had been sitting in
+              the snow since 1.6.10: pale blue dot on the map, wrong row in the
+              biome breakdown, wrong family in the search order.
+            </p>
+            <p>
+              It turned up while counting for the new menu &mdash; all 65 biomes
+              of this version pushed through the classifier once and looked at.
+              The rule now sits above the grove rule, which is where the file
+              already asks narrower rules to go.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.13 -->
+    <section class="release" id="v1613">
+      <div class="rel-head">
+        <h2>1.6.13</h2>
+        <span class="date">6 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        Eighteen choices do not belong on a cycle button.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The biome filter drops down a list</h3>
+          <div class="body">
+            <p>
+              The toolbar's other filters cycle, which is right for three or four
+              choices: one press moves a step, the next takes it back. With
+              eighteen biome families it stops being a filter &mdash; after the
+              wrong pick there are seventeen more clicks between you and
+              <em>all biomes</em> again.
+            </p>
+            <p>
+              The button now opens a list under itself: <em>All biomes</em> on
+              top, below it only the families the chosen scope actually holds,
+              each with its colour swatch and its count. One click picks, a click
+              beside it closes, and so does <code>Esc</code>. The current choice
+              is highlighted.
+            </p>
+            <p>
+              The list is built from the <strong>whole</strong> scope, not from
+              the filtered set: once a family is picked the filtered set holds
+              exactly that one, and a list built from it could never offer
+              another &mdash; the same bug the dimension filter had before
+              1.6.2.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.12 -->
+    <section class="release" id="v1612">
+      <div class="rel-head">
+        <h2>1.6.12</h2>
+        <span class="date">6 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A full map becomes a picture rather than twenty thousand rectangles.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The markers and the route go into a texture</h3>
+          <div class="body">
+            <p>
+              Everything the map draws goes through a single rectangle call, and
+              on 1.21.11 each of those allocates twice: a render state and a copy
+              of the current matrix. A round marker is five of them, a hollow one
+              eight, a route leg one more plus a matrix push and rotate. Two
+              thousand framed landings came to some twenty thousand rectangles a
+              frame &mdash; which is not arithmetic the machine minds, it is
+              allocation it does.
+            </p>
+            <p>
+              Over the <strong>drawing budget</strong> the whole layer &mdash;
+              every landing and the route between them &mdash; is painted into a
+              texture instead, and every frame in between is a single quad. It
+              is repainted only when something it depends on moves: the view,
+              the filter, the marker mode, the colour mode, the picked landing.
+              Not the mouse. Measured on 1971 landings: 0.44&nbsp;ms without the
+              route, 0.86&nbsp;ms with it and its chevrons.
+            </p>
+            <p>
+              The happy side effect is that inside a texture a marker costs
+              pixels rather than draw calls, which makes the thinning from
+              1.6.11 unnecessary: the dense case draws <em>every</em> landing
+              round again, with the whole route. It looks better than it did and
+              is still faster.
+            </p>
+            <p>
+              Two fallbacks. On a very large canvas &mdash; over 2.2&nbsp;million
+              pixels &mdash; handing the picture to the GPU costs more than the
+              rectangles it saves, so the map goes back to drawing and thinning
+              them. And a repaint that turns out to take longer than 2.5&nbsp;ms
+              may be outrun by a view still being dragged: the previous picture
+              stands for up to 80&nbsp;ms rather than the drag stuttering. The
+              same rule the gap field already used.
+            </p>
+            <p>
+              What stays outside is what the picture cannot hold: the picked and
+              hovered landings, which change with a click and with the mouse, and
+              the sample numbers, which need the font.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The metrics column only draws what is on screen</h3>
+          <div class="body">
+            <p>
+              The column is one long strip cut off with a scissor, and every row
+              was drawn whether or not it was in the window. With the cell board
+              and the two biome breakdowns that runs to a good hundred and twenty
+              rows, each a handful of rectangles and two pieces of text, so the
+              rows scrolled past cost as much as the ones being read.
+            </p>
+            <p>
+              Now only what is in the window is drawn. The cursor still walks all
+              of them: the skipped rows have to keep their height, or the
+              scrollbar would not know how far the column runs.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.11 -->
+    <section class="release" id="v1611">
+      <div class="rel-head">
+        <h2>1.6.11</h2>
+        <span class="date">6 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        First pass at what a full map costs, measured rather than guessed.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The route allocated three arrays per segment</h3>
+          <div class="body">
+            <p>
+              Clipping a line to the canvas built three <code>double[4]</code>
+              every time: the two Liang-Barsky tables and the result. At two
+              thousand segments that is six thousand arrays <em>a frame</em> to
+              hand back four numbers, plus one more array per chevron.
+            </p>
+            <p>
+              The galling part: it ran even when no line was visible. Zoomed
+              right in, the route cost close to six thousand allocations a frame
+              for nothing. The result now lives in fields and the clip allocates
+              none.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Drawing budget</h3>
+          <div class="body">
+            <p>
+              One number under <strong>Map &rarr; Performance</strong>: how many
+              markers may be on screen at once before the map draws the cheap
+              way. 500 by default; <code>Off</code> draws every landing on its
+              own again.
+            </p>
+            <p>
+              What is counted is what is actually on screen, not how large the
+              file is: two thousand landings zoomed in on one of them is not a
+              dense plot and should cost nothing.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>No chevrons on a full route</h3>
+          <div class="body">
+            <p>
+              Each chevron is two more rotated rectangles, two thirds of what the
+              line itself costs. On two thousand overlapping segments nobody
+              reads them as direction anyway, only as noise. Past 400 segments
+              they are dropped; the line still fades from old to new, which is
+              the same information at none of the price.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.10 -->
+    <section class="release" id="v1610">
+      <div class="rel-head">
+        <h2>1.6.10</h2>
+        <span class="date">6 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        Three things that make the recording more than a scatter of dots: a
+        target, a search order, and the biome.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Cell board: 22 of 81</h3>
+          <div class="body">
+            <p>
+              The metrics column now opens with a nine-by-nine board, one square
+              per server cell. A cell holding landings is filled in its zone's
+              colour, more of it the more it holds; a cell with exactly one
+              carries a gold ring, because a single deleted landing would empty
+              it again. The cell you are standing in is ringed in green. Under it
+              sit the per-zone bars &mdash; <code>7/10</code>, <code>6/27</code>
+              &mdash; each with the numbers of the cells that zone is still
+              missing.
+            </p>
+            <p>
+              This is the coverage figure the percentage beside it cannot be.
+              That one divides by a disc whose size depends on the cell edge you
+              happen to have set, so it only says something about itself. The
+              grid has 81 cells whatever anyone configures &mdash; <em>22 of
+              81</em> is a sentence with a finish line in it.
+            </p>
+            <p>
+              A zone with no landings at all is drawn dim and sorted to the
+              bottom. That is not a gap in the map but a zone never asked for,
+              and listing its cells as missing would put fifty squares on a
+              to-do list nothing has ever tried to reach.
+            </p>
+            <p>
+              <code>/rtpbuddy cells</code> prints the same to chat. A landing in
+              a cell never reached before says so in chat and pulses that cell on
+              the minimap for a few seconds.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Search order: the run stops when it finds something</h3>
+          <div class="body">
+            <p>
+              Auto-RTP used to stop for damage, the run timer, the session cap
+              and a guard &mdash; every one a reason to give up. A search order
+              is the other kind: a reason to stop because the run found what it
+              was sent out for. It keeps teleporting until a landing matches,
+              stops on that landing, plays a short bell and says in chat which
+              condition fired.
+            </p>
+            <p>
+              On offer: a cell never reached, a typed list of named cells,
+              eighteen biome families, a distance band from the origin, and a
+              target point with a radius. <strong>Combine</strong> decides
+              whether one satisfied condition is enough or all have to hold at
+              once, and <strong>Give up after</strong> ends a run that has turned
+              down that many landings &mdash; without it an order for a rare
+              target runs until something else stops it.
+            </p>
+            <p>
+              None of this makes the loop send more, faster or differently. A
+              search order can only end a run earlier than it would have ended
+              anyway. While it is searching the HUD says what for, and how many
+              landings have been turned down.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>The biome becomes visible</h3>
+          <div class="body">
+            <p>
+              Every landing has carried its biome since schema&nbsp;3, and for a
+              long time nobody could see it anywhere. Now in three places: a
+              colour mode <code>Biome</code>, a filter button in the toolbar, and
+              two breakdowns in the metrics column &mdash; the families first,
+              then the eight busiest single biomes.
+            </p>
+            <p>
+              Colouring is by biome <em>family</em>, not by biome: close to fifty
+              distinct ones are recorded, and fifty hues on one plot is not a key
+              but confetti. Names come from Minecraft's own translations, so not
+              one biome name ships in this mod's language files, and the search
+              box matches both the id and the shown name &mdash;
+              <code>Kirschhain</code> finds what is stored as
+              <code>minecraft:cherry_grove</code>.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>A new cell announces itself</h3>
+          <div class="body">
+            <p>
+              Land in a cell no recorded landing has ever reached and the chat
+              says so with the new standing &mdash; <em>22 of 81</em> &mdash;
+              while the cell pulses on the minimap for eight seconds. Both hang
+              off the landing itself rather than off a per-frame question: the
+              map would otherwise have walked the whole dataset every frame to
+              answer something that comes up once per landing.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3><code>/rtpbuddy cells</code> and <code>/rtpbuddy find</code></h3>
+          <div class="body">
+            <p>
+              <code>cells</code> prints the cell progress to chat, zone by zone
+              with the missing numbers, and ends with the cell you are standing
+              in. <code>find</code> shows the search order; <code>find on</code>
+              and <code>find off</code> switch it.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.9 -->
+    <section class="release" id="v169">
+      <div class="rel-head">
+        <h2>1.6.9</h2>
+        <span class="date">6 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        The map is now available small, in a corner, without anything having to
+        stop for it.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>A minimap in the corner</h3>
+          <div class="body">
+            <p>
+              The full map answers where you are, and charges a key press and a
+              paused view for it. The minimap answers the same question without
+              either: a small plate at the edge of the screen framing exactly the
+              rectangle <code>F</code> frames on the full map, with your own
+              marker inside it.
+            </p>
+            <p>
+              It is not a terrain minimap and does not try to be one. What it
+              draws is the recording: the 50,000 block server cells in the colour
+              of the region that owns them, their numbers written in where they
+              fit, the landings as single pixels, the red leg into the newest one,
+              and the world axes. Underneath sits a strip naming the cell you are
+              standing in &mdash; region and server number, in that region's
+              colour &mdash; and how much ground the plate covers.
+            </p>
+            <p>
+              The frame is <strong>fixed</strong>. It holds the chosen landings
+              and does not scroll with you, because a map that recentres on every
+              step is precisely the one that says nothing about where you are in
+              the recording. Walk out of the rectangle and your marker is pinned
+              to the rim in amber rather than drawn where nobody can see it. With
+              nothing recorded it frames the server cell you are standing in,
+              which is still an answer.
+            </p>
+            <p>
+              <strong>And it costs next to no frame rate.</strong> The plate is
+              painted once into a texture and then drawn as a <em>single</em>
+              quad. A thousand landings would otherwise be a thousand
+              <code>fill</code> calls in every single frame &mdash; the mistake
+              the gap map very nearly shipped with, made permanent, because a
+              minimap is on screen for the whole session. It is repainted only on
+              a new landing, a different sitting, a switch flipped, or crossing
+              into another cell; that measures under 3&nbsp;ms with two thousand
+              landings on it. Per frame what is left is the marker, the cell
+              numbers and the caption, some fifty rectangles.
+            </p>
+            <p>
+              Bottom right by default, because the text overlay sits in the top
+              left and another mod's minimap usually claims the top right. Moved
+              like the overlay, and switched on and off from
+              <code>/rtpbuddy minimap</code> as well.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The placement screen places both</h3>
+          <div class="body">
+            <p>
+              It used to hold one box. Now it holds both: the text overlay and the
+              minimap, each labelled, with <kbd>Tab</kbd> switching between them.
+              That is not convenience &mdash; the question this screen exists to
+              answer is <em>does anything overlap here</em>, and you cannot answer
+              it with only one of two boxes on the screen.
+            </p>
+            <p>
+              Both are always shown, switched off or not: placing something before
+              turning it on is the ordinary order, and a box that vanished when its
+              switch was off would be unplaceable exactly when it needed placing.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.8 -->
+    <section class="release" id="v168">
+      <div class="rel-head">
+        <h2>1.6.8</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Three map modes instead of five. The new one does what the two old ones
+        did, and answers the question better.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag gone">Removed</span>
+          <h3>Heatmap and cluster</h3>
+          <div class="body">
+            <p>
+              Both said the same thing: <em>where is it dense</em>. The heatmap
+              painted density as colour, cluster folded markers into bubbles
+              &mdash; two answers to one question, and both about the
+              <strong>dots</strong> rather than the ground. That was exactly the
+              problem: a dark patch on a heatmap meant "never landed there",
+              "hidden by the filter" and "the region does not reach that far", all
+              at once.
+            </p>
+            <p>
+              The gap mode measures the distance to the nearest landing instead.
+              The statement no longer lives in an absence of colour but in a
+              number that can be shaded, ranked and read off &mdash; and once that
+              existed, the other two had nothing left to say.
+            </p>
+            <p>
+              The mode button now goes <strong>Points &rarr; Path &rarr;
+              Advanced</strong>. A config still holding <code>HEATMAP</code> or
+              <code>CLUSTER</code> quietly falls back to points on load; nothing
+              breaks and nothing is lost.
+            </p>
+            <p>
+              The <strong>Heatmap cell</strong> setting is now the
+              <strong>Density cell</strong> and draws nothing. It stays because it
+              is the basis of the <em>coverage</em> statistic &mdash; cells hit
+              divided by the cells inside the border.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The gap mode is called <em>Advanced</em></h3>
+          <div class="body">
+            <p>
+              It was <em>Dummy</em>. The name was aimed at people who could not
+              make sense of the other modes &mdash; it is now the mode that does
+              the most, and a name claiming the opposite gets in the way of that.
+            </p>
+            <p>
+              Internally the mode stays <code>GAPS</code>, so a stored
+              <code>map.markerMode</code> never has to be touched.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.7 -->
+    <section class="release" id="v167">
+      <div class="rel-head">
+        <h2>1.6.7</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Auto-RTP without the clock: the same run, but you are the trigger.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Trigger by hand</h3>
+          <div class="body">
+            <p>
+              A switch in the Auto-RTP tab turns the clock off. The run stays a
+              run &mdash; the rotation, the counters, the caps, the run timer and
+              every stop condition behave exactly as before &mdash; but nothing
+              is sent until you press the <strong>auto-RTP key</strong>, one
+              teleport per press.
+            </p>
+            <p>
+              It is for the other half of the job: filling a map and looking at
+              where you landed want different rhythms, and the second one is
+              yours to set rather than a rate you had to guess in advance.
+              Cooldown and jitter no longer apply, bar a hard floor of
+              2&nbsp;seconds between commands &mdash; a held key must not turn
+              into a command every tick.
+            </p>
+            <p>
+              A press that cannot be honoured <strong>refuses rather than
+              queues</strong>, and says why. A teleport fired silently later
+              would be worse than none at all: knowing when the command went out
+              is the entire point of stepping by hand. A press that worked says
+              nothing &mdash; the command is already in the chat, the server
+              answers it, and the HUD counts it.
+            </p>
+            <p>
+              There is no countdown, so none is shown: the HUD reads
+              <code>MANUAL</code> and the map button <em>Auto manual</em>. Plus
+              <code>/rtpbuddy auto step</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.6 -->
+    <section class="release" id="v166">
+      <div class="rel-head">
+        <h2>1.6.6</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        The gap map from 1.6.5 sharpened by real use, and the key bindings cut
+        back to what is actually needed.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Red line into the last landing</h3>
+          <div class="body">
+            <p>
+              Every plot now draws one line without being asked: from the point
+              the newest teleport started at to the point it landed on &mdash; in
+              red, with an arrow the way it went. Watching the map, it answers
+              which of the dots you just came from without a click.
+            </p>
+            <p>
+              Drawn from that sample's <strong>recorded origin</strong> rather
+              than from the sample before it: in between you walk, you fall, you
+              take a portal, and only the recorded origin is a fact about
+              <em>that</em> teleport. Left out across dimensions, where a straight
+              line measures nothing. Switched off as
+              <code>map.showLastLeg</code>.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>Seven keys down to five, one carries the whole run</h3>
+          <div class="body">
+            <p>
+              The auto-RTP key now does all of it: no run &rarr; start dialog, a
+              run on the clock &rarr; hold and continue, a run stepped by hand
+              &rarr; send the next teleport. Stopping is <code>End</code>'s job
+              alone &mdash; the one irreversible action sits on a key of its own
+              rather than one press away from a hold.
+            </p>
+            <p>
+              Gone are the separate key for the hold and the one for the capture
+              pause: a switch you set once a session does not need a key, and a
+              second key that only half-stopped the loop was one too many to keep
+              straight in a hurry. Both still work from
+              <code>/rtpbuddy capture pause</code>,
+              <code>/rtpbuddy auto pause</code> and the settings.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The gap mask hugs the recording</h3>
+          <div class="body">
+            <p>
+              1.6.5 grew every occupied tile by a ring &mdash; which wrapped the
+              whole recording in an apron of never-visited ground several tiles
+              wide. Honestly empty and completely useless: empty because nobody
+              has looked there yet, not because the server avoids it.
+            </p>
+            <p>
+              The mask is now the recording's own footprint, filled rather than
+              grown. The tile size is only a strip width: a point is inside when
+              it lies between the leftmost and rightmost landing of its row strip
+              <strong>and</strong> between the topmost and bottommost of its
+              column strip &mdash; measured against real coordinates, not tile
+              edges. Against 1,201 landings: from 76&nbsp;% of the plot down to
+              17&nbsp;%.
+            </p>
+            <p>
+              A hole at the frontier is still listed. The field goes on rising
+              into unexplored ground, so no cell inside the mask is a local
+              maximum there; a neighbour outside no longer counts as higher.
+              Without that, the biggest hole on the map was the one that went
+              missing from the list. Default strip width 8,000 &rarr;
+              <strong>16,000</strong>, choices 4k to 64k.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>Outer tiles blinked while the map was dragged</h3>
+          <div class="body">
+            <p>
+              The gap mode asked, per tile, "is the centre inside the mask?" -
+              and took the centre <em>clipped to the screen</em>. On a tile
+              hanging half off the edge that point walks across the tile as you
+              drag, while the tile stands still. The same square answered
+              differently from one frame to the next.
+            </p>
+            <p>
+              The mask now survives the build as a <strong>world-space</strong>
+              statement and is asked at the tile's real middle. On top of that, a
+              tile holding a landing is drawn whatever the mask says: the mask is
+              not tile-aligned, so a tile whose middle fell just outside it could
+              still hold landings in a corner &mdash; markers on bare ground with
+              no tile under them, which looked like a bug and was one.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.5 -->
+    <section class="release" id="v165">
+      <div class="rel-head">
+        <h2>1.6.5</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        A fifth map mode that asks the opposite question: not where the landings
+        are, but where they are not.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Map mode <em>Dummy</em> &mdash; the gap map</h3>
+          <div class="body">
+            <p>
+              Points, path, heatmap and cluster all draw the same subject: the
+              landings. That leaves a gap as nothing more than ground with nothing
+              drawn on it &mdash; and a dark patch on a heatmap means three things
+              at once: never landed there, hidden by the filter, or the region does
+              not reach that far. Nothing on screen tells them apart.
+            </p>
+            <p>
+              The new mode shades every point of the plot by the <strong>distance
+              to the nearest recorded landing</strong>: dark where they are dense,
+              amber where nothing has ever come up. The absence itself becomes a
+              value that can be shaded, ranked and read off. The biggest holes are
+              ringed, numbered and listed with their coordinates and radius in the
+              metrics column, and the cursor line reads out the distance under the
+              pointer.
+            </p>
+            <p>
+              Two pictures, one measurement: <strong>up to the 5k scale</strong>
+              the field is shaded, because close in a hole is a shape with edges.
+              <strong>Past it</strong> the same ground is cut into fixed world
+              tiles carrying their own landing count in four bands &mdash; none,
+              one, two to three, four and more &mdash; because a shape a few pixels
+              across is not a shape and a number is. It is the same 5k landmark the
+              sample numbers took in 1.6.4, so the map has one rule rather than
+              two. Tiles snap to fixed world coordinates, so the same tile means
+              the same square between sittings and can be ticked off a list.
+            </p>
+            <p>
+              Distance on its own would always name the edge of the canvas as the
+              emptiest place, since nothing has ever been recorded past it. The
+              measurement is bounded by a <strong>mask</strong>: the world tiles
+              holding a landing, grown by one tile outward. Inside it, &ldquo;there
+              is nothing here&rdquo; says something about the server; outside it,
+              only something about how far the recording has got &mdash; and that
+              is dimmed so you can see which is which.
+            </p>
+            <p>
+              <strong>Filter to one region first.</strong> The measurement handles
+              overlap correctly on its own &mdash; a spot two regions reach is only
+              rare if it is rare in both. But a hole in the region you care about
+              will be filled in by landings of a region you never asked for there.
+            </p>
+            <p>
+              A reported radius is always <strong>rounded down</strong>: the patch
+              is at least that empty. The field is measured on a screen-space grid,
+              and a cell is worth a few hundred blocks with a whole region in view
+              &mdash; the figure would rather understate by that much than send you
+              to a clearing with a landing sitting in the middle of it.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Two settings for it</h3>
+          <div class="body">
+            <p>
+              <strong>Gap search area</strong> (2,000 to 32,000 blocks, default
+              8,000) sets the tile the map uses to mark off where anything has been
+              recorded at all &mdash; bigger looks further past the outermost
+              landings. <strong>Listed gaps</strong> (3, 5, 8 or 12) says how many
+              holes get ringed and listed.
+            </p>
+            <p>
+              One note on the plumbing, because it is what makes the mode usable at
+              all: the shading is uploaded as a texture once per rebuild and then
+              drawn as <em>one</em> quad. The obvious way &mdash; a rectangle per
+              cell &mdash; is the wrong one on 1.21.11: every <code>fill</code>
+              allocates a render-state object <em>and</em> a copy of the matrix, so
+              three thousand cells is six thousand allocations on every frame of a
+              zoom. That is exactly what heated up a CPU before the mode shipped.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.4 -->
+    <section class="release" id="v164">
+      <div class="rel-head">
+        <h2>1.6.4</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Sharpening the plot numbers from 1.6.3.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>Numbers only from the 5k scale onward</h3>
+          <div class="body">
+            <p>
+              Crowding alone was not enough of a threshold: with widely spread
+              landings the numbers still turned up too early. The
+              <strong>scale bar in the bottom left</strong> now decides first
+              &mdash; while it reads more than 5,000 blocks the numbers stay off.
+            </p>
+            <p>
+              Zoomed in past that, the crowding check from 1.6.3 applies as well.
+              The rule now sits visibly on the screen instead of in a zoom figure
+              nobody can read off.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.3 -->
+    <section class="release" id="v163">
+      <div class="rel-head">
+        <h2>1.6.3</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Sittings can now be folded together and given names. Plus two small things
+        that got in the way daily: the numbers on the plot, and the fixed rate
+        steps.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Merge sessions</h3>
+          <div class="body">
+            <p>
+              Tick two or more sittings in the session list, then
+              <strong>Merge sessions&nbsp;(n)</strong>. The target is the oldest:
+              its colour, its name and its start time stay, and its span widens to
+              cover them all.
+            </p>
+            <p>
+              <strong>Nothing is deleted.</strong> Every landing survives and
+              belongs to one sitting afterwards, numbered from 1 in the order you
+              actually landed. Checked against a real file of 900 landings:
+              344&nbsp;+&nbsp;190 came out as 1&hellip;534, no gaps, in timestamp
+              order.
+            </p>
+            <p>
+              The other session records go, so a dialog asks first &mdash; it
+              cannot be undone. Refused across servers. If the running sitting was
+              among them, it carries on inside the merged one.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Rename session</h3>
+          <div class="body">
+            <p>
+              Tick exactly one sitting, then <strong>Rename session</strong>
+              &mdash; the running one included. Up to 32 characters, instead of
+              every row repeating <code>donutsmp.net</code>.
+            </p>
+            <p>
+              The name then shows in the session list, in the session card and in
+              the viewer. Leave it empty to clear it and get the server name back.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>Sample numbers only once zoomed in</h3>
+          <div class="body">
+            <p>
+              Zoomed far out the numbers piled on top of each other and hid the
+              very markers they were labelling. They now stay off until there is
+              room for them.
+            </p>
+            <p>
+              What is measured is not the zoom level but <strong>how tightly the
+              markers sit</strong>: if more than a fifth of them would share a
+              label-sized patch, the numbers stay off. For the fixed floor added
+              on top of it, see 1.6.4.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>Rate typed freely, floor 2&nbsp;s</h3>
+          <div class="body">
+            <p>
+              <strong>Cooldown</strong> and <strong>jitter</strong> in the Auto-RTP
+              tab are input fields rather than fixed steps &mdash; no ladder of
+              values hits the interval a given server actually wants.
+            </p>
+            <p>
+              The floor is <strong>2&nbsp;s</strong> instead of 5. It still never
+              shortens a server cooldown: if the server refuses, the next attempt
+              simply waits the same interval again.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.2 -->
+    <section class="release" id="v162">
+      <div class="rel-head">
+        <h2>1.6.2</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Follow-up to 1.6.1: the numbering now follows what is actually on the
+        plot.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>A single ticked sitting started mid-count</h3>
+          <div class="body">
+            <p>
+              Ticking exactly one sitting in <em>All sessions</em> shows one
+              sitting &mdash; but the numbers began at the global figure, so
+              somewhere in the middle.
+            </p>
+            <p>
+              What decides now is the plot, not the view you picked: with one
+              sitting on it, it counts from 1. Only with two does the global
+              number take over, because only that one stays unique then.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>Search matches both numbers</h3>
+          <div class="body">
+            <p>
+              You see <code>#3</code> and type 3 &mdash; and the file holds that
+              landing as <code>#297</code>. The search now matches both, so
+              neither way of remembering a sample comes up empty.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.1 -->
+    <section class="release" id="v161">
+      <div class="rel-head">
+        <h2>1.6.1</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        The session list remembers what is ticked, and an earlier sitting can be
+        continued instead of a new one being started.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>Ticked sittings were reset when the map closed</h3>
+          <div class="body">
+            <p>
+              The picking is now saved (<code>map.filterSessions</code>), and on
+              <strong>every click</strong> rather than only on close: a teleport
+              can tear the map down without it ever closing properly.
+            </p>
+            <p>
+              A picking whose sittings no longer exist is dropped when the map
+              opens &mdash; otherwise you would face an empty plot with no visible
+              cause.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>A picking also emptied the &ldquo;This session&rdquo; view</h3>
+          <div class="body">
+            <p>
+              If the picking did not contain the running sitting, the single
+              sitting plot came out empty too. The session filter now bites only
+              in <em>All sessions</em>, and is parked while the map shows one
+              sitting.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Continue session</h3>
+          <div class="body">
+            <p>
+              Tick exactly one earlier sitting, then <strong>Continue
+              session</strong>: every further landing is added to it, the count
+              carries on rather than restarting at 1, and the HUD counts on from
+              that sitting's total.
+            </p>
+            <p>
+              The sitting in progress is closed first &mdash; and discarded if it
+              recorded nothing. Refused across servers. A relog deliberately ends
+              it: logging back in opens a new sitting, and continuing again is one
+              click.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.0 -->
+    <section class="release" id="v160">
+      <div class="rel-head">
+        <h2>1.6.0</h2>
+        <span class="date">4 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Auto-RTP can be held rather than only stopped, and the start dialog no
+        longer demands a tick box.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3><code>N</code> holds auto-RTP without ending the run</h3>
+          <div class="body">
+            <p>
+              For the moment you want to look at wherever the last teleport
+              landed. <strong>The cooldown and the run timer both freeze</strong>,
+              the counters and the position in the region rotation stay put, and
+              damage or guards stop nothing while it holds &mdash; what you take
+              standing around is yours, not the loop's business.
+            </p>
+            <p>
+              <code>N</code> again picks up with the wait that was left. Also via
+              <code>/rtpbuddy auto pause</code> and <code>resume</code>, or the
+              button in the Auto-RTP tab. The HUD reads <code>HELD</code> in grey
+              and the map button <em>Auto held</em> &mdash; a countdown that never
+              moves would look like a stuck game. <code>H</code> and
+              <code>End</code> still end it outright.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>Start dialog without the acknowledgement tick</h3>
+          <div class="body">
+            <p>
+              The &ldquo;I checked: repeating is allowed here&rdquo; box is gone.
+              The dialog still names the whole rotation, the cooldown with its
+              jitter and every condition that ends the run &mdash; nothing is sent
+              before you press <strong>Start Auto-RTP</strong>. Pressing it is the
+              confirmation.
+            </p>
+            <p>
+              The button stays greyed out only when no chosen region has a
+              command, because the loop would then send nothing.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag gone">Removed</span>
+          <h3>The <code>N</code> key for &ldquo;map, all sessions&rdquo;</h3>
+          <div class="body">
+            <p>
+              The map remembers its own scope now that the scope is saved with the
+              rest &mdash; so both keys opened the same screen. The freed key went
+              to the hold above.
+            </p>
+            <p>
+              <em>All sessions</em> is still reachable from the button in the top
+              right of the map and via <code>/rtpbuddy all</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.5.9 -->
+    <section class="release" id="v159">
+      <div class="rel-head">
+        <h2>1.5.9</h2>
+        <span class="date">3 September 2026</span>
+      </div>
+      <p class="rel-lede">
+        Finding yourself on the plot, and being able to begin a new sitting
+        without logging out and back in.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Player marker redrawn</h3>
+          <div class="body">
+            <p>
+              With the map open the green dot was barely visible during a
+              teleport. Now: a ring with a dark collar that separates from
+              whatever it lands on, a slow outward ripple
+              (<code>map.playerPulse</code>) and a one-pixel stub from its centre
+              for the direction you face.
+            </p>
+            <p>
+              Motion is the one channel nothing else on the plot uses &mdash;
+              after a landing you find yourself again at once.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Start a new sitting</h3>
+          <div class="body">
+            <p>
+              A button at the foot of the session card closes the sitting in
+              progress and opens the next one, without relogging. Samples then
+              count from 1 again, and the card's counters reset with them.
+            </p>
+            <p>
+              Nothing is deleted: the landings recorded so far keep their sitting.
+              A sitting with no landing is left alone &mdash; otherwise you would
+              swap an empty one for an identical empty one.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>Viewer showed the region as a raw id</h3>
+          <div class="body">
+            <p>
+              The viewer's hover card printed <code>na_east</code> rather than
+              <em>NA East</em>. It goes through the same labelling rule as the mod
+              now.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    the mod does not belong on the server. Every setting is explained one by one in
+    <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
+    the project folder; the German version is
+    <code>RTPBuddy-Einstellungen.html</code>.
+  </footer>
+
+</div>

@@ -1,0 +1,1595 @@
+<title>RTPBuddy Patchnotes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* Same tokens as RTPBuddy-Einstellungen.html: these notes are part of the
+     same product and must not read as a different program. Three semantic
+     hues are added on top, one per kind of change, kept apart from the accent. */
+  :root {
+    --ground:      #F4F6F8;
+    --surface:     #FFFFFF;
+    --surface-alt: #EDF1F5;
+    --line:        #D8DFE7;
+    --line-soft:   #E6EBF0;
+    --ink:         #161A20;
+    --ink-soft:    #414B58;
+    --ink-mute:    #6B7787;
+    --accent:      #17628F;
+    --accent-soft: #E3F0F8;
+    --mono-bg:     #EEF2F6;
+    --shadow:      0 1px 2px rgba(22, 26, 32, .06), 0 8px 24px -18px rgba(22, 26, 32, .5);
+
+    --tag-new:       #146A47;
+    --tag-new-bg:    #E1F2EA;
+    --tag-new-line:  #A9D8C2;
+    --tag-chg:       #17628F;
+    --tag-chg-bg:    #E3F0F8;
+    --tag-chg-line:  #A9CFE5;
+    --tag-fix:       #8A5A00;
+    --tag-fix-bg:    #F8EFDC;
+    --tag-fix-line:  #E0BE72;
+    --tag-gone:      #8A3A32;
+    --tag-gone-bg:   #F8E6E3;
+    --tag-gone-line: #E0A79F;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E1116;
+      --surface:     #161B22;
+      --surface-alt: #1C232C;
+      --line:        #2B3542;
+      --line-soft:   #222A34;
+      --ink:         #E7ECF2;
+      --ink-soft:    #B4BFCC;
+      --ink-mute:    #808D9C;
+      --accent:      #74C0F0;
+      --accent-soft: #16303F;
+      --mono-bg:     #1E2632;
+      --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+
+      --tag-new:       #5FD08A;
+      --tag-new-bg:    #16301F;
+      --tag-new-line:  #2E5A3F;
+      --tag-chg:       #74C0F0;
+      --tag-chg-bg:    #16303F;
+      --tag-chg-line:  #2C5570;
+      --tag-fix:       #FFD166;
+      --tag-fix-bg:    #302713;
+      --tag-fix-line:  #6B5620;
+      --tag-gone:      #E86A5C;
+      --tag-gone-bg:   #331B18;
+      --tag-gone-line: #6E3830;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0E1116;
+    --surface:     #161B22;
+    --surface-alt: #1C232C;
+    --line:        #2B3542;
+    --line-soft:   #222A34;
+    --ink:         #E7ECF2;
+    --ink-soft:    #B4BFCC;
+    --ink-mute:    #808D9C;
+    --accent:      #74C0F0;
+    --accent-soft: #16303F;
+    --mono-bg:     #1E2632;
+    --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+
+    --tag-new:       #5FD08A;
+    --tag-new-bg:    #16301F;
+    --tag-new-line:  #2E5A3F;
+    --tag-chg:       #74C0F0;
+    --tag-chg-bg:    #16303F;
+    --tag-chg-line:  #2C5570;
+    --tag-fix:       #FFD166;
+    --tag-fix-bg:    #302713;
+    --tag-fix-line:  #6B5620;
+    --tag-gone:      #E86A5C;
+    --tag-gone-bg:   #331B18;
+    --tag-gone-line: #6E3830;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 96px;
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ---------------------------------------------------------------- masthead */
+
+  .masthead {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 20px;
+    padding-bottom: 22px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .masthead h1 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 42px);
+    letter-spacing: -.02em;
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead .span {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 14px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .masthead .lede {
+    flex-basis: 100%;
+    margin: 10px 0 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 72ch;
+  }
+
+  /* ------------------------------------------------------------------ index */
+
+  .index { position: sticky; top: 28px; font-size: 14px; }
+
+  .index h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 10px;
+  }
+
+  .index ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+  .index a {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 5px 10px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 2px solid var(--line);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    transition: color .12s, border-color .12s, background .12s;
+  }
+
+  .index a:hover,
+  .index a:focus-visible {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .index .n { color: var(--ink-mute); font-size: 11.5px; }
+
+  /* --------------------------------------------------------------- releases */
+
+  main { min-width: 0; display: flex; flex-direction: column; gap: 44px; }
+
+  .release { scroll-margin-top: 24px; }
+
+  .rel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 4px; }
+
+  .rel-head h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 600;
+    font-size: 23px;
+    letter-spacing: -.01em;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .date {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rel-lede { margin: 0 0 18px; color: var(--ink-soft); max-width: 70ch; }
+
+  .entries { display: flex; flex-direction: column; gap: 10px; }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 4px 14px;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    padding: 14px 16px 15px;
+    box-shadow: var(--shadow);
+  }
+
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 3px 0 2px;
+    border-radius: 3px;
+    align-self: start;
+    margin-top: 2px;
+  }
+
+  .tag.new  { color: var(--tag-new);  background: var(--tag-new-bg);  border: 1px solid var(--tag-new-line); }
+  .tag.chg  { color: var(--tag-chg);  background: var(--tag-chg-bg);  border: 1px solid var(--tag-chg-line); }
+  .tag.fix  { color: var(--tag-fix);  background: var(--tag-fix-bg);  border: 1px solid var(--tag-fix-line); }
+  .tag.gone { color: var(--tag-gone); background: var(--tag-gone-bg); border: 1px solid var(--tag-gone-line); }
+
+  .entry h3 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -.005em;
+    margin: 0;
+  }
+
+  .entry .body { grid-column: 2; }
+  .entry p { margin: 6px 0 0; color: var(--ink-soft); max-width: 66ch; font-size: 15px; }
+  .entry p + p { margin-top: 8px; }
+  .entry strong { color: var(--ink); font-weight: 600; }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+    font-variant-ligatures: none;
+    background: var(--mono-bg);
+    padding: .1em .35em;
+    border-radius: 3px;
+    font-size: .88em;
+  }
+
+  /* ------------------------------------------------------------------- note */
+
+  .note {
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 5px 5px 0;
+    color: var(--ink-soft);
+    max-width: 74ch;
+  }
+
+  .note h2 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 6px;
+  }
+
+  .note p { margin: 0; font-size: 15px; }
+  .note p + p { margin-top: 8px; }
+  .note strong { color: var(--ink); }
+
+  /* ------------------------------------------------------------------ footer */
+
+  footer {
+    grid-column: 1 / -1;
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-mute);
+    font-size: 13.5px;
+    max-width: 78ch;
+  }
+
+  a { color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .page { grid-template-columns: minmax(0, 1fr); gap: 30px; padding: 28px 18px 72px; }
+    .index { position: static; }
+    .index ol { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .index a { border-left: 0; border: 1px solid var(--line); border-radius: 4px; }
+    .index .n { display: none; }
+    .entry { grid-template-columns: minmax(0, 1fr); }
+    .tag { justify-self: start; padding-left: 8px; padding-right: 8px; }
+    .entry .body { grid-column: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <h1>RTPBuddy Patchnotes</h1>
+    <span class="span">1.5.8 &rarr; 1.6.14</span>
+    <p class="lede">
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Sechzehn
+      Auslieferungen an drei Tagen &mdash; fast jede davon aus einer Sache, die
+      beim echten Spielen auf donutsmp.net aufgefallen ist.
+    </p>
+  </header>
+
+  <nav class="index" aria-label="Versionen">
+    <h2>Versionen</h2>
+    <ol>
+      <li><a href="#v1614">1.6.14 <span class="n">2 Punkte</span></a></li>
+      <li><a href="#v1613">1.6.13 <span class="n">1 Punkt</span></a></li>
+      <li><a href="#v1612">1.6.12 <span class="n">2 Punkte</span></a></li>
+      <li><a href="#v1611">1.6.11 <span class="n">3 Punkte</span></a></li>
+      <li><a href="#v1610">1.6.10 <span class="n">5 Punkte</span></a></li>
+      <li><a href="#v169">1.6.9 <span class="n">2 Punkte</span></a></li>
+      <li><a href="#v168">1.6.8 <span class="n">2 Punkte</span></a></li>
+      <li><a href="#v167">1.6.7 <span class="n">1 Punkt</span></a></li>
+      <li><a href="#v166">1.6.6 <span class="n">4 Punkte</span></a></li>
+      <li><a href="#v165">1.6.5 <span class="n">2 Punkte</span></a></li>
+      <li><a href="#v164">1.6.4 <span class="n">1 Punkt</span></a></li>
+      <li><a href="#v163">1.6.3 <span class="n">4 Punkte</span></a></li>
+      <li><a href="#v162">1.6.2 <span class="n">2 Punkte</span></a></li>
+      <li><a href="#v161">1.6.1 <span class="n">3 Punkte</span></a></li>
+      <li><a href="#v160">1.6.0 <span class="n">3 Punkte</span></a></li>
+      <li><a href="#v159">1.5.9 <span class="n">3 Punkte</span></a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <div class="note">
+      <h2>Der rote Faden: die Sitzung</h2>
+      <p>
+        Vier der elf Versionen drehen sich um dasselbe: eine <strong>Sitzung</strong>
+        ist ein Stück Spielzeit, und man will sie benennen, fortsetzen,
+        zusammenlegen und verlässlich nummeriert sehen können. Bis 1.5.8 war eine
+        Sitzung schlicht das, was zwischen Einloggen und Ausloggen passierte.
+      </p>
+      <p>
+        Zur Nummerierung: jede Landung trägt zwei Zahlen. Die <strong>globale</strong>
+        steht in der Datei, ist eindeutig und wird nie wiederverwendet &mdash; CSV,
+        Viewer und der Löschen-Dialog meinen sie. Angezeigt wird dagegen die
+        Position <strong>innerhalb der Sitzung</strong>, sobald nur eine auf der
+        Karte liegt. Ab 1.6.2 entscheidet das die Karte selbst, nicht mehr die
+        gewählte Ansicht.
+      </p>
+    </div>
+
+    <!-- =============================================================== 1.6.14 -->
+    <section class="release" id="v1614">
+      <div class="rel-head">
+        <h2>1.6.14</h2>
+        <span class="date">06.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Niemand schickt einen Lauf los, um &bdquo;irgendwas Seltenes&ldquo; zu finden.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Der Suchauftrag findet einzelne Biome</h3>
+          <div class="body">
+            <p>
+              Die achtzehn Biomfamilien waren Ankreuzzeilen: <em>Selten</em> an,
+              und der Lauf hielt bei Pilzinsel, Kirschhain <em>oder</em> Blassem
+              Garten. Eine Familie ist ein Farbband auf der Karte, und dafür ist
+              sie richtig. Für einen Suchauftrag ist sie die falsche Körnung
+              &mdash; gesucht wird der Blassgarten, die Familie ist nur der Weg
+              dorthin.
+            </p>
+            <p>
+              Jede Familienzeile klappt jetzt ihre Biome auf: obenauf die
+              <strong>ganze Familie</strong> wie bisher, darunter jedes einzelne
+              Biom mit der Zahl deiner bisherigen Landungen darin. Mehrere
+              gleichzeitig sind erlaubt, in einer Familie oder über mehrere, und
+              das Menü bleibt beim Ankreuzen offen &mdash; drei Biome sind drei
+              Häkchen, nicht drei Wege durch dasselbe Menü. Die Zeile selbst sagt
+              danach, was gewählt ist: <em>aus</em>, <em>ganze Familie</em>, der
+              Biomname, oder eine Anzahl.
+            </p>
+            <p>
+              Die Liste kommt aus der <strong>Biomliste des Servers</strong>,
+              nicht aus deinen Landungen. Das ist der ganze Punkt: eine Liste aus
+              den Aufzeichnungen enthält genau die Biome, die du schon hast, und
+              damit nie das, was du suchst. Aufgezeichnete Biome kommen oben
+              drauf, damit ein Name nicht verschwindet, weil du gerade auf einem
+              anderen Server bist. Die <strong>0</strong> hinter einem Biom ist
+              deshalb die interessante Zahl: dort war der Suchauftrag noch nie.
+            </p>
+            <p>
+              Der Wert stand schon vorher in der <code>config.json</code> unter
+              <code>autoRtp.findBiomes</code> und wurde auch schon geprüft &mdash;
+              es fehlte nur jede Möglichkeit, ihn mit der Maus zu setzen.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Der Mangrovensumpf war ein Schneebiom</h3>
+          <div class="body">
+            <p>
+              Die Familien werden über Namensteile bestimmt, und die Regel für
+              den <em>Hain</em> (<code>grove</code>) traf mitten in
+              <code>mangrove_swamp</code> hinein. Der Mangrovensumpf lag damit
+              seit 1.6.10 im Schnee: hellblauer Punkt auf der Karte, falsche
+              Zeile in der Biomstatistik, falsche Familie im Suchauftrag.
+            </p>
+            <p>
+              Aufgefallen ist es beim Nachzählen für das neue Menü &mdash; alle
+              65 Biome der Version einmal durch die Einordnung geschickt und
+              angesehen, wo sie landen. Die Regel steht jetzt über der
+              Hain-Regel, wie es die Datei für schmalere Regeln ohnehin vorsieht.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.13 -->
+    <section class="release" id="v1613">
+      <div class="rel-head">
+        <h2>1.6.13</h2>
+        <span class="date">06.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Achtzehn Wahlmöglichkeiten gehören nicht auf einen Durchschaltknopf.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Der Biomfilter klappt eine Liste auf</h3>
+          <div class="body">
+            <p>
+              Die übrigen Filter der Kartenleiste schalten durch, und das ist bei
+              drei oder vier Wahlmöglichkeiten richtig: ein Druck geht einen
+              Schritt weiter, der nächste nimmt ihn zurück. Bei achtzehn
+              Biomfamilien ist es kein Filter mehr &mdash; nach einer falschen
+              Wahl liegen siebzehn weitere Klicks zwischen dir und wieder
+              <em>allen Biomen</em>.
+            </p>
+            <p>
+              Jetzt öffnet der Knopf eine Liste unter sich: <em>Alle Biome</em>
+              obenauf, darunter nur die Familien, die im gewählten Umfang
+              wirklich vorkommen, jede mit ihrem Farbfeld und der Anzahl
+              dahinter. Ein Klick wählt, ein Klick daneben schließt,
+              <code>Esc</code> ebenso. Die aktuelle Wahl ist hinterlegt.
+            </p>
+            <p>
+              Die Liste kommt aus dem <strong>ganzen</strong> Umfang, nicht aus
+              der gefilterten Menge: sobald eine Familie gewählt ist, enthält die
+              gefilterte Menge genau diese eine, und eine daraus gebaute Liste
+              könnte nie eine andere anbieten &mdash; derselbe Fehler, den der
+              Dimensionsfilter vor 1.6.2 hatte.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.12 -->
+    <section class="release" id="v1612">
+      <div class="rel-head">
+        <h2>1.6.12</h2>
+        <span class="date">06.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Die volle Karte wird ein Bild statt zwanzigtausend Rechtecken.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Punkte und Route kommen in eine Textur</h3>
+          <div class="body">
+            <p>
+              Alles, was die Karte zeichnet, geht durch einen einzigen
+              Rechteck-Aufruf, und der allokiert auf 1.21.11 zweimal: einen
+              Zeichenzustand und eine Kopie der aktuellen Matrix. Ein runder
+              Marker sind fünf davon, ein hohler acht, ein Routenabschnitt einer
+              mehr plus Matrix-Push und -Drehung. Zweitausend gerahmte Landungen
+              waren damit rund zwanzigtausend Rechtecke je Bild &mdash; das ist
+              keine Rechenlast, das ist Allokationslast.
+            </p>
+            <p>
+              Über dem <strong>Zeichenbudget</strong> wird die ganze Ebene
+              &mdash; jede Landung und die Route dazwischen &mdash; stattdessen
+              in eine Textur gemalt, und jedes Bild dazwischen ist ein einziger
+              Quad. Neu gemalt wird nur, wenn sich etwas ändert, wovon das Bild
+              abhängt: Ansicht, Filter, Markermodus, Farbmodus, gewählte Landung.
+              Nicht die Maus. Auf 1971 Landungen gemessen: 0,44&nbsp;ms ohne
+              Route, 0,86&nbsp;ms mit ihr und den Richtungspfeilen.
+            </p>
+            <p>
+              Der schöne Nebeneffekt ist, dass in einer Textur ein Marker Pixel
+              kostet statt Zeichenaufrufe. Das Ausdünnen aus 1.6.11 wird damit
+              überflüssig: der volle Fall zeichnet wieder <em>alle</em>
+              Landungen rund, mit der ganzen Route &mdash; er sieht besser aus
+              als vorher und ist trotzdem schneller.
+            </p>
+            <p>
+              Zwei Rückfallebenen. Auf einer sehr großen Zeichenfläche &mdash;
+              über 2,2&nbsp;Millionen Pixel &mdash; kostet das Übergeben an die
+              Grafikkarte mehr, als die gesparten Rechtecke bringen; dann wird
+              wieder gezeichnet und ausgedünnt. Und ein Neumalen, das länger als
+              2,5&nbsp;ms braucht, darf von einer noch gezogenen Ansicht
+              überholt werden: bis zu 80&nbsp;ms lang steht das vorige Bild,
+              statt dass das Ziehen stockt. Dieselbe Regel, die das Lückenfeld
+              schon hatte.
+            </p>
+            <p>
+              Draußen bleibt, was das Bild nicht halten kann: die gewählte und
+              die überfahrene Landung, weil die sich mit Klick und Maus ändern,
+              und die Sample-Nummern, weil die die Schriftart brauchen.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Die Kennzahlenspalte zeichnet nur noch Sichtbares</h3>
+          <div class="body">
+            <p>
+              Die Spalte ist ein langer Streifen, der mit einer Schere
+              beschnitten wird &mdash; gezeichnet wurde bisher jede Zeile,
+              gleich ob sie im Fenster stand. Mit dem Zellenbrett und den beiden
+              Biomtabellen sind das gut hundertzwanzig Zeilen, jede ein paar
+              Rechtecke und zwei Textstücke. Die weggescrollten kosteten damit
+              genauso viel wie die gelesenen.
+            </p>
+            <p>
+              Jetzt zeichnet nur, was im Fenster liegt. Der Zeilenzeiger läuft
+              trotzdem über alle: die übersprungenen müssen ihre Höhe behalten,
+              sonst wüsste die Scrollleiste nicht, wie lang die Spalte ist.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.11 -->
+    <section class="release" id="v1611">
+      <div class="rel-head">
+        <h2>1.6.11</h2>
+        <span class="date">06.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Erster Durchgang gegen die Last einer vollen Karte: gemessen, nicht
+        geraten.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Die Route allokierte drei Arrays je Segment</h3>
+          <div class="body">
+            <p>
+              Der Zuschnitt einer Linie auf die Zeichenfläche baute jedes Mal
+              drei <code>double[4]</code>: die beiden Tabellen des
+              Liang-Barsky-Verfahrens und das Ergebnis. Bei zweitausend
+              Segmenten sind das sechstausend Arrays <em>je Bild</em>, um vier
+              Zahlen zurückzugeben. Dazu ein weiteres Array je Pfeilspitze.
+            </p>
+            <p>
+              Das Ärgerliche daran: es lief auch dann, wenn gar keine Linie
+              sichtbar war. Ganz hineingezoomt kostete die Route knapp
+              sechstausend Allokationen je Bild für nichts. Jetzt steht das
+              Ergebnis in Feldern und der Zuschnitt allokiert nichts mehr.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Zeichenbudget</h3>
+          <div class="body">
+            <p>
+              Eine Zahl unter <strong>Karte &rarr; Leistung</strong>: ab
+              wievielen gleichzeitig sichtbaren Markern die Karte sparsam
+              zeichnet. Standard 500, <code>Aus</code> zeichnet wieder jede
+              Landung einzeln.
+            </p>
+            <p>
+              Gezählt wird, was wirklich auf dem Schirm liegt, nicht wie groß
+              die Datei ist: zweitausend Landungen, auf eine davon
+              hineingezoomt, sind keine dichte Karte und sollen nichts kosten.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Keine Richtungspfeile mehr auf einer vollen Route</h3>
+          <div class="body">
+            <p>
+              Jede Pfeilspitze sind zwei weitere gedrehte Rechtecke, also zwei
+              Drittel dessen, was die Linie kostet. Auf zweitausend einander
+              überlagernden Segmenten liest sie ohnehin niemand als Richtung,
+              sondern als Rauschen. Ab 400 Segmenten fallen sie weg; die Linie
+              verblasst weiterhin von alt nach neu, was dieselbe Auskunft zum
+              Nulltarif ist.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =============================================================== 1.6.10 -->
+    <section class="release" id="v1610">
+      <div class="rel-head">
+        <h2>1.6.10</h2>
+        <span class="date">06.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Drei Sachen, die aus der Aufzeichnung mehr machen als eine Punktwolke:
+        ein Ziel, ein Suchauftrag und das Biom.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Zellenbrett: 22 von 81</h3>
+          <div class="body">
+            <p>
+              Oben in der Kennzahlenspalte steht jetzt ein 9&times;9-Brett, eine
+              Fläche je Serverzelle. Eine Zelle mit Landungen ist in der Farbe
+              ihrer Zone gefüllt, je mehr Landungen desto kräftiger; eine Zelle
+              mit genau einer trägt einen goldenen Rand, weil eine einzige
+              gelöschte Landung sie wieder leeren würde. Die Zelle, in der du
+              stehst, ist grün umrandet. Darunter Balken je Zone &mdash;
+              <code>7/10</code>, <code>6/27</code> &mdash; jeder mit den Nummern
+              der Zellen, die dieser Zone noch fehlen.
+            </p>
+            <p>
+              Das ist die Abdeckung, die der Prozentwert daneben nicht sein
+              kann. Der teilt durch eine Scheibe, deren Größe von der
+              eingestellten Zellenkante abhängt, sagt also nur etwas über sich
+              selbst aus. Das Raster hat 81 Zellen, was auch immer jemand
+              einstellt &mdash; <em>22 von 81</em> ist ein Satz mit einer
+              Ziellinie darin.
+            </p>
+            <p>
+              Eine Zone ganz ohne Landungen steht blass und ganz unten. Das ist
+              keine Lücke in der Karte, sondern eine Zone, die nie angefordert
+              wurde; ihre Zellen als fehlend zu führen, setzte fünfzig Felder
+              auf eine Liste, die noch nie jemand zu erreichen versucht hat.
+            </p>
+            <p>
+              <code>/rtpbuddy cells</code> schreibt dasselbe in den Chat. Eine
+              Landung in einer nie erreichten Zelle meldet sich im Chat und
+              lässt die Zelle ein paar Sekunden auf der Minikarte pulsieren.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Suchauftrag: der Lauf hält an, wenn er etwas findet</h3>
+          <div class="body">
+            <p>
+              Auto-RTP hielt bisher bei Schaden, Zeitlimit, Anzahl und
+              Schutzzone &mdash; jedes davon ein Grund aufzugeben. Der
+              Suchauftrag ist die andere Sorte: ein Grund anzuhalten, weil
+              gefunden wurde, wofür der Lauf losgeschickt war. Er teleportiert
+              weiter, bis eine Landung passt, hält auf dieser Landung an, spielt
+              einen kurzen Glockenton und sagt im Chat, welche Bedingung
+              ausgelöst hat.
+            </p>
+            <p>
+              Zur Wahl stehen: eine nie erreichte Zelle, eine getippte Liste
+              bestimmter Zellen, achtzehn Biomfamilien, ein Distanzband vom
+              Ursprung und ein Zielpunkt mit Radius. <strong>Verknüpfung</strong>
+              entscheidet, ob eine erfüllte Bedingung reicht oder alle
+              gleichzeitig gelten müssen, und <strong>Aufgeben nach</strong>
+              beendet einen Lauf, der so viele Landungen verworfen hat &mdash;
+              ohne das läuft ein Auftrag mit seltenem Ziel, bis ihn etwas
+              anderes stoppt.
+            </p>
+            <p>
+              Nichts daran lässt die Schleife mehr, schneller oder anders
+              senden. Ein Suchauftrag kann einen Lauf nur früher beenden, als er
+              ohnehin geendet hätte. Während er sucht, steht im HUD, wonach, und
+              wieviele Landungen schon verworfen wurden.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Das Biom wird sichtbar</h3>
+          <div class="body">
+            <p>
+              Jede Landung trägt seit Schema&nbsp;3 ihr Biom, und lange hat es
+              nirgends jemand gesehen. Jetzt an drei Stellen: ein Farbmodus
+              <code>Biom</code>, ein Filterknopf in der unteren Leiste und zwei
+              Aufschlüsselungen in der Kennzahlenspalte &mdash; erst die
+              Familien, dann die acht häufigsten einzelnen Biome.
+            </p>
+            <p>
+              Gefärbt wird nach Biom<em>familie</em>, nicht nach Biom: knapp
+              fünfzig verschiedene sind aufgezeichnet, und fünfzig Farbtöne auf
+              einem Bild sind kein Schlüssel, sondern Konfetti. Die Namen kommen
+              aus Minecrafts eigener Übersetzung, es steht also kein einziger
+              Biomname in den Sprachdateien dieser Mod, und das Suchfeld findet
+              sowohl die Id als auch den angezeigten Namen &mdash;
+              <code>Kirschhain</code> findet, was als
+              <code>minecraft:cherry_grove</code> gespeichert ist.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Eine neue Zelle meldet sich</h3>
+          <div class="body">
+            <p>
+              Landest du in einer Zelle, in der noch nie eine aufgezeichnete
+              Landung lag, sagt es der Chat mit dem neuen Stand &mdash;
+              <em>22 von 81</em> &mdash; und die Zelle pulsiert acht Sekunden
+              lang auf der Minikarte. Beides hängt an der Landung selbst, nicht
+              an einer Abfrage je Bild: die Karte hätte sonst bei jedem Bild den
+              ganzen Datenbestand durchlaufen müssen, um eine Frage zu
+              beantworten, die einmal je Landung anfällt.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3><code>/rtpbuddy cells</code> und <code>/rtpbuddy find</code></h3>
+          <div class="body">
+            <p>
+              <code>cells</code> schreibt den Zellenfortschritt in den Chat, Zone
+              für Zone mit den fehlenden Nummern, und sagt am Ende, in welcher
+              Zelle du gerade stehst. <code>find</code> zeigt den Suchauftrag;
+              <code>find on</code> und <code>find off</code> schalten ihn.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.9 -->
+    <section class="release" id="v169">
+      <div class="rel-head">
+        <h2>1.6.9</h2>
+        <span class="date">06.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Die Karte gibt es jetzt auch klein, in der Ecke, ohne dass etwas
+        stehenbleibt.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Minikarte in der Ecke</h3>
+          <div class="body">
+            <p>
+              Die große Karte beantwortet, wo man steht, und verlangt dafür einen
+              Tastendruck und ein angehaltenes Bild. Die Minikarte beantwortet
+              dasselbe ohne beides: eine kleine Platte am Bildschirmrand, die
+              genau das Rechteck zeigt, das <code>F</code> auf der großen Karte
+              wählt, mit dem eigenen Marker darin.
+            </p>
+            <p>
+              Sie ist keine Geländekarte und will keine sein. Gezeichnet wird die
+              Aufzeichnung: die 50&nbsp;000er Serverfelder in der Farbe ihrer
+              Region, ihre Nummern hineingeschrieben, sobald sie hineinpassen, die
+              Landungen als einzelne Pixel, die rote Linie zur neuesten und die
+              Nullachsen. Darunter ein Streifen mit dem Feld, in dem man steht
+              &mdash; Region und Servernummer in der Farbe dieser Region &mdash;
+              und der Breite des Ausschnitts.
+            </p>
+            <p>
+              Der Ausschnitt steht <strong>fest</strong>. Er rahmt die gewählten
+              Landungen ein und wandert nicht mit, weil eine Karte, die sich bei
+              jedem Schritt neu zentriert, gerade nichts darüber sagt, wo man
+              innerhalb der Aufzeichnung steht. Wer aus dem Rechteck herausläuft,
+              wird als gelber Punkt an den Rand geheftet statt außerhalb gezeichnet
+              zu werden, wo ihn niemand sieht. Ohne aufgezeichnete Landungen rahmt
+              sie das Serverfeld ein, in dem man gerade steht &mdash; auch das ist
+              eine Antwort.
+            </p>
+            <p>
+              <strong>Und sie kostet fast keine Bildrate.</strong> Die Platte wird
+              einmal in eine Textur gemalt und danach als <em>ein</em> Viereck
+              gezeichnet. Tausend Landungen wären sonst tausend
+              <code>fill</code>-Aufrufe in jedem einzelnen Bild &mdash; derselbe
+              Fehler, an dem die Lückenkarte fast gescheitert wäre, nur dauerhaft,
+              weil eine Minikarte die ganze Sitzung über sichtbar ist. Neu gemalt
+              wird nur bei einer neuen Landung, einer anderen Sitzung, einem
+              umgelegten Schalter oder beim Überqueren einer Feldgrenze; das dauert
+              mit zweitausend Landungen unter 3&nbsp;ms. Pro Bild bleiben Marker,
+              Feldnummern und Beschriftung, rund fünfzig Rechtecke.
+            </p>
+            <p>
+              Standardmäßig unten rechts, weil oben links das Text-Overlay sitzt
+              und oben rechts meist die Minikarte einer anderen Mod. Verschieben
+              wie das Overlay, an- und ausschalten auch über
+              <code>/rtpbuddy minimap</code>.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Der Platzierungs-Bildschirm platziert beide</h3>
+          <div class="body">
+            <p>
+              Bisher lag dort ein Kasten. Jetzt liegen beide da: Text-Overlay und
+              Minikarte, jeder beschriftet, <kbd>Tab</kbd> wechselt zwischen ihnen.
+              Das ist nicht Bequemlichkeit &mdash; die Frage, die dieser Bildschirm
+              beantwortet, ist <em>überlappt hier etwas</em>, und die kann man mit
+              nur einem von zwei sichtbaren Kästen nicht beantworten.
+            </p>
+            <p>
+              Beide werden immer gezeigt, auch ausgeschaltet: etwas hinzulegen
+              bevor man es einschaltet ist die normale Reihenfolge, und ein
+              Kasten, der beim Ausschalten verschwindet, wäre genau dann nicht
+              platzierbar, wenn er platziert werden soll.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.8 -->
+    <section class="release" id="v168">
+      <div class="rel-head">
+        <h2>1.6.8</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Drei Kartenmodi statt fünf. Der neue kann, was die zwei alten konnten, und
+        beantwortet die Frage besser.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag gone">Entfernt</span>
+          <h3>Heatmap und Cluster</h3>
+          <div class="body">
+            <p>
+              Beide sagten dasselbe: <em>wo ist es dicht</em>. Die Heatmap malte
+              Dichte als Farbe, Cluster fasste Marker zu Blasen zusammen &mdash;
+              zwei Antworten auf dieselbe Frage, und beide über die <strong>Punkte</strong>,
+              nicht über den Boden. Genau das war das Problem: ein dunkler Fleck
+              auf der Heatmap hieß gleichzeitig „nie dort gelandet&ldquo;, „vom
+              Filter versteckt&ldquo; und „die Region reicht nicht dorthin&ldquo;.
+            </p>
+            <p>
+              Der Lückenmodus misst stattdessen den Abstand zur nächsten Landung.
+              Damit steht die Aussage nicht mehr in der Abwesenheit von Farbe,
+              sondern in einer Zahl, die man schattieren, ranken und ablesen kann
+              &mdash; und seit sie da ist, hatten die anderen beiden nichts mehr
+              zu sagen.
+            </p>
+            <p>
+              Der Modus-Knopf geht jetzt <strong>Punkte &rarr; Pfad &rarr;
+              Advanced</strong>. Eine Config, in der noch <code>HEATMAP</code>
+              oder <code>CLUSTER</code> steht, fällt beim Laden still auf Punkte
+              zurück; es geht nichts kaputt und nichts verloren.
+            </p>
+            <p>
+              Die Einstellung <strong>Heatmap-Zelle</strong> heißt jetzt
+              <strong>Dichtezelle</strong> und zeichnet nichts mehr. Sie bleibt,
+              weil sie die Grundlage der Statistik <em>Abdeckung</em> ist &mdash;
+              getroffene Zellen geteilt durch die Zellen innerhalb der Grenze.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Der Lückenmodus heißt <em>Advanced</em></h3>
+          <div class="body">
+            <p>
+              Vorher <em>Dummy</em>. Der Name war für Leute gedacht, die mit den
+              anderen Modi nichts anfangen konnten &mdash; jetzt ist er der Modus,
+              der am meisten kann, und ein Name, der das Gegenteil behauptet,
+              steht dem im Weg.
+            </p>
+            <p>
+              Intern bleibt der Modus <code>GAPS</code>, damit ein gespeichertes
+              <code>map.markerMode</code> nicht angefasst werden muss.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.7 -->
+    <section class="release" id="v167">
+      <div class="rel-head">
+        <h2>1.6.7</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Auto-RTP ohne Uhr: derselbe Lauf, aber der Auslöser bist du.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Manuell auslösen</h3>
+          <div class="body">
+            <p>
+              Ein Schalter im Tab Auto-RTP schaltet die Uhr ab. Der Lauf bleibt
+              ein Lauf &mdash; Regionen-Reihenfolge, Zähler, Obergrenzen,
+              Laufzeit-Limit und jede Stopp-Bedingung verhalten sich exakt wie
+              vorher &mdash; aber gesendet wird erst auf die
+              <strong>Auto-RTP-Taste</strong>, ein Teleport je Druck.
+            </p>
+            <p>
+              Für die andere Hälfte der Arbeit: eine Karte füllen und sich
+              ansehen wo man gelandet ist wollen verschiedene Rhythmen, und den
+              zweiten bestimmst du, statt eine Rate im Voraus raten zu müssen.
+              Wartezeit und Streuung gelten dann nicht mehr, bis auf eine harte
+              Untergrenze von 2&nbsp;Sekunden zwischen zwei Befehlen &mdash; eine
+              gedrückt gehaltene Taste darf kein Befehlsfeuer werden.
+            </p>
+            <p>
+              Ein Druck, der nicht ausgeführt werden kann, <strong>lehnt ab statt
+              zu merken</strong>, und sagt warum. Ein still nachgereichter
+              Teleport wäre schlimmer als gar keiner: zu wissen wann der Befehl
+              rausging ist der ganze Sinn des manuellen Takts. Ein Druck, der
+              geklappt hat, sagt nichts &mdash; der Befehl steht schon im Chat,
+              der Server antwortet darauf, und das HUD zählt ihn.
+            </p>
+            <p>
+              Einen Countdown gibt es nicht, also wird auch keiner angezeigt: das
+              HUD schreibt <code>MANUELL</code>, der Kartenknopf
+              <em>Auto manuell</em>. Dazu <code>/rtpbuddy auto step</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.6 -->
+    <section class="release" id="v166">
+      <div class="rel-head">
+        <h2>1.6.6</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Der Lücken-Modus aus 1.6.5 im echten Einsatz nachgeschärft, und die
+        Tastenbelegung auf das Nötige zusammengestrichen.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Rote Linie zur letzten Landung</h3>
+          <div class="body">
+            <p>
+              Jede Karte zieht jetzt ungefragt eine Linie: von dem Punkt, an dem
+              der jüngste Teleport startete, zu der Stelle, an der er landete
+              &mdash; rot, mit Pfeil in Laufrichtung. Beim Zuschauen beantwortet
+              sie ohne Klick, von welchem der Punkte du gerade gekommen bist.
+            </p>
+            <p>
+              Gezogen aus dem <strong>aufgezeichneten Ursprung</strong> dieses
+              Samples, nicht aus dem vorherigen Sample: dazwischen läufst du
+              herum, fällst, nimmst ein Portal, und nur der gespeicherte Ursprung
+              ist eine Aussage über <em>diesen</em> Teleport. Über Dimensionen
+              hinweg weggelassen, wo eine gerade Linie nichts misst. Abschaltbar
+              als <code>map.showLastLeg</code>.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Sieben Tasten auf fünf, eine trägt den ganzen Lauf</h3>
+          <div class="body">
+            <p>
+              Die Auto-RTP-Taste macht jetzt alles: kein Lauf &rarr;
+              Startdialog, Lauf auf Zeit &rarr; anhalten und fortsetzen, Lauf
+              manuell &rarr; nächsten Teleport senden. Gestoppt wird nur mit
+              <code>Ende</code> &mdash; die eine nicht rücknehmbare Aktion liegt
+              damit auf einer eigenen Taste statt einen Druck neben dem Anhalten.
+            </p>
+            <p>
+              Weggefallen sind die eigene Taste fürs Anhalten und die für die
+              Aufnahme-Pause: ein Schalter, den man einmal pro Sitzung setzt,
+              braucht keine Taste, und eine zweite Taste, die den Lauf nur halb
+              stoppte, war eine zu viel, um sie in der Eile auseinanderzuhalten.
+              Beides bleibt über <code>/rtpbuddy capture pause</code>,
+              <code>/rtpbuddy auto pause</code> und die Einstellungen erreichbar.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Lücken-Maske liegt eng an</h3>
+          <div class="body">
+            <p>
+              1.6.5 erweiterte jede belegte Kachel um einen Ring &mdash; das
+              wickelte die ganze Aufzeichnung in eine mehrere Kacheln breite
+              Schürze aus nie besuchtem Boden. Ehrlich leer und völlig nutzlos:
+              leer, weil dort noch niemand hingeschaut hat, nicht weil der Server
+              die Gegend meidet.
+            </p>
+            <p>
+              Jetzt ist die Maske die Fläche der Aufzeichnung selbst, gefüllt
+              statt gewachsen. Die Kachelgröße ist nur noch eine Streifenbreite:
+              ein Punkt ist drin, wenn er zwischen der linkesten und rechtesten
+              Landung seines Zeilenstreifens <strong>und</strong> zwischen der
+              obersten und untersten seines Spaltenstreifens liegt &mdash;
+              gemessen an den echten Koordinaten, nicht an Kachelkanten. An
+              1201&nbsp;Landungen gemessen: von 76&nbsp;% der Karte auf
+              17&nbsp;%.
+            </p>
+            <p>
+              Ein Loch am Rand der Aufzeichnung wird trotzdem gelistet. Das Feld
+              steigt jenseits der Maske weiter an, also ist dort keine Zelle
+              innerhalb je ein lokales Maximum; ein Nachbar außerhalb zählt
+              deshalb nicht mehr als höher. Ohne das verschwand ausgerechnet das
+              größte Loch der Karte aus der Liste. Standard-Streifenbreite 8.000
+              &rarr; <strong>16.000</strong>, Auswahl 4k bis 64k.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Äußere Kacheln blinkten beim Verschieben</h3>
+          <div class="body">
+            <p>
+              Der Lücken-Modus fragte für jede Kachel „liegt der Mittelpunkt in
+              der Maske?&ldquo; &mdash; und nahm dafür den auf den Bildschirm
+              <em>beschnittenen</em> Mittelpunkt. Bei einer Kachel, die halb aus
+              dem Bild ragt, wandert dieser Punkt beim Ziehen durch die Kachel,
+              während die Kachel stillsteht. Dasselbe Quadrat bekam von Frame zu
+              Frame eine andere Antwort.
+            </p>
+            <p>
+              Die Maske überlebt den Aufbau jetzt als <strong>Weltangabe</strong>
+              und wird an der echten Kachelmitte geprüft. Dazu wird eine Kachel
+              mit einer Landung immer gezeichnet, egal was die Maske sagt: die
+              Maske ist nicht auf das Kachelraster ausgerichtet, also konnte eine
+              Kachel, deren Mitte knapp draußen lag, in einer Ecke trotzdem
+              Landungen halten &mdash; Marker auf nacktem Boden ohne Kachel
+              darunter, was wie ein Fehler aussah und einer war.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.5 -->
+    <section class="release" id="v165">
+      <div class="rel-head">
+        <h2>1.6.5</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Ein fünfter Kartenmodus, der die umgekehrte Frage stellt: nicht wo
+        Landungen liegen, sondern wo keine liegen.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Kartenmodus <em>Dummy</em> &mdash; die Lückenkarte</h3>
+          <div class="body">
+            <p>
+              Punkte, Pfad, Heatmap und Cluster zeichnen alle dasselbe Motiv: die
+              Landungen. Damit ist eine Lücke nur der Boden, auf dem nichts
+              gezeichnet wurde &mdash; und ein dunkler Fleck auf der Heatmap heißt
+              gleichzeitig dreierlei: nie dort gelandet, vom Filter versteckt,
+              oder die Region reicht gar nicht dorthin. Nichts auf dem Schirm
+              unterscheidet die drei.
+            </p>
+            <p>
+              Der neue Modus färbt jeden Punkt der Karte nach dem <strong>Abstand
+              zur nächsten aufgezeichneten Landung</strong> ein: dunkel, wo es eng
+              zugeht, bernstein, wo nie etwas kam. Damit wird aus der Abwesenheit
+              selbst ein Messwert, den man schattieren, ranken und ablesen kann.
+              Die größten Löcher werden eingekreist, nummeriert und mit Koordinate
+              und Radius in der Statistik-Spalte gelistet; die Cursor-Zeile zeigt
+              den Abstand unter dem Zeiger.
+            </p>
+            <p>
+              Zwei Bilder, eine Messung: <strong>bis zum 5k-Maßstab</strong>
+              schattiert die Karte, weil ein Loch aus der Nähe eine Form mit
+              Rändern ist. <strong>Darüber</strong> wird derselbe Boden in feste
+              Weltkacheln geschnitten, die ihre eigene Trefferzahl in vier Bändern
+              tragen &mdash; 0, 1, 2&ndash;3, 4 und mehr &mdash; weil eine Form von
+              wenigen Pixeln keine Form ist, eine Zahl aber schon. Es ist dieselbe
+              5k-Marke wie bei den Sample-Nummern aus 1.6.4, damit die Karte eine
+              Regel hat statt zwei. Die Kacheln rasten auf feste Weltkoordinaten,
+              also bedeutet dieselbe Kachel über Sitzungen hinweg dasselbe Quadrat
+              und lässt sich abhaken.
+            </p>
+            <p>
+              Der Abstand allein würde immer den Kartenrand zum leersten Ort
+              erklären, weil dahinter schlicht nie aufgezeichnet wurde. Die Messung
+              ist deshalb auf eine <strong>Maske</strong> begrenzt: die Weltkacheln
+              mit einer Landung, um eine Kachel nach außen gewachsen. Innerhalb
+              heißt „hier ist nichts&ldquo; etwas über den Server, außerhalb nur
+              etwas darüber, wie weit die Aufzeichnung gekommen ist &mdash; und
+              das wird abgedunkelt, damit man es sieht.
+            </p>
+            <p>
+              <strong>Vorher auf eine Region filtern.</strong> Die Messung rechnet
+              von sich aus richtig &mdash; ein Ort, den zwei Regionen erreichen,
+              ist nur selten, wenn er in beiden selten ist. Aber ein Loch der
+              Region, die dich interessiert, wird von Landungen einer Region
+              zugeschüttet, die du dort nie angefragt hast.
+            </p>
+            <p>
+              Ein gemeldeter Radius ist immer <strong>abgerundet</strong>: die
+              Fläche ist mindestens so leer. Gemessen wird auf einem Raster in
+              Bildschirmkoordinaten, und eine Zelle ist ein paar hundert Blöcke
+              wert, wenn eine ganze Region im Bild liegt &mdash; die Zahl
+              untertreibt lieber um so viel, als dich auf eine Lichtung zu
+              schicken, in deren Mitte doch eine Landung sitzt.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Zwei Einstellungen dazu</h3>
+          <div class="body">
+            <p>
+              <strong>Lücken-Suchfeld</strong> (2.000 bis 32.000 Blöcke, Standard
+              8.000) setzt die Kachel, mit der die Karte abgrenzt, wo überhaupt
+              schon aufgezeichnet wurde &mdash; größer heißt, die Suche schaut
+              weiter über die äußersten Landungen hinaus. <strong>Gelistete
+              Lücken</strong> (3, 5, 8 oder 12) sagt, wie viele Löcher eingekreist
+              und aufgelistet werden.
+            </p>
+            <p>
+              Zur Technik, weil sie den Modus überhaupt erst brauchbar macht: die
+              Schattierung wird einmal je Neuberechnung als Textur hochgeladen und
+              danach als <em>ein</em> Viereck gezeichnet. Der naheliegende Weg
+              &mdash; ein Rechteck je Zelle &mdash; ist auf 1.21.11 der falsche:
+              jedes <code>fill</code> legt ein Render-State-Objekt <em>und</em>
+              eine Kopie der Matrix an, also sind dreitausend Zellen sechstausend
+              Allokationen in jedem Frame eines Zooms. Genau das hat die CPU heiß
+              gemacht, bevor der Modus ausgeliefert wurde.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.4 -->
+    <section class="release" id="v164">
+      <div class="rel-head">
+        <h2>1.6.4</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Nachschärfung an den Kartennummern aus 1.6.3.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Nummern erst ab dem 5k-Maßstab</h3>
+          <div class="body">
+            <p>
+              Die Enge der Marker allein reichte als Grenze nicht: bei weit
+              gestreuten Landungen erschienen die Nummern noch immer zu früh.
+              Jetzt entscheidet zuerst der <strong>Maßstabsbalken unten
+              links</strong> &mdash; sagt er mehr als 5.000 Blöcke, bleiben die
+              Nummern weg.
+            </p>
+            <p>
+              Näher dran kommt die Prüfung auf Enge aus 1.6.3 dazu. Die Regel
+              steht damit sichtbar auf dem Schirm statt in einer Zoomzahl, die
+              niemand ablesen kann.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.3 -->
+    <section class="release" id="v163">
+      <div class="rel-head">
+        <h2>1.6.3</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Sitzungen lassen sich jetzt zusammenlegen und benennen. Dazu zwei
+        Kleinigkeiten, die im Alltag stören: die Nummern auf der Karte und die
+        starren Takt-Stufen.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Sitzungen zusammenführen</h3>
+          <div class="body">
+            <p>
+              Zwei oder mehr Sitzungen in der Sessionliste anhaken, dann
+              <strong>Sitzungen zusammenführen&nbsp;(n)</strong>. Ziel ist die
+              älteste: ihre Farbe, ihr Name und ihre Startzeit bleiben, ihr
+              Zeitraum dehnt sich über alle aus.
+            </p>
+            <p>
+              <strong>Gelöscht wird nichts.</strong> Jede Landung bleibt erhalten
+              und gehört danach zu einer Sitzung, durchnummeriert ab 1 in der
+              Reihenfolge, in der du gelandet bist. Nachgerechnet an einer echten
+              Datei mit 900 Landungen: aus 344&nbsp;+&nbsp;190 wurden 1&hellip;534,
+              ohne Lücke und in Zeitreihenfolge.
+            </p>
+            <p>
+              Die anderen Sitzungseinträge verschwinden, darum fragt vorher ein
+              Dialog &mdash; rückgängig geht es nicht. Über Server hinweg wird
+              abgelehnt. War die laufende Sitzung dabei, läuft sie in der
+              zusammengeführten weiter.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Sitzung umbenennen</h3>
+          <div class="body">
+            <p>
+              Genau eine Sitzung anhaken, dann <strong>Sitzung umbenennen</strong>
+              &mdash; auch für die gerade laufende. Bis zu 32 Zeichen, statt dass
+              jede Zeile wieder <code>donutsmp.net</code> wiederholt.
+            </p>
+            <p>
+              Der Name steht danach in der Sessionliste, in der Sitzungskarte und
+              im Viewer. Leer lassen setzt ihn zurück, dann erscheint wieder der
+              Servername.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Sample-Nummern erst beim Reinzoomen</h3>
+          <div class="body">
+            <p>
+              Weit herausgezoomt lagen die Nummern übereinander und verdeckten
+              genau die Marker, die sie beschriften sollten. Jetzt bleiben sie
+              weg, bis Platz für sie ist.
+            </p>
+            <p>
+              Gemessen wird nicht die Zoomstufe, sondern <strong>wie eng die
+              Marker stehen</strong>: teilen sich mehr als ein Fünftel von ihnen
+              eine beschriftungsgroße Fläche, bleiben die Nummern aus. Um die
+              feste Untergrenze dazu siehe 1.6.4.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Takt frei eintragbar, Minimum 2&nbsp;s</h3>
+          <div class="body">
+            <p>
+              <strong>Wartezeit</strong> und <strong>Streuung</strong> im Tab
+              Auto-RTP sind Eingabefelder statt fester Stufen &mdash; keine Leiter
+              aus Werten trifft das Intervall, das ein bestimmter Server
+              tatsächlich will.
+            </p>
+            <p>
+              Die Untergrenze liegt bei <strong>2&nbsp;s</strong> statt bei 5.
+              Verkürzt wird weiterhin nie eine Server-Wartezeit: lehnt der Server
+              ab, wartet der nächste Versuch dasselbe Intervall erneut ab.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.2 -->
+    <section class="release" id="v162">
+      <div class="rel-head">
+        <h2>1.6.2</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Nachtrag zu 1.6.1: die Nummerierung richtet sich jetzt danach, was
+        tatsächlich auf der Karte liegt.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Einzeln angehakte Sitzung begann mitten in der Zählung</h3>
+          <div class="body">
+            <p>
+              In <em>Alle Sessions</em> genau eine Sitzung anzuhaken zeigt eine
+              Sitzung &mdash; die Nummern fingen aber bei der globalen Zahl an,
+              also irgendwo mitten drin.
+            </p>
+            <p>
+              Maßgeblich ist jetzt der Karteninhalt, nicht die gewählte Ansicht:
+              liegt nur eine Sitzung darauf, zählt sie ab 1. Erst bei zweien
+              übernimmt die globale Nummer, weil nur die dann eindeutig bleibt.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Suchfeld findet beide Nummern</h3>
+          <div class="body">
+            <p>
+              Du siehst <code>#3</code> und tippst 3 &mdash; und die Datei führt
+              diese Landung als <code>#297</code>. Gesucht wird jetzt nach beiden
+              Zahlen, damit keine der zwei Arten, sich ein Sample zu merken, ins
+              Leere läuft.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.1 -->
+    <section class="release" id="v161">
+      <div class="rel-head">
+        <h2>1.6.1</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Die Sessionliste merkt sich ihre Auswahl, und eine alte Sitzung lässt sich
+        fortsetzen statt eine neue zu beginnen.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Angehakte Sitzungen wurden beim Schließen zurückgesetzt</h3>
+          <div class="body">
+            <p>
+              Die Auswahl wird jetzt gespeichert
+              (<code>map.filterSessions</code>), und zwar bei
+              <strong>jedem Klick</strong> statt erst beim Schließen: ein Teleport
+              kann die Karte abräumen, ohne dass sie je regulär schließt.
+            </p>
+            <p>
+              Eine Auswahl, von der keine Sitzung mehr existiert, wird beim Öffnen
+              verworfen &mdash; sonst stünde man vor einer leeren Karte ohne
+              erkennbaren Grund.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Auswahl leerte auch die Ansicht „Diese Session“</h3>
+          <div class="body">
+            <p>
+              Enthielt die Auswahl die laufende Sitzung nicht, blieb auch die
+              Einzelsitzungs-Karte leer. Der Sessionfilter greift jetzt nur noch
+              in <em>Alle Sessions</em> und wird geparkt, solange die Karte eine
+              einzelne Sitzung zeigt.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Sitzung fortsetzen</h3>
+          <div class="body">
+            <p>
+              Genau eine ältere Sitzung anhaken, dann <strong>Sitzung
+              fortsetzen</strong>: jede weitere Landung wird ihr zugeschlagen, die
+              Zählung läuft weiter statt bei 1 anzufangen, und das HUD zählt ab
+              dem Stand dieser Sitzung.
+            </p>
+            <p>
+              Die laufende Sitzung wird vorher sauber beendet &mdash; und
+              verworfen, wenn sie nichts aufgezeichnet hat. Über Server hinweg
+              abgelehnt. Ein Relog beendet das Fortsetzen bewusst: neu einloggen
+              öffnet eine neue Sitzung, und fortsetzen ist dann wieder ein Klick.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.6.0 -->
+    <section class="release" id="v160">
+      <div class="rel-head">
+        <h2>1.6.0</h2>
+        <span class="date">04.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Auto-RTP lässt sich anhalten statt nur stoppen, und der Startdialog kommt
+        ohne Pflicht-Häkchen aus.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3><code>N</code> hält Auto-RTP an, ohne den Lauf zu beenden</h3>
+          <div class="body">
+            <p>
+              Für den Moment, in dem man sich ansehen will, wo der letzte Teleport
+              gelandet ist. <strong>Wartezeit und Laufzeit frieren ein</strong>,
+              Zähler und Position in der Regionen-Reihenfolge bleiben stehen, und
+              Schaden oder Schutzzonen stoppen währenddessen nichts &mdash; was du
+              beim Herumstehen abbekommst, ist deins und nicht Sache der Schleife.
+            </p>
+            <p>
+              Nochmal <code>N</code> macht mit der Restwartezeit weiter. Ebenso über
+              <code>/rtpbuddy auto pause</code> und <code>resume</code> oder den Knopf
+              im Tab Auto-RTP. Das HUD zeigt <code>ANGEHALTEN</code> in Grau, der
+              Kartenknopf <em>Auto hält</em> &mdash; ein Countdown, der sich nicht
+              bewegt, sähe aus wie ein hängendes Spiel. <code>H</code> und
+              <code>Ende</code> beenden weiterhin ganz.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Startdialog ohne Bestätigungshäkchen</h3>
+          <div class="body">
+            <p>
+              Das Häkchen „Geprüft: das Wiederholen ist hier erlaubt“ ist weg. Der
+              Dialog nennt weiterhin die komplette Rotation, die Wartezeit samt
+              Streuung und jede Bedingung, die den Lauf beendet &mdash; gesendet
+              wird nichts, bevor du auf <strong>Auto-RTP starten</strong> drückst.
+              Das Drücken ist die Bestätigung.
+            </p>
+            <p>
+              Grau bleibt der Knopf nur noch, wenn keine gewählte Region einen
+              Befehl hat, weil die Schleife dann nichts senden würde.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag gone">Entfernt</span>
+          <h3>Taste <code>N</code> für „Karte (alle Sessions)“</h3>
+          <div class="body">
+            <p>
+              Die Karte merkt sich ihren Umfang, seit der mit gespeichert wird
+              &mdash; beide Tasten öffneten also denselben Bildschirm. Die frei
+              gewordene Taste ging an das Anhalten oben.
+            </p>
+            <p>
+              <em>Alle Sessions</em> erreichst du weiterhin über den Knopf oben
+              rechts in der Karte und über <code>/rtpbuddy all</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================================================================ 1.5.9 -->
+    <section class="release" id="v159">
+      <div class="rel-head">
+        <h2>1.5.9</h2>
+        <span class="date">03.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Sich auf der Karte wiederfinden, und eine neue Sitzung beginnen können,
+        ohne sich aus- und wieder einzuloggen.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Spielermarker neu gezeichnet</h3>
+          <div class="body">
+            <p>
+              Bei offener Karte war der grüne Punkt während eines Teleports kaum
+              zu sehen. Jetzt: ein Ring mit dunklem Kragen, der sich von jedem
+              Untergrund abhebt, ein langsam auslaufender Puls
+              (<code>map.playerPulse</code>) und ein einpixeliger Strich aus der
+              Mitte als Blickrichtung.
+            </p>
+            <p>
+              Bewegung ist das Einzige, was sonst nichts auf der Karte macht
+              &mdash; nach einer Landung findet man sich damit sofort wieder.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Neue Sitzung starten</h3>
+          <div class="body">
+            <p>
+              Ein Knopf am Fuß der Sitzungskarte beendet die laufende Sitzung und
+              öffnet die nächste, ohne Relog. Die Samples zählen danach wieder ab
+              1, die Zähler der Karte ebenso.
+            </p>
+            <p>
+              Gelöscht wird nichts: die bisherigen Landungen behalten ihre
+              Sitzung. Eine Sitzung ohne Landung wird nicht ersetzt &mdash; sonst
+              tauschte man eine leere gegen eine identische leere.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Viewer zeigte die Region als rohe ID</h3>
+          <div class="body">
+            <p>
+              Die Hover-Karte im Viewer schrieb <code>na_east</code> statt
+              <em>NA East</em>. Sie geht jetzt durch dieselbe Beschriftungsregel
+              wie die Mod.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
+    <code>SETTINGS.md</code> und auf der Seite
+    <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische
+    Fassung als <code>RTPBuddy-Settings.html</code>.
+  </footer>
+
+</div>

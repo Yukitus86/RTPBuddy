@@ -1,0 +1,457 @@
+<title>RTPBuddy Kurzfassung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* Same tokens as the long patch notes, so the two read as one document. */
+  :root {
+    --ground:      #F4F6F8;
+    --surface:     #FFFFFF;
+    --surface-alt: #EDF1F5;
+    --line:        #D8DFE7;
+    --line-soft:   #E6EBF0;
+    --ink:         #161A20;
+    --ink-soft:    #414B58;
+    --ink-mute:    #6B7787;
+    --accent:      #17628F;
+    --accent-soft: #E3F0F8;
+    --mono-bg:     #EEF2F6;
+    --shadow:      0 1px 2px rgba(22, 26, 32, .06), 0 8px 24px -18px rgba(22, 26, 32, .5);
+
+    --tag-new:       #146A47;
+    --tag-new-bg:    #E1F2EA;
+    --tag-new-line:  #A9D8C2;
+    --tag-chg:       #17628F;
+    --tag-chg-bg:    #E3F0F8;
+    --tag-chg-line:  #A9CFE5;
+    --tag-fix:       #8A5A00;
+    --tag-fix-bg:    #F8EFDC;
+    --tag-fix-line:  #E0BE72;
+    --tag-gone:      #8A3A32;
+    --tag-gone-bg:   #F8E6E3;
+    --tag-gone-line: #E0A79F;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E1116;
+      --surface:     #161B22;
+      --surface-alt: #1C232C;
+      --line:        #2B3542;
+      --line-soft:   #222A34;
+      --ink:         #E7ECF2;
+      --ink-soft:    #B4BFCC;
+      --ink-mute:    #808D9C;
+      --accent:      #74C0F0;
+      --accent-soft: #16303F;
+      --mono-bg:     #1E2632;
+      --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+
+      --tag-new:       #5FD08A;
+      --tag-new-bg:    #16301F;
+      --tag-new-line:  #2E5A3F;
+      --tag-chg:       #74C0F0;
+      --tag-chg-bg:    #16303F;
+      --tag-chg-line:  #2C5570;
+      --tag-fix:       #FFD166;
+      --tag-fix-bg:    #302713;
+      --tag-fix-line:  #6B5620;
+      --tag-gone:      #E86A5C;
+      --tag-gone-bg:   #331B18;
+      --tag-gone-line: #6E3830;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0E1116;
+    --surface:     #161B22;
+    --surface-alt: #1C232C;
+    --line:        #2B3542;
+    --line-soft:   #222A34;
+    --ink:         #E7ECF2;
+    --ink-soft:    #B4BFCC;
+    --ink-mute:    #808D9C;
+    --accent:      #74C0F0;
+    --accent-soft: #16303F;
+    --mono-bg:     #1E2632;
+    --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+
+    --tag-new:       #5FD08A;
+    --tag-new-bg:    #16301F;
+    --tag-new-line:  #2E5A3F;
+    --tag-chg:       #74C0F0;
+    --tag-chg-bg:    #16303F;
+    --tag-chg-line:  #2C5570;
+    --tag-fix:       #FFD166;
+    --tag-fix-bg:    #302713;
+    --tag-fix-line:  #6B5620;
+    --tag-gone:      #E86A5C;
+    --tag-gone-bg:   #331B18;
+    --tag-gone-line: #6E3830;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+  }
+
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 18px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .masthead h1 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 38px);
+    letter-spacing: -.02em;
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead .span {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 14px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .masthead .lede {
+    flex-basis: 100%;
+    margin: 8px 0 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    max-width: 78ch;
+  }
+
+  .sep { color: var(--ink-mute); padding: 0 4px; }
+
+  main { display: flex; flex-direction: column; gap: 34px; }
+
+  .lang-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .lang-head h2 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -.01em;
+    margin: 0;
+  }
+
+  .lang-head .count {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  /* Rows on hairlines, not cards: one line each is not an object that earns
+     its own border, fill and shadow. */
+  .log { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-soft); }
+
+  .log li {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    padding: 7px 2px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .log li.rel {
+    grid-template-columns: 92px minmax(0, 1fr);
+    background: var(--surface-alt);
+    padding-top: 9px;
+    padding-bottom: 8px;
+    margin-top: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .log li.rel:first-child { margin-top: 0; }
+
+  .log .v {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink);
+    padding-left: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .log .d {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 2px 0 1px;
+    border-radius: 3px;
+  }
+
+  .tag.new  { color: var(--tag-new);  background: var(--tag-new-bg);  border: 1px solid var(--tag-new-line); }
+  .tag.chg  { color: var(--tag-chg);  background: var(--tag-chg-bg);  border: 1px solid var(--tag-chg-line); }
+  .tag.fix  { color: var(--tag-fix);  background: var(--tag-fix-bg);  border: 1px solid var(--tag-fix-line); }
+  .tag.gone { color: var(--tag-gone); background: var(--tag-gone-bg); border: 1px solid var(--tag-gone-line); }
+
+  .log .t { color: var(--ink); font-size: 15px; }
+
+  code {
+    font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+    font-variant-ligatures: none;
+    background: var(--mono-bg);
+    padding: .1em .35em;
+    border-radius: 3px;
+    font-size: .88em;
+  }
+
+  footer {
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-mute);
+    font-size: 13.5px;
+  }
+
+  a { color: var(--accent); }
+
+  @media (max-width: 620px) {
+    .page { padding: 26px 16px 60px; }
+    .log li { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+    .log .tag { justify-self: start; padding-left: 8px; padding-right: 8px; }
+    .log li.rel { grid-template-columns: minmax(0, 1fr); }
+    .log .v { padding-left: 8px; }
+    .log .d { padding-left: 8px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <h1>RTPBuddy Kurzfassung</h1>
+    <span class="span">1.5.8 &rarr; 1.6.14</span>
+    <p class="lede">
+      Nur die Punkte, ohne Erklärung &mdash; zum Weiterschicken. Die ausführliche
+      Fassung erklärt zu jedem, warum er so gebaut ist.
+      <span class="sep">&middot;</span>
+      Just the items, no explanations &mdash; made to forward. The long version
+      says why each one works the way it does.
+    </p>
+  </header>
+
+  <main>
+
+    <section class="lang" id="de">
+      <div class="lang-head">
+        <h2>Deutsch</h2>
+        <span class="count">40 Punkte, 16 Versionen</span>
+      </div>
+
+      <ol class="log">
+        <li class="rel"><span class="v">1.6.14</span><span class="d">06.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Suchauftrag auf einzelne Biome: jede Familienzeile klappt ihre Biome auf, mit der Zahl deiner Landungen darin</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Der Mangrovensumpf galt als Schneebiom, weil die Regel für <code>grove</code> in <code>mangrove_swamp</code> traf</span></li>
+
+        <li class="rel"><span class="v">1.6.13</span><span class="d">06.09.2026</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Der Biomfilter klappt eine Liste auf, statt durch achtzehn Familien zu schalten</span></li>
+
+        <li class="rel"><span class="v">1.6.12</span><span class="d">06.09.2026</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Punkte und Route der vollen Karte kommen in eine Textur: ein Quad je Bild statt zwanzigtausend Rechtecke</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Die Kennzahlenspalte zeichnet nur noch die Zeilen, die im Fenster stehen</span></li>
+
+        <li class="rel"><span class="v">1.6.11</span><span class="d">06.09.2026</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Die Route allokierte drei Arrays je Segment &mdash; rund zwanzigtausend je Bild, auch für Linien außerhalb des Bildes</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Zeichenbudget: ab wievielen sichtbaren Markern die Karte sparsam zeichnet</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Ab 400 Segmenten fallen die Richtungspfeile der Route weg</span></li>
+
+        <li class="rel"><span class="v">1.6.10</span><span class="d">06.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Zellenbrett: 9&times;9 Felder, wieviele der 81 Serverzellen erreicht sind und welche fehlen</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Suchauftrag: Auto-RTP läuft, bis eine Landung passt &mdash; neue Zelle, Zelle, Biomfamilie, Distanz, Zielpunkt</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Biom als Farbmodus, Filter und Statistik; Namen aus Minecrafts eigener Übersetzung</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Eine nie erreichte Zelle meldet sich im Chat und blinkt auf der Minikarte</span></li>
+        <li><span class="tag new">Neu</span><span class="t"><code>/rtpbuddy cells</code> und <code>/rtpbuddy find</code></span></li>
+
+        <li class="rel"><span class="v">1.6.9</span><span class="d">06.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Minikarte in der Ecke: der <code>F</code>-Ausschnitt der großen Karte, dauerhaft sichtbar, verschiebbar</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Der Platzierungs-Bildschirm zeigt und platziert beide Overlays, <kbd>Tab</kbd> wechselt</span></li>
+
+        <li class="rel"><span class="v">1.6.8</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag gone">Entfernt</span><span class="t">Kartenmodi Heatmap und Cluster</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Der Lückenmodus heißt <code>Advanced</code> statt <code>Dummy</code></span></li>
+
+        <li class="rel"><span class="v">1.6.7</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Manuell auslösen: Auto-RTP ohne Uhr, ein Teleport je Tastendruck</span></li>
+
+        <li class="rel"><span class="v">1.6.6</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Rote Linie von dort, wo der letzte Teleport startete</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Sieben Tasten auf fünf, eine trägt den ganzen Auto-RTP-Lauf</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Lücken-Maske liegt eng an der Aufzeichnung statt eine Kachel darüber hinaus</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Äußere Kacheln blinkten beim Verschieben, Landungen ohne Kachel darunter</span></li>
+
+        <li class="rel"><span class="v">1.6.5</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Kartenmodus <code>Dummy</code>: Abstand zur nächsten Landung statt der Landungen</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Lücken-Suchfeld und Gelistete Lücken als Einstellungen</span></li>
+
+        <li class="rel"><span class="v">1.6.4</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Sample-Nummern erst ab dem 5k-Maßstab</span></li>
+
+        <li class="rel"><span class="v">1.6.3</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Sitzungen zusammenführen</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Sitzung umbenennen</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Sample-Nummern nur, wenn die Marker nicht zu eng stehen</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Wartezeit und Streuung frei eintragbar, Minimum 2&nbsp;s statt 5&nbsp;s</span></li>
+
+        <li class="rel"><span class="v">1.6.2</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Einzeln angehakte Sitzung begann mitten in der Zählung</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Suchfeld findet angezeigte und globale Nummer</span></li>
+
+        <li class="rel"><span class="v">1.6.1</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Angehakte Sitzungen wurden beim Schließen der Karte zurückgesetzt</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Auswahl ohne die laufende Sitzung leerte auch „Diese Session“</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Sitzung fortsetzen</span></li>
+
+        <li class="rel"><span class="v">1.6.0</span><span class="d">04.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t"><code>N</code> hält Auto-RTP an, ohne den Lauf zu beenden</span></li>
+        <li><span class="tag chg">Geändert</span><span class="t">Auto-RTP-Startdialog ohne Bestätigungshäkchen</span></li>
+        <li><span class="tag gone">Entfernt</span><span class="t">Taste <code>N</code> für „Karte (alle Sessions)“</span></li>
+
+        <li class="rel"><span class="v">1.5.9</span><span class="d">03.09.2026</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Spielermarker neu gezeichnet: Ring, Puls, Richtungsstrich</span></li>
+        <li><span class="tag new">Neu</span><span class="t">Neue Sitzung starten, ohne aus- und wieder einzuloggen</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Viewer zeigte die Region als rohe ID (<code>na_east</code>)</span></li>
+      </ol>
+    </section>
+
+    <section class="lang" id="en">
+      <div class="lang-head">
+        <h2>English</h2>
+        <span class="count">40 items, 16 releases</span>
+      </div>
+
+      <ol class="log">
+        <li class="rel"><span class="v">1.6.14</span><span class="d">6 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Search order down to single biomes: every family row opens its biomes, each with your landing count in it</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">The mangrove swamp counted as a snow biome, because the <code>grove</code> rule matched inside <code>mangrove_swamp</code></span></li>
+
+        <li class="rel"><span class="v">1.6.13</span><span class="d">6 Sep 2026</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The biome filter drops down a list instead of cycling eighteen families</span></li>
+
+        <li class="rel"><span class="v">1.6.12</span><span class="d">6 Sep 2026</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The full map's markers and route go into a texture: one quad a frame instead of twenty thousand rectangles</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The metrics column only draws the rows that are on screen</span></li>
+
+        <li class="rel"><span class="v">1.6.11</span><span class="d">6 Sep 2026</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">The route allocated three arrays per segment &mdash; some twenty thousand a frame, even for lines off screen</span></li>
+        <li><span class="tag new">New</span><span class="t">Drawing budget: how many visible markers before the map draws the cheap way</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Past 400 segments the route drops its direction chevrons</span></li>
+
+        <li class="rel"><span class="v">1.6.10</span><span class="d">6 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Cell board: nine by nine, how many of the 81 server cells are reached and which are missing</span></li>
+        <li><span class="tag new">New</span><span class="t">Search order: auto-RTP runs until a landing matches &mdash; new cell, named cell, biome family, distance, target point</span></li>
+        <li><span class="tag new">New</span><span class="t">Biome as a colour mode, a filter and a breakdown; names from Minecraft's own translations</span></li>
+        <li><span class="tag new">New</span><span class="t">A cell never reached before says so in chat and pulses on the minimap</span></li>
+        <li><span class="tag new">New</span><span class="t"><code>/rtpbuddy cells</code> and <code>/rtpbuddy find</code></span></li>
+
+        <li class="rel"><span class="v">1.6.9</span><span class="d">6 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">A minimap in the corner: the full map's <code>F</code> frame, always visible, movable</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The placement screen shows and places both overlays, <kbd>Tab</kbd> switches</span></li>
+
+        <li class="rel"><span class="v">1.6.8</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag gone">Removed</span><span class="t">Map modes heatmap and cluster</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The gap mode is called <code>Advanced</code>, not <code>Dummy</code></span></li>
+
+        <li class="rel"><span class="v">1.6.7</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Trigger by hand: auto-RTP without the clock, one teleport per key press</span></li>
+
+        <li class="rel"><span class="v">1.6.6</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Red line from wherever the last teleport started</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Seven keys down to five, one carries the whole auto-RTP run</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The gap mask hugs the recording instead of reaching a tile past it</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">Outer tiles blinked while dragging, landings with no tile under them</span></li>
+
+        <li class="rel"><span class="v">1.6.5</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Map mode <code>Dummy</code>: distance to the nearest landing instead of the landings</span></li>
+        <li><span class="tag new">New</span><span class="t">Gap search area and Listed gaps as settings</span></li>
+
+        <li class="rel"><span class="v">1.6.4</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Sample numbers only from the 5k scale onward</span></li>
+
+        <li class="rel"><span class="v">1.6.3</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Merge sessions</span></li>
+        <li><span class="tag new">New</span><span class="t">Rename session</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Sample numbers only while the markers are not packed too tightly</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Cooldown and jitter typed freely, floor 2&nbsp;s instead of 5&nbsp;s</span></li>
+
+        <li class="rel"><span class="v">1.6.2</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">A single ticked sitting started mid-count</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Search matches the shown number and the global one</span></li>
+
+        <li class="rel"><span class="v">1.6.1</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">Ticked sittings were reset when the map closed</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">A picking without the running sitting also emptied &ldquo;This session&rdquo;</span></li>
+        <li><span class="tag new">New</span><span class="t">Continue session</span></li>
+
+        <li class="rel"><span class="v">1.6.0</span><span class="d">4 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t"><code>N</code> holds auto-RTP without ending the run</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Auto-RTP start dialog without the acknowledgement tick</span></li>
+        <li><span class="tag gone">Removed</span><span class="t">The <code>N</code> key for &ldquo;map, all sessions&rdquo;</span></li>
+
+        <li class="rel"><span class="v">1.5.9</span><span class="d">3 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">Player marker redrawn: ring, ripple, heading stub</span></li>
+        <li><span class="tag new">New</span><span class="t">Start a new sitting without logging out and back in</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">Viewer showed the region as a raw id (<code>na_east</code>)</span></li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>
+    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only.
+    <span class="sep">&middot;</span>
+    Ausführlich: <code>RTPBuddy-Patchnotes.html</code> &mdash; in full:
+    <code>RTPBuddy-Release-Notes.html</code>.
+  </footer>
+
+</div>

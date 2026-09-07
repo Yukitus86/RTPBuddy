@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: #faf9f7; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>RTPBuddy Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* Light palette. Neutrals carry a slight blue bias, taken from the mod's own
+     MapPalette so the page reads as part of the same product. */
+  :root {
+    --ground:      #F4F6F8;
+    --surface:     #FFFFFF;
+    --surface-alt: #EDF1F5;
+    --line:        #D8DFE7;
+    --line-soft:   #E6EBF0;
+    --ink:         #161A20;
+    --ink-soft:    #414B58;
+    --ink-mute:    #6B7787;
+    --accent:      #17628F;
+    --accent-soft: #E3F0F8;
+    --warn:        #8A5A00;
+    --warn-line:   #E0BE72;
+    --mono-bg:     #EEF2F6;
+    --shadow:      0 1px 2px rgba(22, 26, 32, .06), 0 8px 24px -18px rgba(22, 26, 32, .5);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E1116;
+      --surface:     #161B22;
+      --surface-alt: #1C232C;
+      --line:        #2B3542;
+      --line-soft:   #222A34;
+      --ink:         #E7ECF2;
+      --ink-soft:    #B4BFCC;
+      --ink-mute:    #808D9C;
+      --accent:      #74C0F0;
+      --accent-soft: #16303F;
+      --warn:        #FFD166;
+      --warn-line:   #6B5620;
+      --mono-bg:     #1E2632;
+      --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0E1116;
+    --surface:     #161B22;
+    --surface-alt: #1C232C;
+    --line:        #2B3542;
+    --line-soft:   #222A34;
+    --ink:         #E7ECF2;
+    --ink-soft:    #B4BFCC;
+    --ink-mute:    #808D9C;
+    --accent:      #74C0F0;
+    --accent-soft: #16303F;
+    --warn:        #FFD166;
+    --warn-line:   #6B5620;
+    --mono-bg:     #1E2632;
+    --shadow:      0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px -20px rgba(0, 0, 0, .9);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 24px 96px;
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* ---------------------------------------------------------------- masthead */
+
+  .masthead {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 20px;
+    padding-bottom: 22px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .masthead h1 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 42px);
+    letter-spacing: -.02em;
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .masthead p {
+    margin: 0;
+    color: var(--ink-mute);
+    max-width: 46ch;
+    font-size: 15px;
+  }
+
+  .masthead .where {
+    flex-basis: 100%;
+    margin-top: 10px;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    max-width: 74ch;
+  }
+
+  /* ------------------------------------------------------------------ index */
+
+  .index {
+    position: sticky;
+    top: 28px;
+    font-size: 14px;
+  }
+
+  .index h2 {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 10px;
+  }
+
+  .index ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .index a {
+    display: block;
+    padding: 5px 10px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-left: 2px solid var(--line);
+    transition: color .12s, border-color .12s, background .12s;
+  }
+
+  .index a:hover,
+  .index a:focus-visible {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .index .count {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    float: right;
+  }
+
+  /* ---------------------------------------------------------------- sections */
+
+  main { min-width: 0; display: flex; flex-direction: column; gap: 52px; }
+
+  section { scroll-margin-top: 24px; }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .sec-head h2 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: -.015em;
+    margin: 0;
+  }
+
+  .tab-tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .sec-intro {
+    margin: 0 0 22px;
+    color: var(--ink-soft);
+    max-width: 68ch;
+  }
+
+  /* ----------------------------------------------------------------- entries */
+
+  .entries { display: flex; flex-direction: column; gap: 14px; }
+
+  .entry {
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    padding: 16px 18px 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .entry-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    margin-bottom: 8px;
+  }
+
+  .entry-head h3 {
+    font-family: Archivo, "IBM Plex Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+
+  code, .key, .val {
+    font-family: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+    font-variant-ligatures: none;
+  }
+
+  code {
+    background: var(--mono-bg);
+    padding: .1em .35em;
+    border-radius: 3px;
+    font-size: .9em;
+  }
+
+  .key {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    background: var(--mono-bg);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+
+  .val {
+    font-size: 12px;
+    letter-spacing: .02em;
+    color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 1px 7px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .entry p { margin: 0 0 10px; max-width: 68ch; color: var(--ink-soft); }
+  .entry p:last-child { margin-bottom: 0; }
+  .entry strong { color: var(--ink); font-weight: 600; }
+
+  .choices {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .choices b { color: var(--ink-soft); font-weight: 500; }
+
+  /* an entry that is an action button, not a stored value */
+  .entry.action { background: var(--surface-alt); box-shadow: none; }
+
+  .flag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--warn);
+    border: 1px solid var(--warn-line);
+    border-radius: 3px;
+    padding: 2px 7px;
+  }
+
+  .note {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 5px 5px 0;
+    color: var(--ink-soft);
+    max-width: 72ch;
+  }
+
+  .note p { margin: 0; }
+  .note p + p { margin-top: 8px; }
+  .note strong { color: var(--ink); }
+
+  /* ------------------------------------------------------------------ tables */
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: 6px; background: var(--surface); }
+
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 640px; }
+
+  th, td { text-align: left; padding: 10px 14px; vertical-align: top; border-bottom: 1px solid var(--line-soft); }
+
+  thead th {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td { border-bottom: 0; }
+  td:first-child { font-weight: 500; color: var(--ink); white-space: nowrap; }
+  td.k { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12.5px; color: var(--ink-mute); white-space: nowrap; font-weight: 400; }
+  td.d { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12.5px; color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.w { color: var(--ink-soft); min-width: 280px; }
+
+  /* ------------------------------------------------------------------ footer */
+
+  footer {
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-mute);
+    font-size: 13.5px;
+  }
+
+  a { color: var(--accent); }
+
+  @media (max-width: 860px) {
+    .page { grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 28px 18px 72px; }
+    .index { position: static; }
+    .index ol { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+    .index a { border-left: 0; border: 1px solid var(--line); border-radius: 4px; }
+    .index .count { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+
+<div class="page">
+
+  <header class="masthead">
+    <h1>RTPBuddy Settings</h1>
+    <p>What every switch actually does &mdash; and when you should touch it.</p>
+    <p class="where">
+      Open the menu with <code>O</code>, the <strong>Options</strong> button on the
+      map, or <code>/rtpbuddy config</code>. Everything lands in
+      <code>.minecraft/config/rtpbuddy/config.json</code>.
+    </p>
+    <p class="where">
+      The short version is in the game now: hover a switch and the tooltip explains
+      it. This page is the long version. The <code>/rtp</code> command itself is not
+      part of RTPBuddy — the server provides it; this mod only watches what you type
+      and where you end up.
+    </p>
+  </header>
+
+  <nav class="index" aria-label="Contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#capture">Capture <span class="count">11</span></a></li>
+      <li><a href="#auto">Auto-RTP <span class="count">22</span></a></li>
+      <li><a href="#guards">Guards <span class="count">6</span></a></li>
+      <li><a href="#map">Map <span class="count">25</span></a></li>
+      <li><a href="#hud">HUD &amp; minimap <span class="count">27</span></a></li>
+      <li><a href="#configonly">config.json only</a></li>
+      <li><a href="#toolbar">Map toolbar</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ============================================================ CAPTURE -->
+    <section id="capture">
+      <div class="sec-head">
+        <h2>Capture</h2>
+        <span class="tab-tag">Tab 1</span>
+      </div>
+      <p class="sec-intro">
+        Controls how RTPBuddy notices a teleport and records it. These are the
+        switches that decide whether an RTP makes it onto the map at all.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Capture</h3>
+            <span class="key">capture.enabled</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Master switch for automatic recording. Off means typed commands are no
+            longer watched and no new samples appear. Existing data is untouched.
+          </p>
+          <p>
+            Manual capture with <code>K</code> keeps working &mdash; it does not go
+            through this check.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Capture on commands</h3>
+            <span class="key">capture.autoCapture</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Whether a matching command arms a capture. Off means you only record by
+            hand with <code>K</code>. Useful when a server uses commands whose
+            patterns keep misfiring.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>On dimension change</h3>
+            <span class="key">capture.captureOnDimensionChange</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Counts a dimension change during the waiting phase as a successful
+            teleport.
+          </p>
+          <p>
+            <strong>This is the switch for <code>/rtp nether</code> and
+            <code>/rtp end</code>.</strong> Crossing into another dimension can move
+            you a tiny horizontal distance &mdash; without this switch only the
+            distance threshold applies, and those RTPs end up in the "missed"
+            counter.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Reject short jumps</h3>
+            <span class="key">capture.rejectShortJumps</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Checks after landing: if the horizontal jump is below the teleport
+            threshold <strong>and</strong> the dimension stayed the same, the sample
+            is thrown away (the "rejected" counter).
+          </p>
+          <p>
+            Keeps a refused RTP &mdash; server says no, you are still standing there
+            &mdash; out of the statistics.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Write CSV mirror</h3>
+            <span class="key">capture.writeCsvMirror</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Keeps <code>rtp_samples.csv</code> in step with the JSON. The JSON is
+            authoritative; the CSV is pure convenience for Excel and friends. Off
+            saves writes.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Teleport threshold</h3>
+            <span class="key">capture.teleportDistanceThreshold</span>
+            <span class="val">200 blocks</span>
+          </div>
+          <p>
+            The horizontal distance at which a position jump counts as a teleport.
+          </p>
+          <p>
+            <strong>Too low:</strong> elytra flight or a nether portal trigger false
+            readings. <strong>Too high:</strong> nearby RTPs are not recognised as
+            teleports at all.
+          </p>
+          <p>
+            The same number decides what "Reject short jumps" considers too short.
+          </p>
+          <p class="choices"><b>Steps</b> &nbsp;50 &middot; 100 &middot; 200 &middot; 500 &middot; 1000 &middot; 2000</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Arm timeout</h3>
+            <span class="key">capture.armTimeoutTicks</span>
+            <span class="val">15 s</span>
+          </div>
+          <p>
+            How long to wait for the teleport after the command. When the time runs
+            out the capture quietly disarms and the "missed" counter goes up by one.
+          </p>
+          <p>
+            <strong>Raise it if your server has a countdown</strong> ("teleporting in
+            3&hellip; 2&hellip; 1&hellip;"). 15 s is enough for an instant RTP, not
+            for a 30 second warm-up.
+          </p>
+          <p class="choices"><b>Steps</b> &nbsp;5 &middot; 10 &middot; 15 &middot; 30 &middot; 60 s</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Settle time</h3>
+            <span class="key">capture.settleTicks</span>
+            <span class="val">10 ticks</span>
+          </div>
+          <p>
+            After the jump is seen, the position has to hold still for this many
+            ticks before the sample is taken. Still means under 0.05 blocks of drift
+            per tick &mdash; any real movement resets the count to zero.
+          </p>
+          <p>
+            Stops a server-side correction from being recorded as the final position.
+            Set it to 0 only if you want to run off immediately and the last decimal
+            does not matter.
+          </p>
+          <p class="choices"><b>Steps</b> &nbsp;0 &middot; 5 &middot; 10 &middot; 20 &middot; 40 ticks &nbsp;&nbsp;<b>&middot;</b>&nbsp;&nbsp;20 ticks = 1 second</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Save debounce</h3>
+            <span class="key">capture.saveDebounceMillis</span>
+            <span class="val">2000 ms</span>
+          </div>
+          <p>
+            Batches writes: a run of RTPs collapses into a single write to disk.
+          </p>
+          <p>
+            0 writes immediately &mdash; more disk activity, but no window of loss.
+            After a crash you lose at most the samples from that window; the file
+            itself can never be left half written (temp file plus rename).
+          </p>
+          <p class="choices"><b>Steps</b> &nbsp;0 &middot; 1000 &middot; 2000 &middot; 5000 &middot; 10000 ms</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Record unknown /rtp</h3>
+            <span class="key">capture.captureUnknownRtp</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Also records an <code>/rtp</code> whose destination is missing from the
+            region list. The argument is kept verbatim as the requested region
+            (<code>/rtp mars</code> &rarr; region <code>mars</code>) rather than
+            being mapped onto the nearest configured one. Without this, such a
+            landing is dropped in silence.
+          </p>
+          <p>
+            What counts as an RTP command is
+            <code>capture.rtpCommandPattern</code>. Other commands such as
+            <code>/tpa</code> trigger nothing.
+          </p>
+        </article>
+
+        <article class="entry action">
+          <div class="entry-head">
+            <h3>Reapply DonutSMP preset</h3>
+            <span class="flag">Action</span>
+          </div>
+          <p>
+            Not a switch: resets the region list to the bundled preset &mdash;
+            <code>overworld</code>, <code>nether</code>, <code>end</code> plus the
+            six server zones <code>asia</code>, <code>east</code>,
+            <code>west</code>, <code>eu central</code>, <code>eu west</code> and
+            <code>oceania</code>, with their patterns and commands.
+          </p>
+          <p>
+            Use it when you have broken the patterns editing
+            <code>config.json</code>. The <strong>Regions:</strong> line at the
+            bottom of the tab shows what is loaded and marks bad patterns with
+            <code>(bad pattern)</code>.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =========================================================== AUTO-RTP -->
+    <section id="auto">
+      <div class="sec-head">
+        <h2>Auto-RTP</h2>
+        <span class="tab-tag">Tab 2</span>
+      </div>
+      <p class="sec-intro">
+        The loop that repeats <code>/rtp</code> for you. Off after every start of
+        the game; the running state is never written to disk.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry action">
+          <div class="entry-head">
+            <h3>Start Auto-RTP&hellip; / Stop</h3>
+            <span class="flag">Action</span>
+          </div>
+          <p>
+            Opens the start dialog. It names the whole rotation, the wait with its
+            jitter and every condition that will end the run &mdash; nothing is
+            sent before you press <em>Start Auto-RTP</em>. The button stays greyed
+            out only when no chosen region has a command, because then the loop
+            would send nothing.
+          </p>
+        </article>
+
+        <article class="entry action">
+          <div class="entry-head">
+            <h3>Hold / continue Auto-RTP</h3>
+            <span class="flag">Action</span>
+          </div>
+          <p>
+            Only offered while a run exists. Holding does <strong>not</strong> end
+            it: nothing is sent, the wait and the run timer both freeze, and damage
+            or a guard violation stop nothing while it holds. Continuing picks up
+            with the wait that was left when you held it &mdash; same counters,
+            same position in the region rotation.
+          </p>
+          <p>
+            It is for stopping to look at wherever the last teleport landed,
+            without losing the run. Key <code>H</code>, in chat
+            <code>/rtpbuddy auto pause</code> and
+            <code>/rtpbuddy auto resume</code>. On the map the auto button then
+            reads <em>Auto held</em> instead of a frozen countdown.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Regions</h3>
+            <span class="key">autoRtp.regions</span>
+            <span class="val">empty</span>
+          </div>
+          <p>
+            One switch per configured region, captioned with the command that is
+            actually sent (<code>Asia&nbsp;&nbsp;/rtp asia</code>). Ticked means
+            this region is part of the run.
+          </p>
+          <p>
+            With several on, each teleport takes the next one &mdash;
+            <code>/rtp asia</code>, cooldown, <code>/rtp eu central</code>,
+            cooldown, <code>/rtp east</code>, then round again. On a server where a
+            plain <code>/rtp</code> keeps handing back the same zone, this is the
+            only way to fill in the rest of the map. The full rotation is written
+            out under the switches and again in the start dialog.
+          </p>
+          <p>
+            With none ticked, <code>autoRtp.region</code> still applies (default
+            <code>overworld</code>), so an older config behaves exactly as before.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Order</h3>
+            <span class="key">autoRtp.order</span>
+            <span class="val">Round robin</span>
+          </div>
+          <p>
+            Only shown when more than one region is on. <strong>Round robin</strong>
+            walks the list in order so every zone gets the same number of samples;
+            <strong>Random</strong> picks one each time.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Cooldown</h3>
+            <span class="key">autoRtp.cooldownSeconds</span>
+            <span class="val">60 s</span>
+          </div>
+          <p>
+            Gap between two teleports, <strong>typed in seconds</strong> &mdash; no
+            fixed ladder of steps any more, because no ladder hits the interval a
+            given server actually wants. Hard-floored at <strong>2 s</strong>.
+          </p>
+          <p>
+            <strong>Measured between landings, not between sends.</strong> A slow
+            teleport therefore pushes the next command back instead of queueing
+            commands up.
+          </p>
+          <p>
+            It never shortens a server cooldown: if the server refuses, the next
+            attempt simply waits the same interval again.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Jitter</h3>
+            <span class="key">autoRtp.jitterSeconds</span>
+            <span class="val">+0&ndash;5 s</span>
+          </div>
+          <p>
+            A random 0 to n seconds added to every cooldown, so the spacing is not
+            machine-exact. Typed freely as well; 0 turns it off.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Trigger by hand</h3>
+            <span class="key">autoRtp.manualStep</span>
+            <span class="val">off</span>
+          </div>
+          <p>
+            Turns the clock off. The run stays a run &mdash; the rotation, the
+            counters, the caps, the run timer and every stop condition behave
+            exactly as they do on the timer &mdash; but nothing is sent until you
+            press the <strong>auto-RTP key</strong>, one teleport per press.
+          </p>
+          <p>
+            It is for the other half of the job: filling a map and looking at
+            where you landed want different rhythms, and the second one is yours
+            to set rather than a rate you had to guess in advance.
+          </p>
+          <p>
+            Cooldown and jitter no longer apply, bar a hard floor of
+            <strong>2 seconds</strong> between commands &mdash; a held key must
+            not turn into a command every tick. There is no countdown, so none is
+            shown: the HUD reads <code>MANUAL</code> and the map button
+            <em>Auto manual</em>.
+          </p>
+          <p>
+            A press that cannot be honoured <strong>refuses rather than
+            queues</strong>, and says why: the last landing is still being
+            recorded, the floor has not elapsed, the run is held. A teleport
+            fired silently later would be worse than none at all &mdash; knowing
+            when the command went out is the entire point of stepping by hand. A
+            press that worked says nothing: the command is already in the chat,
+            the server answers it, and the HUD counts it.
+            <code>/rtpbuddy auto step</code> does the same from chat.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Stop after</h3>
+            <span class="key">autoRtp.stopAfterMinutes</span>
+            <span class="val">30 min</span>
+          </div>
+          <p>Wall-clock limit for one run.</p>
+          <p class="choices"><b>Steps</b> &nbsp;no limit &middot; 10 &middot; 30 &middot; 60 &middot; 120 min</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Max per run</h3>
+            <span class="key">autoRtp.maxPerSession</span>
+            <span class="val">no limit</span>
+          </div>
+          <p>Ceiling on teleports per run.</p>
+          <p class="choices"><b>Steps</b> &nbsp;no limit &middot; 25 &middot; 50 &middot; 100 &middot; 250 &middot; 500</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Wait for the landing</h3>
+            <span class="key">autoRtp.waitForCapture</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            While a capture is still running (armed or settling), the cooldown
+            restarts instead of the next command being sent.
+          </p>
+          <p>
+            Leave it on while you are recording &mdash; otherwise the loop overtakes
+            its own measurement.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Stop on damage</h3>
+            <span class="key">autoRtp.stopOnDamage</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Halts the moment your health drops. The one switch that keeps an
+            unattended run from killing you.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Stop outside the guards</h3>
+            <span class="key">autoRtp.stopOnGuardViolation</span>
+            <span class="val">off</span>
+          </div>
+          <p>
+            Halts when a landing falls outside the border buffer or inside the spawn
+            buffer. Only turn this on once the values in the <strong>Guards</strong>
+            tab really match your server &mdash; otherwise the loop stops for no
+            reason.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Search order</h3>
+            <span class="key">autoRtp.findEnabled</span>
+            <span class="val">off</span>
+          </div>
+          <p>
+            Every stop above ends a run because something went wrong. This one
+            ends it because the run found what it was sent out for: it keeps
+            teleporting until a landing matches, stops <strong>on that
+            landing</strong>, plays a short bell and says in chat which
+            condition fired.
+          </p>
+          <p>
+            It never sends more, faster or differently. A search order can only
+            end a run earlier than it would have ended anyway. While the switch
+            is off, nothing below it is built at all.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>New cell</h3>
+            <span class="key">autoRtp.findNewCell</span>
+            <span class="val">off</span>
+          </div>
+          <p>
+            Stops on the first landing in a cell no recorded landing has ever reached. This is the condition that fills the cell board &mdash; exactly the teleports that get you somewhere.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Named cells</h3>
+            <span class="key">autoRtp.findCells</span>
+            <span class="val">empty</span>
+          </div>
+          <p>
+            A typed list such as <code>11 12 20</code>. Separators do not matter; anything that is not a number from 1 to 81 is dropped rather than rejected &mdash; the field is typed into, and a half-finished entry must not break the whole order.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Distance from / to</h3>
+            <span class="key">autoRtp.findMinDistance / …MaxDistance</span>
+            <span class="val">0 / 0</span>
+          </div>
+          <p>
+            A band measured from the world origin. 0 switches the respective bound off.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Target X / Z</h3>
+            <span class="key">autoRtp.findNearX / …NearZ</span>
+            <span class="val">0 / 0</span>
+          </div>
+          <p>
+            The point the run should stop near. Only takes effect with a radius. <strong>Target = my position</strong> takes your coordinates and puts the radius at 500 if none is set yet.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Target radius</h3>
+            <span class="key">autoRtp.findNearRadius</span>
+            <span class="val">0</span>
+          </div>
+          <p>
+            Stops as soon as a landing falls closer than this to the target point. 0 switches the condition off.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Biomes</h3>
+            <span class="key">autoRtp.findFamilies / &hellip;findBiomes</span>
+            <span class="val">empty</span>
+          </div>
+          <p>
+            Eighteen rows, one per family, from <em>Plains</em> to <em>Rare</em>. A click opens the biomes behind it: the <strong>whole family</strong> on top &mdash; stops on any landing in that colour &mdash; and under it every single biome with the number of landings already recorded in it. Several may be ticked at once, in one family or across many, and the menu stays open while you tick them.
+          </p>
+          <p>
+            The list comes from the server's own biome registry, not from your landings: otherwise the one thing you are looking for would be the one thing missing from it. That makes the <strong>0</strong> behind a biome the interesting number &mdash; that is where the search has never been. <em>Pale Garden</em> rather than <em>something rare</em>.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Combine</h3>
+            <span class="key">autoRtp.findMatchAll</span>
+            <span class="val">any one</span>
+          </div>
+          <p>
+            Whether one satisfied condition is enough or they all have to hold at once. <em>All together</em> gets rare quickly &mdash; that is when the give-up cap earns its keep.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Give up after</h3>
+            <span class="key">autoRtp.findGiveUpAfter</span>
+            <span class="val">no limit</span>
+          </div>
+          <p>
+            Ends the run after this many landings with no match. With no cap a search order for a rare target runs until something else stops it &mdash; exactly the sort of thing that should not be a default.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Sound on a match</h3>
+            <span class="key">autoRtp.findSound</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            A short bell when the order fires. The whole point of a search order is not having to watch, so the ending has to arrive without a look at the screen. While a run is searching, the HUD says what it is looking for and how many landings it has turned down.
+          </p>
+        </article>
+
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>Always, with no switch involved,</strong> the loop stops on:
+          disconnect, world change, the <code>End</code> key, and
+          <code>/rtpbuddy auto stop</code>.
+        </p>
+        <p>
+          <code>H</code> is deliberately not in that list while a run is on the
+          clock: it holds, it does not
+          stop. A held run stays alive and waits for you.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================= GUARDS -->
+    <section id="guards">
+      <div class="sec-head">
+        <h2>Guards</h2>
+        <span class="tab-tag">Tab 3</span>
+      </div>
+      <p class="sec-intro">
+        These values describe your server's map. They <strong>never</strong> block a
+        capture. What they do drive: overlays on the map, a warning on the sample,
+        the coverage statistic, and optionally the auto-RTP stop from tab 2.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Border radius</h3>
+            <span class="key">guards.borderRadius</span>
+            <span class="val">30,000,000</span>
+          </div>
+          <p>
+            Radius of the <strong>overworld</strong> border in blocks, measured from
+            the border centre. The default is the vanilla limit; on an SMP you put the
+            real value here. For DonutSMP that is <strong>225,000</strong> &mdash; the
+            border sits 225,000 blocks from 0,0 in every direction, so the world is
+            450,000&nbsp;&times;&nbsp;450,000 blocks. Leave <strong>Square border</strong>
+            on as well. The nether and the end have borders of their own &mdash; see
+            <span class="key">guards.netherBorderRadius</span> and
+            <span class="key">guards.endBorderRadius</span>, which for DonutSMP are
+            <strong>28,500</strong> and <strong>87,500</strong>. Each dimension gets its
+            own rectangle on the map, in that dimension's colour.
+          </p>
+          <p>
+            It is also the basis of the <strong>coverage</strong> statistic: density
+            cells hit, divided by the cells inside the border.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Border buffer</h3>
+            <span class="key">guards.borderGuard</span>
+            <span class="val">1000</span>
+          </div>
+          <p>
+            Safety margin inwards. Usable area = radius &minus; buffer. That inner
+            edge is exactly what gets drawn on the map and checked for the warning.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Spawn X &middot; Spawn Z</h3>
+            <span class="key">guards.spawnX / spawnZ</span>
+            <span class="val">0 / 0</span>
+          </div>
+          <p>Centre of the spawn zone.</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Spawn buffer</h3>
+            <span class="key">guards.spawnGuard</span>
+            <span class="val">500</span>
+          </div>
+          <p>Radius around that point that counts as "too close to spawn".</p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Square border</h3>
+            <span class="key">guards.squareBorder</span>
+            <span class="val">on</span>
+          </div>
+          <p>
+            Treats the border as a square (like vanilla) rather than a circle.
+            Changes the shape of the overlay <strong>and</strong> the area formula
+            behind the coverage statistic.
+          </p>
+        </article>
+
+        <article class="entry action">
+          <div class="entry-head">
+            <h3>Use my position as spawn</h3>
+            <span class="flag">Action</span>
+          </div>
+          <p>Takes your current X/Z as the spawn centre.</p>
+        </article>
+
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>In <code>config.json</code> only:</strong>
+          <code>guards.borderCenterX</code> and <code>guards.borderCenterZ</code>
+          &mdash; the centre of the world border, if your server is not centred on
+          0/0.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================================ MAP -->
+    <section id="map">
+      <div class="sec-head">
+        <h2>Map</h2>
+        <span class="tab-tag">Tab 4</span>
+      </div>
+      <p class="sec-intro">
+        Presentation only. None of it affects what gets recorded.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Setting</th><th>Key</th><th>Default</th><th>Effect</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Remember view</td><td class="k">map.rememberView</td><td class="d">on</td><td class="w">Pan and zoom survive closing the map, kept separately per scope. Off = always fit to all samples on open</td></tr>
+            <tr><td>Remember filter</td><td class="k">map.rememberFilter</td><td class="d">on</td><td class="w">Dimension, region, capture mode <strong>and the sittings ticked in the session list</strong> are still set the next time the map opens. Without it every reopen widened the view back to <em>all</em>, even though <em>Overworld</em> had been picked. A picking whose sittings no longer exist is dropped on open rather than leading to an empty plot</td></tr>
+            <tr><td>Hide empty sessions</td><td class="k">map.hideEmptySessions</td><td class="d">on</td><td class="w">Sittings without a single landing are left out of the session list. Every login opens a sitting, so they accumulate on their own</td></tr>
+            <tr><td>Frame cap on the map</td><td class="k">map.mapFpsLimit</td><td class="d">60</td><td class="w">Ceiling on the frame rate while the map is open: off &middot; 30 &middot; 60 &middot; 90 &middot; 120</td></tr>
+            <tr><td>Grid</td><td class="k">map.showGrid</td><td class="d">on</td><td class="w">Coordinate grid with axis labels</td></tr>
+            <tr><td>Show border</td><td class="k">map.showBorder</td><td class="d">on</td><td class="w">Draws the inner border edge (radius &minus; buffer) &mdash; one rectangle per dimension, in that dimension's colour, labelled once more than one is on show</td></tr>
+            <tr><td>Show spawn zone</td><td class="k">map.showSpawnGuard</td><td class="d">on</td><td class="w">Draws the spawn buffer circle</td></tr>
+            <tr><td>Player marker</td><td class="k">map.showPlayer</td><td class="d">on</td><td class="w">Your position and facing: a ring with a dark collar so it separates from whatever it lands on, and a short one-pixel stub from its centre for the direction you face</td></tr>
+            <tr><td>Player marker ripples</td><td class="k">map.playerPulse</td><td class="d">on</td><td class="w">A slow ring fading outward around your position. Motion is the one channel nothing else on the plot uses, so the marker is found at once after a teleport</td></tr>
+            <tr><td>Origin marker</td><td class="k">map.showOrigin</td><td class="d">on</td><td class="w">The point 0 / 0</td></tr>
+            <tr><td>Line into the last landing</td><td class="k">map.showLastLeg</td><td class="d">on</td><td class="w">The red line from the point the newest teleport started at to the point it landed on &mdash; with an arrow the way it went and a ring at the start. Drawn from that sample's <strong>recorded origin</strong> rather than from the sample before it: in between you walk, you fall, you take a portal, and only the recorded origin is a fact about <em>that</em> teleport. Watching the map, it answers which of the dots you just came from without a click. Left out across dimensions, where a straight line measures nothing</td></tr>
+            <tr><td>Sample numbers</td><td class="k">map.showSampleNumbers</td><td class="d">on</td><td class="w">Numbers next to the markers &mdash; <strong>only from the 5k scale onward</strong>. The bar in the bottom left decides: while it reads more than 5,000 blocks the numbers stay off. Zoomed in past that, crowding decides as well &mdash; if more than a fifth of the markers would share a label patch they stay off too, rather than smearing into each other. At most 250 markers in view as well. All of it counts only what is on screen &mdash; zooming in brings the numbers back</td></tr>
+            <tr><td>Scale bar</td><td class="k">map.showScaleBar</td><td class="d">on</td><td class="w">The bar in the bottom left</td></tr>
+            <tr><td>Server region grid</td><td class="k">map.showServerRegions</td><td class="d">on</td><td class="w">The 9&times;9 grid of server regions under the plot: DonutSMP splits its overworld into 81 cells of 50,000 blocks and gives each one to one of six server regions. Each cell in the colour of its region, with the server number. Shown only for samples from a host that uses the grid</td></tr>
+            <tr><td>Colour key</td><td class="k">map.showLegend</td><td class="d">on</td><td class="w">The panel in the corner of the plot saying what the marker colours stand for. In <strong>Advanced</strong> mode a ramp from <em>dense</em> to <em>empty</em> takes its place, because there the colour is a measurement rather than a list</td></tr>
+            <tr><td>Round markers</td><td class="k">map.roundMarkers</td><td class="d">on</td><td class="w">Draws landings as discs rather than squares, in every view</td></tr>
+            <tr><td>Cell board</td><td class="k">map.showCellBoard</td><td class="d">on</td><td class="w">The nine-by-nine board at the top of the metrics column: one square per server cell, filled in its zone's colour, more of it the more landings it holds. A gold ring means reached exactly once, a green ring is the cell you are standing in. Under it, one bar per zone with the numbers of the cells that zone is still missing. A zone with no landings at all sits dim at the bottom &mdash; that is not a gap, it is a zone never asked for</td></tr>
+            <tr><td>Numbers on the board</td><td class="k">map.cellBoardNumbers</td><td class="d">on</td><td class="w">Writes the number into every cell that holds a landing. Off leaves the colour blocks alone &mdash; quieter, and easier to read in a narrow column</td></tr>
+            <tr><td>Drawing budget</td><td class="k">map.densityBudget</td><td class="d">500</td><td class="w">Steps: off &middot; 250 &middot; 500 &middot; 1000 &middot; 2000 &middot; 5000. How many markers may be on screen before the map bakes the whole marker and route layer into <strong>one texture</strong> rather than drawing it rectangle by rectangle. Every rectangle allocates twice on 1.21.11, and two thousand framed landings came to some twenty thousand rectangles a frame. It is repainted only when the view, the filter, the mode, the colour or the picked landing changes &mdash; not on mouse movement; measured at 0.44&nbsp;ms without the route and 0.86&nbsp;ms with it. Over 2.2&nbsp;million canvas pixels the texture stops paying for itself, and the markers are thinned instead: one per marker-sized patch, squared off inside the clusters, while lone dots and the picked marker keep their round shape. <code>Off</code> draws every landing on its own however many there are</td></tr>
+            <tr><td>Marker size</td><td class="k">map.markerRadius</td><td class="d">2 (5&nbsp;px)</td><td class="w">Radius of one marker: 1 &middot; 2 &middot; 3 &middot; 4 &middot; 5 &middot; 6. Small keeps a crowded patch readable; large keeps single landings visible when zoomed right out. The viewer reads the same value, so both tools draw the same dot</td></tr>
+            <tr><td>Density cell</td><td class="k">map.densityCellSize</td><td class="d">512</td><td class="w">Edge length of a density cell: 64 &middot; 128 &middot; 256 &middot; 512 &middot; 1024 &middot; 2048 blocks. It no longer draws anything as of 1.6.8 &mdash; it is the basis of the <strong>coverage</strong> statistic</td></tr>
+            <tr><td>Gap search area</td><td class="k">map.gapMaskTile</td><td class="d">16,000</td><td class="w">Strip width the Advanced mode uses to mark off where anything has been recorded at all: 4,000 &middot; 8,000 &middot; 16,000 &middot; 32,000 &middot; 64,000 blocks. The landings are cut into strips that tall and that wide; a point counts as explored when it lies between the leftmost and rightmost landing of its row strip <strong>and</strong> between the topmost and bottommost of its column strip. Everything outside is dimmed and left unranked, or the biggest gap would always be the edge of the canvas. Wider is coarser but more robust; narrower hugs the recording harder but eventually fragments, and then a big hole drops out of the mask altogether</td></tr>
+            <tr><td>Listed gaps</td><td class="k">map.gapTopCount</td><td class="d">5</td><td class="w">How many holes the Advanced mode rings, numbers and lists with coordinates and radius in the metrics column: 3 &middot; 5 &middot; 8 &middot; 12</td></tr>
+            <tr><td>Hold the map open through a teleport</td><td class="k">map.reopenAfterTeleport</td><td class="d">on</td><td class="w">A teleport across worlds brings up the game's own loading screen, which throws away whatever was open &mdash; so with the auto loop running the map closed on every landing. This declines that one swap: the same map stays up, with no blink and no rebuild, keeping its filter, zoom, scroll position and selection. Anything you or the server opens on purpose &mdash; a disconnect screen above all &mdash; still comes through, and escape still closes it for good</td></tr>
+            <tr><td>Reset panel widths</td><td class="k">&mdash;</td><td class="d">Action</td><td class="w">Both side panels back to 24 % / 26 % of the window width</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>On numbering:</strong> samples count
+          <strong>from 1 within a sitting</strong>. A new session starts at
+          <code>#1</code> again rather than carrying on from the number reached
+          yesterday.
+        </p>
+        <p>
+          What decides it is the plot, not the scope: tick a single sitting in
+          <em>All sessions</em> and it counts from 1 there too. Only once two
+          sittings share the plot does the global number take over &mdash; it is
+          then the only one that stays unique, and it is what the CSV, the viewer
+          and the delete dialog mean. Not a setting, and the stored number never
+          changes either way.
+        </p>
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>On the density cell:</strong> it draws nothing as of 1.6.8
+          &mdash; the heatmap is gone &mdash; but it is still the basis of the
+          <strong>coverage</strong> statistic: cells hit divided by the cells
+          inside the border. Smaller cells measure finer but push the coverage
+          percentage down &mdash; at 130 samples with 512-block cells it is
+          already only 0.000&nbsp;%.
+        </p>
+        <p>
+          So pin the cell size before comparing that percentage, or you are
+          comparing apples with oranges.
+        </p>
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>On the frame cap:</strong> Minecraft does not throttle a screen
+          while a world is behind it, so the map redraws as fast as your video
+          setting allows. The picture only changes when you move the mouse, so the
+          spare frames buy nothing and heat the CPU. Set it to <em>off</em> if you
+          would rather let the video setting decide.
+        </p>
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>On the Advanced mode:</strong> it asks the opposite question
+          &mdash; not where the landings are, but where they are not.
+          Every point of the plot is shaded by its distance to the nearest
+          landing; bright means far from everything. Up to the 5k scale it
+          shades, past it it counts fixed world tiles in four bands. The biggest
+          holes are listed with coordinates and radius in the metrics column, the
+          radius always rounded down: the patch is <em>at least</em> that empty.
+        </p>
+        <p>
+          <strong>Filter to one region first.</strong> The measurement handles
+          overlap correctly on its own &mdash; a spot two regions reach is only
+          rare if it is rare in both. But a hole in the region you care about
+          will be filled in by landings of a region you never asked for there.
+        </p>
+        <p>
+          Two rules keep the tiles honest while the view moves. The mask is asked
+          in <strong>world units</strong>, never through a screen pixel: asked
+          through the clipped centre of a tile hanging off the edge, the outer
+          row and column blinked in and out on a drag, because the probe walked
+          across the tile while the tile stood still. And a tile holding a
+          landing is drawn whatever the mask says &mdash; a marker sitting on
+          bare ground with no tile under it reads as a bug.
+        </p>
+        <p>
+          A hole at the frontier of the recording is still listed. The field goes
+          on rising into unexplored ground, so no cell inside the mask is a local
+          maximum there; a neighbour outside the mask therefore does not count as
+          higher. Without that, the biggest hole on the map is the one that goes
+          missing from the list.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================================ HUD -->
+    <section id="hud">
+      <div class="sec-head">
+        <h2>HUD</h2>
+        <span class="tab-tag">Tab 5</span>
+      </div>
+      <p class="sec-intro">
+        The two overlays while you play: the text readout with capture state,
+        counters and last sample, and the minimap. They have a tab of their own
+        because the game screen is shared: RTPBuddy has no say over what other
+        mods draw in the top left or the top right, so its own readouts have to
+        be movable to wherever there is room.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Setting</th><th>Key</th><th>Default</th><th>Effect</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>HUD overlay</td><td class="k">map.hudEnabled</td><td class="d">on</td><td class="w">Whether the readout is shown at all</td></tr>
+            <tr><td>Place the overlays</td><td class="k">&mdash;</td><td class="d">Action</td><td class="w">Opens the placement screen for <strong>both</strong> boxes: they are dragged with the mouse and the rest of the HUD stays visible behind them. Tab switches between the overlay and the minimap, arrow keys nudge by 1&nbsp;px, shift by 10; the boxes snap to the edges and the centre</td></tr>
+            <tr><td>Corner</td><td class="k">map.hudAnchor</td><td class="d">TOP_LEFT</td><td class="w">Which corner the overlay hangs from: top/bottom &times; left/centre/right</td></tr>
+            <tr><td>Offset X / Y</td><td class="k">map.hudX / map.hudY</td><td class="d">4 / 4</td><td class="w">Distance inwards from that corner, in GUI pixels</td></tr>
+            <tr><td>Size</td><td class="k">map.hudScale</td><td class="d">1.0</td><td class="w">Scales the whole overlay: 50&nbsp;% to 200&nbsp;%, independently of the game's GUI scale</td></tr>
+            <tr><td>Backing plate</td><td class="k">map.hudBackground</td><td class="d">on</td><td class="w">The dark plate behind the text</td></tr>
+            <tr><td>Opacity</td><td class="k">map.hudBackgroundOpacity</td><td class="d">60&nbsp;%</td><td class="w">How solid that plate is: 0 &middot; 20 &middot; 40 &middot; 60 &middot; 80 &middot; 100</td></tr>
+            <tr><td>Text shadow</td><td class="k">map.hudTextShadow</td><td class="d">off</td><td class="w">Readability with the plate switched off</td></tr>
+            <tr><td>Row: auto-RTP</td><td class="k">map.hudShowAuto</td><td class="d">on</td><td class="w">Countdown and number of commands sent, only while the loop runs; while held it reads HELD in grey with the time left</td></tr>
+            <tr><td>Row: state</td><td class="k">map.hudShowState</td><td class="d">on</td><td class="w">watching / armed / landing / paused</td></tr>
+            <tr><td>Row: counters</td><td class="k">map.hudShowCounters</td><td class="d">on</td><td class="w">Captured, total, missed, rejected</td></tr>
+            <tr><td>Row: last sample</td><td class="k">map.hudShowLast</td><td class="d">on</td><td class="w">The last landing as a small block: its number and region &mdash; the region in its own colour, with the DonutSMP server number beside it &mdash; and the coordinates with the distance from origin underneath</td></tr>
+            <tr><td>Row: region &amp; biome</td><td class="k">map.hudShowContext</td><td class="d">on</td><td class="w">One more row under the number: the biome and dimension of that landing</td></tr>
+            <tr><td>Row: messages</td><td class="k">map.hudShowStatus</td><td class="d">on</td><td class="w">Short capture messages, for six seconds</td></tr>
+            <tr><td>Reset the HUD</td><td class="k">&mdash;</td><td class="d">Action</td><td class="w">Corner, offsets, size, plate and shadow of the text overlay back to their defaults</td></tr>
+            <tr><td>Reset minimap</td><td class="k">&mdash;</td><td class="d">Action</td><td class="w">Corner, offsets, edge length and opacity of the minimap back to their defaults</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <p>
+          Position and size are stored as a <strong>corner plus an offset</strong>
+          rather than a raw screen position. A spot picked at GUI scale 2 would
+          otherwise sit half off the screen at scale 4.
+        </p>
+      </div>
+
+      <h3>Minimap</h3>
+      <p class="sec-intro">
+        The small map at the edge of the screen. It frames exactly the rectangle
+        the full map's <code>F</code> picks &mdash; the chosen landings, framed
+        &mdash; with your own position inside it. The frame is
+        <strong>fixed</strong>: it does not scroll with you, because a map that
+        recentres on every step says nothing about where you are within the
+        recording. Walk out of the rectangle and your marker is pinned to the rim
+        in amber. With nothing recorded it frames the server cell you are
+        standing in instead.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Setting</th><th>Key</th><th>Default</th><th>Effect</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Minimap</td><td class="k">map.minimapEnabled</td><td class="d">on</td><td class="w">Whether the minimap is shown at all. Also <code>/rtpbuddy minimap on</code> and <code>off</code></td></tr>
+            <tr><td>Corner</td><td class="k">map.minimapAnchor</td><td class="d">BOTTOM_RIGHT</td><td class="w">Which corner the map hangs from. Bottom right by default, because the text overlay sits in the top left and another mod's minimap usually claims the top right</td></tr>
+            <tr><td>Offset X / Y</td><td class="k">map.minimapX / map.minimapY</td><td class="d">4 / 4</td><td class="w">Distance inwards from that corner, in GUI pixels</td></tr>
+            <tr><td>Edge length</td><td class="k">map.minimapSize</td><td class="d">104&nbsp;px</td><td class="w">Edge length of the square plate: 64 &middot; 80 &middot; 104 &middot; 128 &middot; 160 &middot; 192. From about 104&nbsp;px the cell numbers fit inside it</td></tr>
+            <tr><td>Opacity</td><td class="k">map.minimapOpacity</td><td class="d">78&nbsp;%</td><td class="w">How far the plate covers the world behind it: 30 &middot; 50 &middot; 65 &middot; 78 &middot; 90 &middot; 100. The rim stays at full strength either way, so a plate at 30&nbsp;% still has an edge</td></tr>
+            <tr><td>Data</td><td class="k">map.minimapScope</td><td class="d">SESSION</td><td class="w">Which landings are framed: this sitting only, or everything ever recorded</td></tr>
+            <tr><td>Server cells</td><td class="k">map.minimapShowRegions</td><td class="d">on</td><td class="w">The server's 50,000 block cells, each in the colour of the region that owns it. The cell you are standing in is brighter and carries a strong edge &mdash; that is the actual answer to <em>where in the sector am I</em></td></tr>
+            <tr><td>Cell numbers</td><td class="k">map.minimapShowCellNumbers</td><td class="d">on</td><td class="w">Writes the server number into each cell once the cells are at least 26&nbsp;px wide. Below that the number would be larger than the cell</td></tr>
+            <tr><td>Zero axes</td><td class="k">map.minimapShowAxes</td><td class="d">on</td><td class="w">The two lines through x&nbsp;=&nbsp;0 and z&nbsp;=&nbsp;0</td></tr>
+            <tr><td>Last leg</td><td class="k">map.minimapShowLastLeg</td><td class="d">on</td><td class="w">The red line into the newest landing: where that teleport started &mdash; the same line the full map draws</td></tr>
+            <tr><td>Caption</td><td class="k">map.minimapShowCaption</td><td class="d">on</td><td class="w">The strip under the plate: the region and cell number of your own position, and how wide the framed area is</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <p>
+          <strong>On the frame cost.</strong> The plate is painted once into a
+          texture and then drawn as a <em>single</em> quad. A thousand landings
+          would otherwise be a thousand <code>fill</code> calls in every single
+          frame &mdash; the mistake the gap map very nearly shipped with, made
+          permanent, because a minimap is on screen for the whole session. It is
+          repainted only when the picture actually changes: a new landing, a
+          different sitting, a switch flipped, or crossing into another server
+          cell. Such a repaint measures under 3&nbsp;ms with two thousand
+          landings on it. What is left per frame is your marker, up to sixteen
+          cell numbers and the caption &mdash; some fifty rectangles, about what
+          one vanilla HUD widget costs.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================= CONFIG ONLY -->
+    <section id="configonly">
+      <div class="sec-head">
+        <h2>config.json only</h2>
+        <span class="tab-tag">no menu</span>
+      </div>
+      <p class="sec-intro">
+        These values exist but appear in no tab. Edit them with the game closed, or
+        the next save will overwrite your change.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Key</th><th>Default</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="k">capture.defaultCategory</td><td class="d">rtp</td><td class="w">Category stamped on new samples, for later analysis</td></tr>
+            <tr><td class="k">capture.manualFallbackRegion</td><td class="d">unknown</td><td class="w">Region given to a <code>K</code> capture with nothing specified</td></tr>
+            <tr><td class="k">guards.borderCenterX / &hellip;Z</td><td class="d">0 / 0</td><td class="w">Centre of the world border</td></tr>
+            <tr><td class="k">map.markerMode / colorMode</td><td class="d">POINTS / DIMENSION</td><td class="w">Set from the map toolbar</td></tr>
+            <tr><td class="k">map.sessionCenter&hellip; / allCenter&hellip;</td><td class="d">&mdash;</td><td class="w">The remembered view, one per scope</td></tr>
+            <tr><td class="k">map.filterBiomeFamily</td><td class="d">null</td><td class="w">The biome family picked in the toolbar. Stored as the family name, not as the shown label &mdash; that comes from a translation and would not survive a language change</td></tr>
+            <tr><td class="k">map.filterDimension / &hellip;Region / &hellip;CaptureMode</td><td class="d">null</td><td class="w">The remembered filter from the map toolbar; <code>null</code> means <em>all</em>. Written while <strong>Remember filter</strong> is on</td></tr>
+            <tr><td class="k">map.filterSessions / &hellip;Active</td><td class="d">empty / off</td><td class="w">The sittings ticked in the session list, and whether a narrowing is in force at all. Both are needed: an empty list with the flag set means <em>show none</em>, which is not the same as <em>no session filter</em></td></tr>
+            <tr><td class="k">map.scope</td><td class="d">SESSION</td><td class="w">Scope <code>M</code> opens the map on: <code>SESSION</code> or <code>ALL</code>. You switch it in the map header, and it stays put until you switch it back</td></tr>
+            <tr><td class="k">map.sidebarFraction</td><td class="d">0.28</td><td class="w">Height of the session list in the sidebar, as a fraction of the panel</td></tr>
+            <tr><td class="k">map.panelLeftFraction / &hellip;Right&hellip;</td><td class="d">0.24 / 0.26</td><td class="w">Width of the side panels as a fraction of the window</td></tr>
+            <tr><td class="k">regions[]</td><td class="d">preset</td><td class="w">Pattern and command per region</td></tr>
+            <tr><td class="k">serverRegionHost</td><td class="d">donutsmp</td><td class="w">Substring of the server name that turns the server-region grid on. Blank switches it off entirely</td></tr>
+            <tr><td class="k">guards.netherBorderRadius / …end…</td><td class="d">0 / 0</td><td class="w">Own border for the nether and the end; 0 = the overworld radius. DonutSMP: 28,500 and 87,500</td></tr>
+            <tr><td class="k">legacyImportDone / &hellip;At / &hellip;Count</td><td class="d">&mdash;</td><td class="w">Markers for the one-off import from the predecessor <code>rtpmapper</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ TOOLBAR -->
+    <section id="toolbar">
+      <div class="sec-head">
+        <h2>Map toolbar</h2>
+        <span class="tab-tag">controls</span>
+      </div>
+      <p class="sec-intro">
+        Not saved settings in the strict sense, but the same kind of switch &mdash;
+        the config remembers the first two and the scope.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Button</th><th>Effect</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Points / Path / Advanced</td><td class="w">How samples are drawn. <strong>Points</strong> draws solid markers and nothing else &mdash; no lines. <strong>Path</strong> draws the route in recording order, one pixel wide, with a direction chevron per segment and hollow markers behind it. <strong>Advanced</strong> &mdash; the gap map &mdash; drops the landings as the subject and shades the distance to the nearest one instead, so the empty ground is what the eye lands on</td></tr>
+            <tr><td>Dimension / Region / Recency / Session / Biome</td><td class="w">What the marker colour means. <strong>Biome</strong> paints by biome <em>family</em> &mdash; close to fifty biomes are recorded, and fifty hues on one plot is confetti</td></tr>
+            <tr><td>All biomes / Forest / Plains / &hellip;</td><td class="w">Drops down the biome families the chosen scope actually holds, each with its colour and its count, <em>All biomes</em> on top. One click picks, a click beside it closes, and so does <code>Esc</code>. Cycling eighteen families would not be a filter: after the wrong pick there would be seventeen clicks between you and all of them again. A single biome is what the search box is for &mdash; it matches both the id and the name the game shows</td></tr>
+            <tr><td>all / Overworld / &hellip;</td><td class="w">Filter to one dimension</td></tr>
+            <tr><td>Fit <code>F</code></td><td class="w">Zooms to all visible samples. Hold <strong>shift</strong> to frame the whole world border instead</td></tr>
+            <tr><td>Reset <code>R</code></td><td class="w">Resets pan and zoom</td></tr>
+            <tr><td>Export</td><td class="w">Writes the visible samples as a timestamped CSV to <code>.minecraft/rtpbuddy/exports/</code></td></tr>
+            <tr><td>Clear</td><td class="w">Resets every filter</td></tr>
+            <tr><td>Delete <code>Del</code></td><td class="w">Deletes the picked samples. Click a sample to pick it, or shift-drag a rectangle to pick several; a group is confirmed first, with its count and number range</td></tr>
+            <tr><td>Undo <code>Ctrl+Z</code></td><td class="w">Puts the last deletion back &mdash; the last one only, and only until the game is closed</td></tr>
+            <tr><td>Panels <code>Tab</code></td><td class="w">Cycles both side panels, stats only, list only, none</td></tr>
+            <tr><td>Sidebar divider</td><td class="w">Drag to divide the sidebar between the session list and the sample list; double-click resets it</td></tr>
+            <tr><td>This session / All sessions <em>(top right)</em></td><td class="w">The scope. In <em>All sessions</em> the session list appears in the sidebar; unticking rows there hides individual sittings and the button reads <em>Picked (n)</em></td></tr>
+            <tr><td>Start a new sitting <em>(in the session card)</em></td><td class="w">Closes the sitting in progress and opens the next one without relogging. Sample numbers start at 1 again and the card's counters reset with them. Nothing is deleted: the landings recorded so far keep their sitting. A sitting with no landing is left alone</td></tr>
+            <tr><td>Delete empty sessions (n) <em>(in the session list)</em></td><td class="w">Shown only while there are sittings with no landing at all, and deletes exactly those. The running sitting is never among them, and samples are never touched</td></tr>
+            <tr><td>Sample list scrollbar</td><td class="w">Draggable. It sits in a strip of its own on the right, so reaching for it no longer selects the row behind it</td></tr>
+            <tr><td>Options <code>O</code></td><td class="w">This settings menu</td></tr>
+            <tr><td>Auto off / Auto 42s / Auto held</td><td class="w">Starts or stops the auto-RTP loop, and doubles as the countdown. With the run held by <code>H</code> it reads <em>Auto held</em> &mdash; a countdown that never moves would look like a stuck game</td></tr>
+            <tr><td>Rename session <em>(in the session list)</em></td><td class="w">Appears as soon as exactly one sitting is ticked &mdash; the running one included. Gives it a name of its own, up to 32 characters, instead of every row repeating the server address. The name then shows in the session list, in the session card and in the viewer; leave it empty to clear it back to the server name. It is stored as <code>label</code> on the session record and touches none of the landings</td></tr>
+            <tr><td>Merge sessions (n) <em>(in the session list)</em></td><td class="w">Appears as soon as two or more sittings are ticked. Folds them into one: the target is the oldest, whose colour, name and start time stay, and its span widens to cover them all. <strong>Nothing is deleted</strong> &mdash; every landing survives, it just belongs to one sitting now, and the numbers run from 1 in the order you actually landed. The other session records go, which is why a dialog asks first; it cannot be undone. Refused across servers. If the running sitting was among them, it carries on inside the merged one</td></tr>
+            <tr><td>Continue session: DD-MM HH:MM <em>(in the session list)</em></td><td class="w">Appears as soon as exactly one sitting is ticked and it is not the running one &mdash; so after <em>None</em> and a click on a row. Continues that sitting instead of opening a new one: every further landing takes its number, so the count carries on rather than restarting at 1, and the HUD counts on from that sitting's total. The sitting in progress is closed first &mdash; and discarded if it recorded nothing. Refused across servers: a sitting is one stretch of play on one server, and two of them in a single run of numbers would be a lie</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; 6 September 2026 &mdash; the same
+    list lives as <code>SETTINGS.md</code> in the project folder, and the German
+    version as <code>RTPBuddy-Einstellungen.html</code>.
+  </footer>
+
+</div>
+
+</body>
+</html>

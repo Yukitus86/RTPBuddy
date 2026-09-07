@@ -1,0 +1,29 @@
+# Gradle / build output
+.gradle/
+build/
+
+# Dev client run directory (worlds, logs, personal Minecraft data)
+run/
+
+# Recorded landing data kept outside the run directory
+backup/
+
+# Desktop viewer (not part of this repository)
+viewer/
+
+# Baritone upstream reference doc - the mod has no pathing integration
+FEATURES.md
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
