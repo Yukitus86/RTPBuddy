@@ -54,7 +54,6 @@ the newest landing, and the open menu filters by biome.*
   - [World borders](#world-borders)
   - [What the metrics column reports](#what-the-metrics-column-reports)
 - [Data storage](#data-storage)
-- [Desktop viewer](#desktop-viewer)
 
 ---
 
@@ -343,8 +342,8 @@ yesterday's run continuing, so a view showing one sitting numbers its landings
 from 1. That follows what is actually on the plot rather than the scope: pick a
 single sitting in the all-sessions list and it counts from 1 there too. Only once
 two sittings share the plot does the global number take over, which is the one
-that stays unique across sittings and the one the CSV, the viewer and the delete
-dialog mean. The stored number never changes either way.
+that stays unique across sittings and the one the CSV and the delete dialog
+mean. The stored number never changes either way.
 
 The sample list is number, biome, coordinates, and its scrollbar sits in a strip
 of its own, so dragging it scrolls instead of picking the row behind it. The
@@ -483,8 +482,8 @@ else a region stays what the command asked for.
 ### Markers and the hover card
 
 Markers are discs by default, two pixels of radius. Both are settings:
-**Settings → Map → Round markers** and **Marker size**. The viewer reads the same
-two values out of `config.json`, so the two tools draw the same dot.
+**Settings → Map → Round markers** and **Marker size**, both stored in
+`config.json`.
 
 Hovering a marker gives the full record on a card rather than a stack of
 labelled lines: the sample number and its server region in the header, the
@@ -698,8 +697,8 @@ the map opens rather than showing nothing.
 
 Tick exactly one and the list offers **Rename session**, which gives that
 sitting a name of its own instead of every row repeating the server address. The
-name shows in the list, in the session card and in the viewer, and clearing it
-brings the server name back. It is stored as `label` on the session record and
+name shows in the list and in the session card, and clearing it brings the
+server name back. It is stored as `label` on the session record and
 touches none of the landings.
 
 Tick two or more and the list offers **Merge sessions**, which folds them into
@@ -800,16 +799,3 @@ the schema-3 fields appended after them:
 ```csv
 sample,x,y,z,distance_from_origin,dimension,timestamp,requested_region,session_id,category,from_x,from_y,from_z,from_dimension,travel_distance,latency_ms,biome,surface_y,capture_mode,server,note
 ```
-
----
-
-## Desktop viewer
-
-A standalone Windows app exists that opens a recorded map without starting
-Minecraft — the same canvas, the same metrics, plus CSV and PNG export. It only
-ever reads the mod's files and is **not part of this repository**; passing
-mentions of "the viewer" above refer to it. The mod is complete without it.
-
-It follows the Windows display language the same way the mod follows
-Minecraft's. Override it with `--lang=de` / `--lang=en` on the command line,
-or the `RTPBUDDY_LANG` environment variable.
