@@ -583,12 +583,13 @@ a reason to stop because the run found what it was sent out for. Under
 ![The Auto-RTP tab](docs/img/settings-auto-rtp.png)
 
 *The Auto-RTP tab with the search order still off: the run stops only for the
-usual reasons.*
+usual reasons. The red frame marks the section, and is drawn on the screenshot
+rather than by the mod.*
 
 ![The search order switched on](docs/img/settings-search-order.png)
 
-*Switched on, every condition is available. The red frame is drawn on the
-screenshot, not by the mod.*
+*Switched on, the whole section unfolds: the cell and distance conditions, then
+the eighteen biome families, then the rules that combine them.*
 
 **Combine** decides whether one satisfied condition is enough or all of them
 have to hold at once, and **Give up after** ends a run that has turned down that
