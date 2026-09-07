@@ -19,12 +19,47 @@ The one thing that does act for you is auto-RTP, which repeats the single comman
 you configured at the interval you chose. Whether that is allowed differs per
 server; on DonutSMP it is. Check your server's rules.
 
+## Contents
+
+- [Requirements](#requirements)
+- [Build](#build)
+- [Install](#install)
+- [Using it](#using-it)
+- [Testing without a server](#testing-without-a-server)
+- [Language](#language)
+- [Commands](#commands)
+- [Features in detail](#features-in-detail)
+  - [Capture](#capture)
+  - [Settings](#settings)
+  - [Auto-RTP](#auto-rtp)
+  - [The maps](#the-maps)
+  - [Advanced: the gap map](#advanced-the-gap-map)
+  - [Clicking a landing](#clicking-a-landing)
+  - [Server regions on the plot](#server-regions-on-the-plot)
+  - [Markers and the hover card](#markers-and-the-hover-card)
+  - [The minimap](#the-minimap)
+  - [The cell board](#the-cell-board)
+  - [The search order](#the-search-order)
+  - [Biome colours and filters](#biome-colours-and-filters)
+  - [Drawing a full map](#drawing-a-full-map)
+  - [Deleting samples](#deleting-samples)
+  - [Sessions and scope](#sessions-and-scope)
+  - [The map screen while you play](#the-map-screen-while-you-play)
+  - [World borders](#world-borders)
+  - [What the metrics column reports](#what-the-metrics-column-reports)
+- [Data storage](#data-storage)
+- [Desktop viewer](#desktop-viewer)
+
+---
+
 ## Requirements
 
 - Minecraft Java Edition 1.21.11
 - Java 21
 - Fabric Loader 0.19.3 or newer
 - Fabric API 0.141.6+1.21.11
+
+---
 
 ## Build
 
@@ -41,6 +76,8 @@ On Windows:
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
 production JAR lands in `build/libs/` as `rtpbuddy-1.6.14.jar`.
 
+---
+
 ## Install
 
 Download `rtpbuddy-1.6.14.jar` from the
@@ -52,7 +89,10 @@ or build it yourself with the step above.
 3. Put `rtpbuddy-1.6.14.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
-The JAR is client-only. It is neither needed nor intended on the server.
+> [!NOTE]
+> The JAR is client-only. It is neither needed nor intended on the server.
+
+---
 
 ## Using it
 
@@ -87,6 +127,8 @@ exactly when a running loop is most likely to need stopping. It halts the
 auto-RTP loop and reports precisely what it stopped. With nothing running it
 leaves the key alone, so `End` still moves the caret in a text field.
 
+---
+
 ## Testing without a server
 
 RTPBuddy only records; it never teleports you. Recording therefore needs
@@ -94,9 +136,12 @@ something that answers `/rtp` — the server you are on, or in single player any
 mod that provides the command. RTPBuddy watches the outgoing command packet and
 does not care which.
 
-With no such command available, record by hand instead: `K`, or
-`/rtpbuddy capture manual [region]`, writes a sample at wherever you are
-standing, which is enough to exercise the store, the map and the statistics.
+> [!TIP]
+> With no such command available, record by hand instead: `K`, or
+> `/rtpbuddy capture manual [region]`, writes a sample at wherever you are
+> standing, which is enough to exercise the store, the map and the statistics.
+
+---
 
 ## Language
 
@@ -104,11 +149,11 @@ The interface follows the language selected in Minecraft's own options: German
 with the game set to German, English otherwise. Both translations ship with the
 mod and no setting of its own is involved.
 
-The desktop viewer follows the Windows display language the same way. Override
-it with `--lang=de` / `--lang=en` on the command line, or the `RTPBUDDY_LANG`
-environment variable.
+---
 
-Commands (client-side; no packet reaches the server):
+## Commands
+
+Every one of these is client-side; no packet reaches the server.
 
 ```text
 /rtpbuddy map | all | config
@@ -119,6 +164,10 @@ Commands (client-side; no packet reaches the server):
 /rtpbuddy cells
 /rtpbuddy find [on | off]
 ```
+
+---
+
+## Features in detail
 
 ### Capture
 
@@ -210,27 +259,41 @@ server answers it, and the HUD counts it. `/rtpbuddy auto step` does the same
 from chat.
 
 It is off by default and the running flag is never written to disk — it starts
-stopped on every launch and stops on
-disconnect, on world join, on damage, on the run timer and on the teleport cap.
+stopped on every launch. A run stops on:
+
+- a **disconnect**
+- a **world join**
+- **damage** taken
+- the **run timer** running out
+- the **teleport cap** being reached
+
 The interval is measured between *landings*, not between attempts, so a slow
 teleport does not stack up commands. Jitter keeps the spacing from being
 machine-exact. It never shortens or bypasses a server cooldown: if the server
 refuses a teleport, the next attempt simply waits out the same interval again.
 
-Whether repeating a command is allowed differs per server — on DonutSMP it is —
-so the start dialog states exactly what will be sent, how often and every
-condition that ends the run, and sends nothing until you press start. It informs;
-the decision stays yours.
+> [!IMPORTANT]
+> Whether repeating a command is allowed differs per server — on DonutSMP it is —
+> so the start dialog states exactly what will be sent, how often and every
+> condition that ends the run, and sends nothing until you press start. It
+> informs; the decision stays yours.
 
 The literal command per region lives in `config.json` next to the match pattern,
 because a regex cannot be run backwards into the one command a server expects.
 
 ### The maps
 
-Both maps share the same canvas: drag to pan, scroll to zoom on the cursor, `F`
-to fit, `R` to reset, `Tab` to show or hide the side panels, arrow keys to step
-between samples, shift-drag for a rectangle selection that is summarised in the
-status line.
+Both maps share the same canvas:
+
+| Input | Action |
+|---|---|
+| Drag | Pan |
+| Scroll | Zoom on the cursor |
+| `F` | Fit everything in view |
+| `R` | Reset the view |
+| `Tab` | Show or hide the side panels |
+| Arrow keys | Step between samples |
+| Shift-drag | Rectangle selection, summarised in the status line |
 
 Sample numbers appear next to the markers **from the 5k scale onward**: while the
 bar in the bottom left reads more than 5,000 blocks they stay off, because at that
@@ -247,7 +310,7 @@ it - the two are usually the same point and sometimes are not, since you walk,
 you fall, you take a portal, and only the recorded origin is a fact about that
 teleport. Watching the map while a run goes, it answers which of the dots you
 just came from without clicking one. Left out across dimensions, where a straight
-line measures nothing, and switched off under **Settings, Map, Line into the last
+line measures nothing, and switched off under **Settings → Map → Line into the last
 landing**.
 
 The map is held open through a teleport. A jump across worlds normally brings up
@@ -256,13 +319,13 @@ loop running the map shut on every single landing; RTPBuddy declines that one
 swap instead, and the same screen stays up with its filter, zoom, scroll position
 and selection intact. Only the game's transient loading screens are refused -
 anything you or the server opens on purpose comes through, and escape still means
-closed. It is **Settings, Map, Hold the map open through a teleport**.
+closed. It is **Settings → Map → Hold the map open through a teleport**.
 
 Your own position is drawn as a ring with a dark collar around it, a short
 one-pixel stub from its centre for the direction you face, and a slow ripple that
 fades outward - the one moving thing on the plot, which is what makes the marker
 findable again after a teleport has moved it. The ripple is
-**Settings, Map, Player marker ripples** if it is not wanted.
+**Settings → Map → Player marker ripples** if it is not wanted.
 
 **Start a new sitting** at the bottom of the session card closes the sitting in
 progress and opens the next one without relogging: the sample numbers start at 1
@@ -280,7 +343,7 @@ dialog mean. The stored number never changes either way.
 The sample list is number, biome, coordinates, and its scrollbar sits in a strip
 of its own, so dragging it scrolls instead of picking the row behind it. The
 dimension, region and mode filter is remembered between openings
-(**Settings, Map, Remember filter**), and sittings that recorded nothing are kept
+(**Settings → Map → Remember filter**), and sittings that recorded nothing are kept
 out of the session list, with a **Delete empty sessions** button offered there
 while any exist - the running sitting is never among them.
 
@@ -288,8 +351,7 @@ The two side panels are resizable: drag the divider between a panel and the map,
 and double-click a divider to put that panel back to its default width. The
 widths are kept as a fraction of the window, so they survive a resize and a GUI
 scale change rather than swallowing the screen at scale 4; the map keeps a
-minimum width of its own, so a drag can never squeeze it away. **Settings, Map,
-Reset panel widths** restores both at once.
+minimum width of its own, so a drag can never squeeze it away. **Settings → Map → Reset panel widths** restores both at once.
 
 Markers can be drawn as points, a path in recording order, or **Advanced**, and
 coloured by dimension, region, session or recency; a colour key in the corner
@@ -336,7 +398,7 @@ its column strip. Holes in the middle stay inside, which is the whole point,
 while the outer edge lands on the outermost *landing* rather than a tile edge
 past it. Inside the mask, "nothing here" is a fact about the server; outside it,
 it is only a fact about how far the recording has got, and it is dimmed to say
-so. **Settings, Map, Gap search area** sets the strip width, **Listed gaps** how
+so. **Settings → Map → Gap search area** sets the strip width, **Listed gaps** how
 many holes are ringed.
 
 The strips are measured against real coordinates rather than tile edges because
@@ -378,12 +440,16 @@ Drawing it as one rectangle per cell was the obvious way and the wrong one: on
 1.21.11 every `fill` allocates a render-state object and a copy of the matrix, so
 a few thousand cells is a few thousand allocations on every frame of a zoom.
 
+### Clicking a landing
+
 Clicking a landing draws the two legs that touch it: red for the leg that
 arrives, green for the leg that leaves, both thicker than the rest of the route
 and drawn on top of it. So one click answers where you came from and where the
 next RTP took you - in the path view and in points, where those two lines are
 the only ones drawn. A leg that crosses dimensions is left out, because a
 straight line between two different worlds measures nothing.
+
+### Server regions on the plot
 
 **Region** means the server region, not the dimension. DonutSMP splits its
 overworld into 81 cells of 50,000 blocks over the playable area and hands each
@@ -392,12 +458,15 @@ Asia, Oceania. That grid is drawn under the plot, each cell tinted in the colour
 of the region that owns it and labelled with its server number, and a landing
 takes the colour of the region it fell in. Whether a plain `/rtp` spreads across
 the whole world or keeps you in one region is not something this mod claims -
-it is what the recorded landings are there to show. It is switched on in **Settings, Map, Server region
+it is what the recorded landings are there to show. It is switched on in **Settings → Map → Server region
 grid**, and appears only for samples recorded on a host that uses it: painting
 that layout over a single-player world would be inventing a fact. Everywhere
 else a region stays what the command asked for.
+
+### Markers and the hover card
+
 Markers are discs by default, two pixels of radius. Both are settings:
-**Settings, Map, Round markers** and **Marker size**. The viewer reads the same
+**Settings → Map → Round markers** and **Marker size**. The viewer reads the same
 two values out of `config.json`, so the two tools draw the same dot.
 
 Hovering a marker gives the full record on a card rather than a stack of
@@ -442,7 +511,7 @@ another server cell. A repaint measures under 3 ms with two thousand landings on
 it. What is redrawn per frame is your marker, up to sixteen cell numbers and the
 caption — some fifty rectangles, about what one vanilla HUD widget costs.
 
-Its position works exactly like the text overlay's: **Settings, HUD, Place the
+Its position works exactly like the text overlay's: **Settings → HUD → Place the
 overlays** puts both boxes on the running game to be dragged, `Tab` switches
 between them, and each is stored as a corner plus an offset so it stays put
 through a resize or a GUI scale change. `/rtpbuddy minimap` switches it on and
@@ -480,7 +549,7 @@ a few seconds.
 Auto-RTP stops for damage, for the run timer, for the session cap and for a
 guard - every one of them a reason to give up. A search order is the other kind:
 a reason to stop because the run found what it was sent out for. Under
-**Auto-RTP -> Search order**, switch it on and pick conditions:
+**Auto-RTP → Search order**, switch it on and pick conditions:
 
 - **New cell** - the first landing in a cell no stored landing has ever reached.
 - **Named cells** - a typed list such as `11 12 20`.
@@ -509,7 +578,7 @@ family or across many, and the menu stays open while they are. That is the
 difference between hunting for "something rare" and hunting for the Pale
 Garden.
 
-### Biomes
+### Biome colours and filters
 
 Every landing has carried its biome since schema 3, and for a long time nothing
 showed it. Now three things do:
@@ -536,8 +605,8 @@ matrix push and rotate. Two thousand landings framed at once came to some twenty
 thousand rectangles a frame, which is not arithmetic the machine minds - it is
 allocation it does.
 
-Past **Drawing budget** markers on screen (500 by default, under Map ->
-Performance) the whole layer - every landing and the route between them - is
+Past **Drawing budget** markers on screen (500 by default, under **Map →
+Performance**) the whole layer - every landing and the route between them - is
 painted into a texture instead, and every frame in between is a single quad. The
 picture is repainted only when something it depends on moves: the view, the
 filter, the marker mode, the colour mode, the picked landing. Not the mouse. On
@@ -565,8 +634,13 @@ are, which is what releases before 1.6.11 did.
 Click a landing to pick it, or shift-drag a rectangle to pick a group, then use
 **Delete** in the toolbar or press `Del`. A single sample goes straight away; a
 group states its count and waits for a confirmation. **Undo** puts the last
-deletion back — the button, or `Ctrl+Z`. Only the most recent deletion is kept,
-and it is kept in memory, so it does not survive leaving the game.
+deletion back — the button, or `Ctrl+Z`.
+
+> [!WARNING]
+> Only the most recent deletion is kept, and it is kept in memory, so it does
+> not survive leaving the game.
+
+### Sessions and scope
 
 The button in the top right sets the **scope**. *This session* covers the
 current world or server only, with live counters for captured, missed and
@@ -593,8 +667,8 @@ Tick two or more and the list offers **Merge sessions**, which folds them into
 one. The oldest is the target and keeps its colour, name and start time, and its
 span widens to cover them all. Nothing is deleted: every landing survives and
 they then number from 1 in the order you actually landed, because the per-sitting
-count follows the recording order. The other session records go, so a dialog asks
-first and there is no undo. Refused across servers, and if the running sitting was
+count follows the recording order. The other session records go, so a dialog
+asks first and **there is no undo**. Refused across servers, and if the running sitting was
 among them it carries on inside the merged one.
 
 Tick exactly one sitting that is not the running one and the list offers
@@ -605,11 +679,13 @@ sitting's total. The sitting in progress is closed first, and discarded if it
 recorded nothing. It is refused across servers — a sitting is one stretch of
 play on one server, and two of them under one run of numbers would be a lie.
 
+### The map screen while you play
+
 A teleport that crosses worlds makes the client swap in its own loading screen,
 and that throws away whatever was open - so with the auto loop running, the map
 closed on every landing. It is now put back once the world is there, at the same
 scope and the same pan and zoom. Escape still closes it for good; only what the
-game itself took away comes back. **Settings, Map, Reopen the map after a
+game itself took away comes back. **Settings → Map → Reopen the map after a
 teleport** switches it off.
 
 While the map is open the frame rate is capped (60 by default, **Frame cap on
@@ -617,12 +693,16 @@ the map** in the settings). Minecraft does not throttle a screen that has a
 world behind it, and a picture that only changes when you move the mouse has no
 use for three hundred frames a second.
 
+### World borders
+
 Each dimension's world border is drawn as its own rectangle, in that dimension's
 colour and labelled once more than one is on show. Servers rarely give the three
 the same border - DonutSMP's overworld reaches 225,000 blocks from 0,0, its
 nether nowhere near that - so one square over all three is wrong for two of them.
-The nether and end radii live in **Settings, Guards**; 0 means "same as the
+The nether and end radii live in **Settings → Guards**; 0 means "same as the
 overworld".
+
+### What the metrics column reports
 
 The metrics column reports distance from the origin (min, median, mean, p90,
 max, standard deviation), jump distances, bounding box, centroid, coverage,
@@ -632,6 +712,8 @@ furthest pair, and a chi-square reading of how uniform the teleports really are.
 Radial buckets are built over *r²* so every ring covers the same area — that is
 what makes the chi-square honest, since equal-width rings would look biased even
 for a perfect generator.
+
+---
 
 ## Data storage
 
@@ -680,9 +762,15 @@ the schema-3 fields appended after them:
 sample,x,y,z,distance_from_origin,dimension,timestamp,requested_region,session_id,category,from_x,from_y,from_z,from_dimension,travel_distance,latency_ms,biome,surface_y,capture_mode,server,note
 ```
 
+---
+
 ## Desktop viewer
 
 A standalone Windows app exists that opens a recorded map without starting
 Minecraft — the same canvas, the same metrics, plus CSV and PNG export. It only
 ever reads the mod's files and is **not part of this repository**; passing
-mentions of "the viewer" below refer to it. The mod is complete without it.
+mentions of "the viewer" above refer to it. The mod is complete without it.
+
+It follows the Windows display language the same way the mod follows
+Minecraft's. Override it with `--lang=de` / `--lang=en` on the command line,
+or the `RTPBUDDY_LANG` environment variable.
