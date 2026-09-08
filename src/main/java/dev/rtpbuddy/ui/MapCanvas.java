@@ -83,6 +83,32 @@ public class MapCanvas {
     };
 
     /**
+     * The largest piece of ground one raster tile may stand for while the
+     * scale bar reads {@link #GAP_TILE_HOLD_SCALE_BLOCKS} or less, in blocks.
+     *
+     * <p>Sizing every tile to about the same width on screen keeps the picture
+     * looking the same at every zoom, and that is the problem: the square stays
+     * put while the ground under it quadruples. A tile is a question - has
+     * anything ever landed in this square - and the answer is worth much less
+     * when the square grows to sixty-four thousand blocks a side. Held here
+     * instead, zooming out shrinks the tiles rather than coarsening them.
+     *
+     * <p>This is the fallback for a config that names no size of its own;
+     * {@link MapConfig#gapRasterTile} is what normally decides.
+     */
+    private static final double GAP_TILE_HOLD = 8_000;
+
+    /**
+     * The scale bar reading past which the tile is free to grow again.
+     *
+     * <p>Beyond this the held tile falls under three pixels and stops being
+     * drawable at all, so out here a coarser square really is the only picture
+     * left. In practice the whole world frames at about a third of this, so
+     * the growth is the far end of the zoom rather than the normal case.
+     */
+    private static final double GAP_TILE_HOLD_SCALE_BLOCKS = 100_000;
+
+    /**
      * Shading bands.
      *
      * <p>The picture goes to a texture, so the band count costs nothing at draw
@@ -1304,7 +1330,7 @@ public class MapCanvas {
                 rasterGaps() ? null : GAP_PALETTE);
 
         if (rasterGaps()) {
-            countRasterTiles(samples);
+            countRasterTiles(samples, config);
         } else {
             gapTexture.update(gapField.pixels(), gapField.gridWidth(), gapField.gridHeight());
         }
@@ -1321,13 +1347,14 @@ public class MapCanvas {
         hash = 31 * hash + samples.size();
         hash = 31 * hash + config.gapMaskTile;
         hash = 31 * hash + config.gapTopCount;
+        hash = 31 * hash + config.gapRasterTile;
         return hash;
     }
 
     /** Landing counts per tile, held between frames alongside the field. */
-    private void countRasterTiles(List<RtpSample> samples) {
+    private void countRasterTiles(List<RtpSample> samples, MapConfig config) {
         gapCounts.clear();
-        gapCountTile = gapRasterTile();
+        gapCountTile = gapRasterTile(config);
         for (RtpSample sample : samples) {
             gapCounts.merge(tileKey(sample.x(), sample.z(), gapCountTile), 1, Integer::sum);
         }
@@ -1349,9 +1376,33 @@ public class MapCanvas {
             return;
         }
         TextRenderer font = MinecraftClient.getInstance().textRenderer;
-        boolean labels = tilePixels >= 20;
+        // A held tile is a good deal smaller than the old growing one - at a
+        // 50k scale bar it is fourteen pixels, not fifty-eight - and dropping
+        // the counts there would take away the one thing the counted raster is
+        // for. Font height plus a pixel of air is the real limit; a count too
+        // wide for its own tile is skipped below, one at a time.
+        boolean labels = tilePixels >= font.fontHeight + 4;
 
         double[] bounds = view.visibleWorldBounds();
+        // Held tiles are small, so a wide view can span far more of them than
+        // the budget allows - almost all of it ground the mask never covered
+        // and the loop would skip anyway. Trimming to the mask first means the
+        // budget is spent on tiles that can actually be drawn, instead of the
+        // empty half of the screen blanking the whole raster.
+        double[] mask = gapField.maskBounds();
+        if (mask != null) {
+            // One tile of slack: the mask is not raster-aligned, and a tile
+            // straddling its edge can still hold landings.
+            bounds = new double[]{
+                    Math.max(bounds[0], mask[0] - tile),
+                    Math.max(bounds[1], mask[1] - tile),
+                    Math.min(bounds[2], mask[2] + tile),
+                    Math.min(bounds[3], mask[3] + tile)
+            };
+            if (bounds[2] <= bounds[0] || bounds[3] <= bounds[1]) {
+                return;
+            }
+        }
         long firstX = (long) Math.floor(bounds[0] / tile);
         long lastX = (long) Math.floor(bounds[2] / tile);
         long firstZ = (long) Math.floor(bounds[1] / tile);
@@ -1399,6 +1450,9 @@ public class MapCanvas {
                 if (labels) {
                     String text = String.valueOf(count);
                     int width = font.getWidth(text);
+                    if (width + 2 > tilePixels) {
+                        continue;
+                    }
                     context.drawText(font, text, (x1 + x2 - width) / 2,
                             (y1 + y2 - font.fontHeight) / 2,
                             count == 0 ? 0xFF4A3708 : MapPalette.TEXT_DIM, false);
@@ -1407,16 +1461,28 @@ public class MapCanvas {
         }
     }
 
-    /** Picks a tile that lands near half the scale bar, so a few dozen fit across. */
-    private double gapRasterTile() {
-        double target = scaleBarSpan() / 2.0;
+    /**
+     * Picks a tile that lands near half the scale bar, so a few dozen fit
+     * across - then holds it at {@link #GAP_TILE_HOLD} until the scale bar
+     * passes {@link #GAP_TILE_HOLD_SCALE_BLOCKS}.
+     */
+    private double gapRasterTile(MapConfig config) {
+        double span = scaleBarSpan();
+        double target = span / 2.0;
         double best = GAP_TILE_STEPS[0];
         for (double step : GAP_TILE_STEPS) {
             if (Math.abs(step - target) < Math.abs(best - target)) {
                 best = step;
             }
         }
-        return best;
+        if (span > GAP_TILE_HOLD_SCALE_BLOCKS) {
+            return best;
+        }
+        double hold = config.gapRasterTile > 0 ? config.gapRasterTile : GAP_TILE_HOLD;
+        // Never *bigger* than the automatic size: close in, a held 8k tile
+        // would be a third of the screen and the picture would stop being a
+        // raster. The hold only ever stops the tile growing.
+        return Math.min(best, hold);
     }
 
     private static long tileKey(double worldX, double worldZ, double tile) {

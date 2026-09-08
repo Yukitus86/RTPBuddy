@@ -32,6 +32,22 @@ public class MapConfig {
     public int gapTopCount = 5;
 
     /**
+     * Ground one counted tile stands for out past the 5k scale, in blocks.
+     *
+     * <p>The tile used to be sized to stay about the same width on screen at
+     * every zoom, which meant zooming out quietly quadrupled the ground behind
+     * each square until one of them covered sixty-four thousand blocks a side.
+     * A tile asks whether anything ever landed in this square, and that answer
+     * is worth less the bigger the square gets, so the size is held here
+     * instead and zooming out shrinks the tiles rather than coarsening them.
+     *
+     * <p>Past a 100k scale bar the held tile falls under three pixels and
+     * cannot be drawn at all, so out there the old growing tile takes over
+     * whatever this says.
+     */
+    public int gapRasterTile = 8_000;
+
+    /**
      * Marker radius in pixels. Three was a fat square at every zoom; the plot is
      * about where the landings are, not how much ink each one can claim.
      */

@@ -271,7 +271,7 @@
 
   <header class="masthead">
     <h1>RTPBuddy Changelog</h1>
-    <span class="span">1.5.8 &rarr; 1.6.15</span>
+    <span class="span">1.5.8 &rarr; 1.6.16</span>
     <p class="lede">
       Just the items, no explanations &mdash; made to forward. The full release
       notes say why each one works the way it does, and every setting is
@@ -284,10 +284,14 @@
     <section class="lang" id="en">
       <div class="lang-head">
         <h2>All changes since 1.5.8</h2>
-        <span class="count">42 items, 17 releases</span>
+        <span class="count">44 items, 18 releases</span>
       </div>
 
       <ol class="log">
+        <li class="rel"><span class="v">1.6.16</span><span class="d">8 Sep 2026</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">Counted gap tiles hold at 8,000 blocks a side out to a 100k scale bar, instead of growing with the zoom until one square covered 64,000</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">The gap raster went blank at a wide zoom: its 20,000-tile budget was being spent on empty ground outside the mask</span></li>
+
         <li class="rel"><span class="v">1.6.15</span><span class="d">8 Sep 2026</span></li>
         <li><span class="tag fix">Fixed</span><span class="t">The panel layout is stored: picking <em>Map</em> to fill the window used to be back on <em>Panels</em> at the next open</span></li>
         <li><span class="tag chg">Changed</span><span class="t">The search box is remembered with the rest of the filter</span></li>
@@ -369,7 +373,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.15 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.16 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. In full:
     <code>RTPBuddy-Release-Notes.html</code>. Every setting:
     <code>RTPBuddy-Settings.html</code>.

@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.15</span>
+    <span class="span">1.5.8 &rarr; 1.6.16</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Siebzehn
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Achtzehn
       Auslieferungen an vier Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1616">1.6.16 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1615">1.6.15 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1614">1.6.14 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1613">1.6.13 <span class="n">1 Punkt</span></a></li>
@@ -379,6 +380,72 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.16 -->
+    <section class="release" id="v1616">
+      <div class="rel-head">
+        <h2>1.6.16</h2>
+        <span class="date">08.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Eine Kachel ist ein St&uuml;ck Boden. Sie sollte nicht wachsen, nur weil du
+        herauszoomst.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Ge&auml;ndert</span>
+          <h3>Die gez&auml;hlten Kacheln bleiben klein bis 100k</h3>
+          <div class="body">
+            <p>
+              Die Kachelgr&ouml;&szlig;e richtete sich nach dem Zoom: immer etwa gleich
+              breit auf dem Schirm, egal wie weit man drau&szlig;en war. Das sah auf
+              jeder Zoomstufe gleich aus &mdash; und genau das war das Problem, denn
+              der Boden hinter einem Quadrat vervierfachte sich dabei still und
+              leise. Bei 50k Ma&szlig;stab stand ein K&auml;stchen f&uuml;r 32&nbsp;000
+              Bl&ouml;cke Kantenl&auml;nge, bei 100k f&uuml;r 64&nbsp;000. Die Frage, die eine
+              Kachel stellt &mdash; <em>ist hier &uuml;berhaupt schon mal jemand
+              gelandet</em> &mdash; ist bei einem Quadrat dieser Gr&ouml;&szlig;e nichts mehr
+              wert.
+            </p>
+            <p>
+              Die Gr&ouml;&szlig;e wird jetzt <strong>gehalten</strong>: 8&nbsp;000 Bl&ouml;cke
+              Kantenl&auml;nge, bis der Ma&szlig;stab 100k &uuml;berschreitet. Herauszoomen
+              macht die K&auml;stchen also kleiner statt gr&ouml;ber. Bei 50k sind sie 14
+              statt 58 Pixel breit und tragen ihre Zahl weiter; erst dar&uuml;ber
+              hinaus bleiben nur noch die Farbb&auml;nder. Ab 100k &uuml;bernimmt wieder
+              die alte, mitwachsende Kachel &mdash; die gehaltene f&auml;llt dort unter
+              drei Pixel und lie&szlig;e sich gar nicht mehr zeichnen.
+            </p>
+            <p>
+              Einstellbar unter <strong>Karte &rarr; Kachelgr&ouml;&szlig;e</strong>:
+              2&nbsp;000 &middot; 4&nbsp;000 &middot; 8&nbsp;000 &middot; 16&nbsp;000 &middot; 32&nbsp;000 Bl&ouml;cke.
+              Nach oben begrenzt die Automatik weiterhin mit: nah dran w&uuml;rde eine
+              8k-Kachel ein Drittel des Schirms f&uuml;llen, und das w&auml;re kein Raster
+              mehr.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Weit drau&szlig;en blieb das Raster leer</h3>
+          <div class="body">
+            <p>
+              Das Raster zeichnet h&ouml;chstens 20&nbsp;000 Kacheln und gibt sonst ganz
+              auf. Kleine Kacheln auf einem weiten Bild &uuml;berschreiten das leicht
+              &mdash; bei 100k Ma&szlig;stab w&auml;ren es 22&nbsp;000 gewesen &mdash; und fast
+              alles davon war Boden weit jenseits der Aufzeichnung, den die
+              Schleife ohnehin &uuml;bersprungen h&auml;tte. Sie l&auml;uft jetzt nur noch
+              &uuml;ber die Fl&auml;che, die die Maske abdeckt: aus 22&nbsp;000 werden
+              3&nbsp;600, und das Bild bleibt stehen.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.15 -->
     <section class="release" id="v1615">
@@ -1644,7 +1711,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.15 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.16 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische

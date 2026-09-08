@@ -437,6 +437,26 @@ public final class GapField {
      * anything bigger than a field cell: the answer depends on the point, never
      * on where the view happens to sit.
      */
+    /**
+     * The ground the mask spans, as {@code {minX, minZ, maxX, maxZ}}, or null
+     * while nothing is built.
+     *
+     * <p>Everything outside it is ground no landing has ever been near, which
+     * is what lets the counted raster stop iterating there instead of walking
+     * empty tiles it would only skip.
+     */
+    public double[] maskBounds() {
+        if (!ready || maskWide <= 0 || maskHigh <= 0) {
+            return null;
+        }
+        return new double[]{
+                (double) maskX0 * maskTile,
+                (double) maskZ0 * maskTile,
+                (double) (maskX0 + maskWide) * maskTile,
+                (double) (maskZ0 + maskHigh) * maskTile
+        };
+    }
+
     public boolean insideWorld(double worldX, double worldZ) {
         return ready && maskCovers(worldX, worldZ);
     }

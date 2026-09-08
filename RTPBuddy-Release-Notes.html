@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.15</span>
+    <span class="span">1.5.8 &rarr; 1.6.16</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Seventeen releases over four
+      Everything that changed since 1.5.8, newest first. Eighteen releases over four
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1616">1.6.16 <span class="n">2 items</span></a></li>
       <li><a href="#v1615">1.6.15 <span class="n">2 items</span></a></li>
       <li><a href="#v1614">1.6.14 <span class="n">2 items</span></a></li>
       <li><a href="#v1613">1.6.13 <span class="n">1 item</span></a></li>
@@ -379,6 +380,66 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.16 -->
+    <section class="release" id="v1616">
+      <div class="rel-head">
+        <h2>1.6.16</h2>
+        <span class="date">8 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A tile is a piece of ground. It should not grow just because you zoomed out.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The counted tiles stay small out to 100k</h3>
+          <div class="body">
+            <p>
+              Tile size followed the zoom, staying about the same width on screen
+              however far out you went. That looked identical at every zoom
+              &mdash; which was exactly the problem, because the ground behind one
+              square quadrupled along the way. At a 50k scale bar a square stood
+              for 32,000 blocks a side, at 100k for 64,000. The question a tile
+              asks &mdash; <em>has anything ever landed in here</em> &mdash; is
+              worth nothing at that size.
+            </p>
+            <p>
+              The size is <strong>held</strong> now: 8,000 blocks a side until the
+              scale bar passes 100k. Zooming out shrinks the squares instead of
+              coarsening them. At 50k they are 14 pixels rather than 58 and still
+              carry their count; only past that are they colour bands alone. From
+              100k the old growing tile takes back over &mdash; the held one falls
+              under three pixels there and could not be drawn at all.
+            </p>
+            <p>
+              Set it under <strong>Map &rarr; Tile size</strong>: 2,000 &middot;
+              4,000 &middot; 8,000 &middot; 16,000 &middot; 32,000 blocks. The
+              automatic size is still the ceiling: close in, an 8k tile would fill
+              a third of the screen and the picture would stop being a raster.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The raster went blank at a wide zoom</h3>
+          <div class="body">
+            <p>
+              The raster draws at most 20,000 tiles and gives up entirely past
+              that. Small tiles on a wide view cross it easily &mdash; at a 100k
+              scale bar it would have been 22,000 &mdash; and nearly all of them
+              were ground far outside the recording that the loop would have
+              skipped anyway. It now runs only over what the mask covers: 22,000
+              becomes 3,600, and the picture stays up.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.15 -->
     <section class="release" id="v1615">
@@ -1613,7 +1674,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.15 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.16 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is
