@@ -107,7 +107,19 @@ public class MapScreen extends Screen {
 
     /** Which side panels are shown. Tab cycles through them. */
     private enum PanelMode {
-        BOTH, LEFT_ONLY, RIGHT_ONLY, NONE
+        BOTH, LEFT_ONLY, RIGHT_ONLY, NONE;
+
+        /** A stored name that no longer names a mode falls back to BOTH. */
+        static PanelMode parse(String name) {
+            if (name == null) {
+                return BOTH;
+            }
+            try {
+                return valueOf(name);
+            } catch (IllegalArgumentException e) {
+                return BOTH;
+            }
+        }
     }
 
     /** Which divider the mouse is currently dragging, if any. */
@@ -516,6 +528,8 @@ public class MapScreen extends Screen {
 
     @Override
     protected void init() {
+        // Before computeLayout(), which is what turns the mode into widths.
+        panelMode = PanelMode.parse(mapConfig().panelMode);
         canvas.setMarkerMode(MarkerMode.parse(mapConfig().markerMode));
         canvas.setColorMode(ColorMode.parse(mapConfig().colorMode));
         canvas.setRegionColorLookup(sample -> {
@@ -628,6 +642,11 @@ public class MapScreen extends Screen {
             case RIGHT_ONLY -> PanelMode.NONE;
             case NONE -> PanelMode.BOTH;
         };
+        // Written here rather than on close: a teleport can tear this screen
+        // down without ever reaching close(), and a layout that survives only
+        // a tidy exit is one the player cannot rely on.
+        mapConfig().panelMode = panelMode.name();
+        RTPBuddyClient.configManager().save();
         rebuild();
     }
 
@@ -891,6 +910,7 @@ public class MapScreen extends Screen {
             dirty = true;
         }
         if (config.rememberFilter) {
+            config.filterSearch = blankToNull(filter.search);
             config.filterDimension = filter.dimension;
             config.filterRegion = filter.region;
             config.filterCaptureMode = filter.captureMode;
@@ -945,6 +965,8 @@ public class MapScreen extends Screen {
         if (!config.rememberFilter) {
             return;
         }
+        String search = blankToNull(config.filterSearch);
+        filter.search = search == null ? "" : search;
         filter.dimension = blankToNull(config.filterDimension);
         filter.region = blankToNull(config.filterRegion);
         filter.captureMode = blankToNull(config.filterCaptureMode);

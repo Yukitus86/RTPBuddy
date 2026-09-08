@@ -114,6 +114,21 @@ public class MapConfig {
     public String scope = "SESSION";
 
     /**
+     * BOTH | LEFT_ONLY | RIGHT_ONLY | NONE - which side panels the map opens
+     * with. Tab and the toolbar button both cycle it.
+     *
+     * <p>Stored because the screen is rebuilt from scratch constantly - a
+     * teleport replaces the instance outright - so a mode held only in the
+     * screen came back as BOTH every time, and setting the map to fill the
+     * window had to be redone on every open.
+     *
+     * <p>A window too narrow to hold the chosen panels falls back to fewer
+     * for that draw only; the fallback is never written back here, or one
+     * resize would destroy the preference.
+     */
+    public String panelMode = "BOTH";
+
+    /**
      * Frame cap while the map is open, or 0 to leave the game's own limit alone.
      *
      * <p>A still map redrawn 300 times a second is 300 times the work for the
@@ -175,6 +190,9 @@ public class MapConfig {
 
     /** Persisted filter, written on close and read on open. Null means "all". */
     public String filterDimension = null;
+
+    /** Persisted contents of the search box. Null or blank means "no search". */
+    public String filterSearch = null;
     public String filterRegion = null;
     public String filterCaptureMode = null;
 

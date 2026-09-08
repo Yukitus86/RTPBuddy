@@ -329,10 +329,10 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.14</span>
+    <span class="span">1.5.8 &rarr; 1.6.15</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Sechzehn
-      Auslieferungen an drei Tagen &mdash; fast jede davon aus einer Sache, die
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Siebzehn
+      Auslieferungen an vier Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
   </header>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1615">1.6.15 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1614">1.6.14 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1613">1.6.13 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1612">1.6.12 <span class="n">2 Punkte</span></a></li>
@@ -378,6 +379,64 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.15 -->
+    <section class="release" id="v1615">
+      <div class="rel-head">
+        <h2>1.6.15</h2>
+        <span class="date">08.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Eine Einstellung, die jedes Öffnen neu gemacht werden muss, ist keine.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Die Karte stand wieder auf <em>Panels</em>, egal was gewählt war</h3>
+          <div class="body">
+            <p>
+              <code>Tab</code> und die Panel-Taste schalten durch vier Zustände:
+              <em>Panels</em>, <em>Stats</em>, <em>Liste</em> und <em>Karte</em>
+              &mdash; letzterer räumt beide Seitenleisten weg und gibt der Karte
+              das ganze Fenster. Der Zustand lag aber nur im Kartenbildschirm,
+              und der wird ständig neu gebaut: jeder Tastendruck in der Leiste
+              baut ihn neu auf, und eine Landung wirft ihn ganz weg und setzt
+              einen neuen hin. Damit stand nach jedem Schließen und Öffnen wieder
+              <em>Panels</em> da.
+            </p>
+            <p>
+              Die Wahl steht jetzt in der <code>config.json</code> unter
+              <code>map.panelMode</code> und wird in dem Moment geschrieben, in
+              dem sie umgestellt wird &mdash; nicht erst beim Schließen, denn ein
+              Teleport reißt die Karte ab, ohne dort je vorbeizukommen.
+            </p>
+            <p>
+              Ein Fenster, das für die gewählten Panels zu schmal ist, zeigt
+              weiterhin weniger an. Das gilt aber nur für den einen Aufbau und
+              wird nicht zurückgeschrieben: sonst würde ein einziges Verkleinern
+              die Einstellung dauerhaft löschen.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Geändert</span>
+          <h3>Das Suchfeld überlebt das Schließen</h3>
+          <div class="body">
+            <p>
+              Dimension, Region, Aufnahmemodus, Biom und die angehakten
+              Sitzungen standen beim nächsten Öffnen längst noch da &mdash; der
+              Suchtext als einziger nicht. Er hängt jetzt mit an
+              <strong>Filter merken</strong> und liegt in
+              <code>map.filterSearch</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.14 -->
     <section class="release" id="v1614">
@@ -1585,7 +1644,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.15 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische

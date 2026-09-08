@@ -1091,7 +1091,7 @@
           </thead>
           <tbody>
             <tr><td>Remember view</td><td class="k">map.rememberView</td><td class="d">on</td><td class="w">Pan and zoom survive closing the map, kept separately per scope. Off = always fit to all samples on open</td></tr>
-            <tr><td>Remember filter</td><td class="k">map.rememberFilter</td><td class="d">on</td><td class="w">Dimension, region, capture mode <strong>and the sittings ticked in the session list</strong> are still set the next time the map opens. Without it every reopen widened the view back to <em>all</em>, even though <em>Overworld</em> had been picked. A picking whose sittings no longer exist is dropped on open rather than leading to an empty plot</td></tr>
+            <tr><td>Remember filter</td><td class="k">map.rememberFilter</td><td class="d">on</td><td class="w">Dimension, region, capture mode, the search text <strong>and the sittings ticked in the session list</strong> are still set the next time the map opens. Without it every reopen widened the view back to <em>all</em>, even though <em>Overworld</em> had been picked. A picking whose sittings no longer exist is dropped on open rather than leading to an empty plot</td></tr>
             <tr><td>Hide empty sessions</td><td class="k">map.hideEmptySessions</td><td class="d">on</td><td class="w">Sittings without a single landing are left out of the session list. Every login opens a sitting, so they accumulate on their own</td></tr>
             <tr><td>Frame cap on the map</td><td class="k">map.mapFpsLimit</td><td class="d">60</td><td class="w">Ceiling on the frame rate while the map is open: off &middot; 30 &middot; 60 &middot; 90 &middot; 120</td></tr>
             <tr><td>Grid</td><td class="k">map.showGrid</td><td class="d">on</td><td class="w">Coordinate grid with axis labels</td></tr>
@@ -1317,11 +1317,13 @@
             <tr><td class="k">map.markerMode / colorMode</td><td class="d">POINTS / DIMENSION</td><td class="w">Set from the map toolbar</td></tr>
             <tr><td class="k">map.sessionCenter&hellip; / allCenter&hellip;</td><td class="d">&mdash;</td><td class="w">The remembered view, one per scope</td></tr>
             <tr><td class="k">map.filterBiomeFamily</td><td class="d">null</td><td class="w">The biome family picked in the toolbar. Stored as the family name, not as the shown label &mdash; that comes from a translation and would not survive a language change</td></tr>
+            <tr><td class="k">map.filterSearch</td><td class="d">null</td><td class="w">Contents of the search box in the map header. Written only while <strong>Remember filter</strong> is on, like the rest of the filter</td></tr>
             <tr><td class="k">map.filterDimension / &hellip;Region / &hellip;CaptureMode</td><td class="d">null</td><td class="w">The remembered filter from the map toolbar; <code>null</code> means <em>all</em>. Written while <strong>Remember filter</strong> is on</td></tr>
             <tr><td class="k">map.filterSessions / &hellip;Active</td><td class="d">empty / off</td><td class="w">The sittings ticked in the session list, and whether a narrowing is in force at all. Both are needed: an empty list with the flag set means <em>show none</em>, which is not the same as <em>no session filter</em></td></tr>
             <tr><td class="k">map.scope</td><td class="d">SESSION</td><td class="w">Scope <code>M</code> opens the map on: <code>SESSION</code> or <code>ALL</code>. You switch it in the map header, and it stays put until you switch it back</td></tr>
             <tr><td class="k">map.sidebarFraction</td><td class="d">0.28</td><td class="w">Height of the session list in the sidebar, as a fraction of the panel</td></tr>
             <tr><td class="k">map.panelLeftFraction / &hellip;Right&hellip;</td><td class="d">0.24 / 0.26</td><td class="w">Width of the side panels as a fraction of the window</td></tr>
+            <tr><td class="k">map.panelMode</td><td class="d">BOTH</td><td class="w">Which side panels the map opens with: <code>BOTH</code> &middot; <code>LEFT_ONLY</code> (statistics only) &middot; <code>RIGHT_ONLY</code> (list only) &middot; <code>NONE</code> (map only). Set by <code>Tab</code> and the panel button, and stored since 1.6.15 &mdash; before that every map opened on <em>both</em> again. A window too narrow for the chosen panels shows fewer, but that fallback is not written back</td></tr>
             <tr><td class="k">regions[]</td><td class="d">preset</td><td class="w">Pattern and command per region</td></tr>
             <tr><td class="k">serverRegionHost</td><td class="d">donutsmp</td><td class="w">Substring of the server name that turns the server-region grid on. Blank switches it off entirely</td></tr>
             <tr><td class="k">guards.netherBorderRadius / …end…</td><td class="d">0 / 0</td><td class="w">Own border for the nether and the end; 0 = the overworld radius. DonutSMP: 28,500 and 87,500</td></tr>
@@ -1377,7 +1379,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; 6 September 2026 &mdash; the same
+    RTPBuddy 1.6.15 &middot; Minecraft 1.21.11 &middot; 8 September 2026 &mdash; the same
     list lives as <code>SETTINGS.md</code> in the project folder, and the German
     version as <code>RTPBuddy-Einstellungen.html</code>.
   </footer>

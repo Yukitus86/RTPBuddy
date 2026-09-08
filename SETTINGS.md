@@ -341,7 +341,7 @@ Reine Darstellung. Nichts davon beeinflusst, was aufgezeichnet wird.
 | Einstellung | Schlüssel | Standard | Wirkung |
 |---|---|---|---|
 | Ansicht merken | `map.rememberView` | an | Verschiebung und Zoom überleben das Schließen, je Umfang getrennt. Aus = beim Öffnen immer auf alle Samples einpassen |
-| Filter merken | `map.rememberFilter` | an | Dimension, Region, Aufnahmemodus **und die in der Sessionliste angehakten Sitzungen** stehen beim nächsten Öffnen noch. Ohne das ging jedes Öffnen wieder auf *alle* zurück, obwohl vorher z. B. *Oberwelt* gewählt war. Gespeichert in `map.filterDimension`, `map.filterRegion`, `map.filterCaptureMode`, `map.filterSessions` und `map.filterSessionsActive` |
+| Filter merken | `map.rememberFilter` | an | Dimension, Region, Aufnahmemodus **und die in der Sessionliste angehakten Sitzungen** stehen beim nächsten Öffnen noch. Ohne das ging jedes Öffnen wieder auf *alle* zurück, obwohl vorher z. B. *Oberwelt* gewählt war. Gespeichert in `map.filterDimension`, `map.filterRegion`, `map.filterCaptureMode`, `map.filterSearch`, `map.filterSessions` und `map.filterSessionsActive` |
 | Leere Sitzungen ausblenden | `map.hideEmptySessions` | an | Sitzungen ohne eine einzige Landung erscheinen nicht in der Sessionliste. Jedes Einloggen öffnet eine Sitzung, also sammeln sich die von selbst an |
 | Bildrate auf der Karte | `map.mapFpsLimit` | 60 | Deckel für die Bildrate, solange die Karte offen ist: aus · 30 · 60 · 90 · 120. Minecraft bremst ein Fenster nicht, solange eine Welt dahinter liegt — ein stehendes Bild 200-mal je Sekunde neu zu zeichnen heizt nur die CPU |
 | Gitter | `map.showGrid` | an | Koordinatengitter mit Achsenbeschriftung |
@@ -497,11 +497,13 @@ Vanilla-HUD-Element.
 | `guards.borderCenterX` / `…Z` | 0 / 0 | Mittelpunkt der Weltgrenze |
 | `map.markerMode` / `map.colorMode` | POINTS / DIMENSION | Werden von der unteren Leiste der Karte gesetzt |
 | `map.filterBiomeFamily` | leer | Die in der unteren Leiste gewählte Biomfamilie. Als Familienname gespeichert, nicht als angezeigte Beschriftung — die kommt aus einer Übersetzung und würde einen Sprachwechsel nicht überleben |
+| `map.filterSearch` | leer | Der Inhalt des Suchfelds im Kopf der Karte. Wird wie der übrige Filter nur gespeichert, solange **Filter merken** an ist |
 | `map.sessionCenter…` / `map.allCenter…` | — | Die gemerkte Ansicht je Umfang |
 | `map.filterSessions` / `…Active` | leer / aus | Die in der Sessionliste angehakten Sitzungen und ob überhaupt eingegrenzt wird. Beides nötig: eine leere Liste mit gesetztem Schalter heißt *keine anzeigen*, was nicht dasselbe ist wie *kein Sessionfilter* |
 | `map.scope` | SESSION | Umfang, mit dem `M` die Karte aufmacht: `SESSION` oder `ALL`. Umgestellt im Kopf der Karte, und die Einstellung bleibt |
 | `map.sidebarFraction` | 0,28 | Höhe der Sessionliste in der Seitenleiste, als Anteil der Panelhöhe. Der Trenner darunter ist ziehbar |
 | `map.panelLeftFraction` / `…Right…` | 0,24 / 0,26 | Breite der Seitenpanels als Anteil der Fensterbreite |
+| `map.panelMode` | BOTH | Welche Seitenpanels die Karte aufmacht: `BOTH` · `LEFT_ONLY` (nur Statistik) · `RIGHT_ONLY` (nur Liste) · `NONE` (nur Karte). Gesetzt von `Tab` und der Panel-Taste in der unteren Leiste, und ab 1.6.15 gespeichert — vorher stand jede Karte wieder auf *beide*. Ein zu schmales Fenster zeigt weniger Panels als gewählt, schreibt das aber nicht zurück |
 | `regions[]` | Preset | Muster und Befehl je Region |
 | `legacyImportDone` / `…At` / `…Count` | — | Marker für den einmaligen Import aus dem Vorgänger `rtpmapper` |
 

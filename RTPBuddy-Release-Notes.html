@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.14</span>
+    <span class="span">1.5.8 &rarr; 1.6.15</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Sixteen releases over three
+      Everything that changed since 1.5.8, newest first. Seventeen releases over four
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1615">1.6.15 <span class="n">2 items</span></a></li>
       <li><a href="#v1614">1.6.14 <span class="n">2 items</span></a></li>
       <li><a href="#v1613">1.6.13 <span class="n">1 item</span></a></li>
       <li><a href="#v1612">1.6.12 <span class="n">2 items</span></a></li>
@@ -378,6 +379,62 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.15 -->
+    <section class="release" id="v1615">
+      <div class="rel-head">
+        <h2>1.6.15</h2>
+        <span class="date">8 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A setting you have to make again on every open is not a setting.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The map opened on <em>Panels</em> again, whatever had been picked</h3>
+          <div class="body">
+            <p>
+              <code>Tab</code> and the panel button cycle four states:
+              <em>Panels</em>, <em>Stats</em>, <em>List</em> and <em>Map</em>
+              &mdash; the last one clears both sidebars and gives the plot the
+              whole window. The state lived only in the map screen, and that
+              screen is rebuilt constantly: every toolbar press rebuilds it, and
+              a landing throws it away and puts a new one in its place. So every
+              close and reopen was back to <em>Panels</em>.
+            </p>
+            <p>
+              The choice now sits in <code>config.json</code> under
+              <code>map.panelMode</code>, written the moment it is changed
+              &mdash; not on close, because a teleport tears the map down without
+              ever going through there.
+            </p>
+            <p>
+              A window too narrow for the chosen panels still shows fewer. That
+              applies to the one layout pass only and is never written back:
+              otherwise a single resize would destroy the setting for good.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The search box survives a close</h3>
+          <div class="body">
+            <p>
+              Dimension, region, capture mode, biome and the ticked sittings were
+              all still set on the next open &mdash; the search text was the one
+              thing that was not. It now rides along with
+              <strong>Remember filter</strong> and is stored in
+              <code>map.filterSearch</code>.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.14 -->
     <section class="release" id="v1614">
@@ -1556,7 +1613,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.14 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.15 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

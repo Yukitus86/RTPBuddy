@@ -79,19 +79,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.14.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.15.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.14.jar` from the
+Download `rtpbuddy-1.6.15.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.14.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.15.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -296,7 +296,7 @@ Both maps share the same canvas:
 | Scroll | Zoom on the cursor |
 | `F` | Fit everything in view |
 | `R` | Reset the view |
-| `Tab` | Show or hide the side panels |
+| `Tab` | Cycle the side panels: both, stats only, list only, map only |
 | Arrow keys | Step between samples |
 | Shift-drag | Rectangle selection, summarised in the status line |
 
@@ -347,10 +347,15 @@ mean. The stored number never changes either way.
 
 The sample list is number, biome, coordinates, and its scrollbar sits in a strip
 of its own, so dragging it scrolls instead of picking the row behind it. The
-dimension, region and mode filter is remembered between openings
-(**Settings → Map → Remember filter**), and sittings that recorded nothing are kept
+dimension, region, mode and biome filter is remembered between openings, along
+with whatever is typed in the search box (**Settings → Map → Remember filter**),
+and sittings that recorded nothing are kept
 out of the session list, with a **Delete empty sessions** button offered there
 while any exist - the running sitting is never among them.
+
+Which panels are shown is kept, so a map set to fill the whole window opens that
+way again. A window too narrow for the chosen panels shows fewer of them for as
+long as it is that size, without changing what was picked.
 
 The two side panels are resizable: drag the divider between a panel and the map,
 and double-click a divider to put that panel back to its default width. The

@@ -1094,7 +1094,7 @@
           </thead>
           <tbody>
             <tr><td>Ansicht merken</td><td class="k">map.rememberView</td><td class="d">an</td><td class="w">Verschiebung und Zoom überleben das Schließen, je Umfang getrennt. Aus = beim Öffnen immer auf alle Samples einpassen</td></tr>
-            <tr><td>Filter merken</td><td class="k">map.rememberFilter</td><td class="d">an</td><td class="w">Dimension, Region, Aufnahmemodus <strong>und die in der Sessionliste angehakten Sitzungen</strong> stehen beim nächsten Öffnen noch. Ohne das ging jedes Öffnen wieder auf <em>alle</em> zurück, obwohl vorher z.&nbsp;B. <em>Oberwelt</em> gewählt war. Eine Auswahl, von der keine Sitzung mehr existiert, wird beim Öffnen verworfen statt auf eine leere Karte zu führen</td></tr>
+            <tr><td>Filter merken</td><td class="k">map.rememberFilter</td><td class="d">an</td><td class="w">Dimension, Region, Aufnahmemodus, der Suchtext <strong>und die in der Sessionliste angehakten Sitzungen</strong> stehen beim nächsten Öffnen noch. Ohne das ging jedes Öffnen wieder auf <em>alle</em> zurück, obwohl vorher z.&nbsp;B. <em>Oberwelt</em> gewählt war. Eine Auswahl, von der keine Sitzung mehr existiert, wird beim Öffnen verworfen statt auf eine leere Karte zu führen</td></tr>
             <tr><td>Leere Sitzungen ausblenden</td><td class="k">map.hideEmptySessions</td><td class="d">an</td><td class="w">Sitzungen ohne eine einzige Landung erscheinen nicht in der Sessionliste. Jedes Einloggen öffnet eine Sitzung, also sammeln sich die von selbst an</td></tr>
             <tr><td>Bildrate auf der Karte</td><td class="k">map.mapFpsLimit</td><td class="d">60</td><td class="w">Deckel für die Bildrate, solange die Karte offen ist: aus · 30 · 60 · 90 · 120</td></tr>
             <tr><td>Gitter</td><td class="k">map.showGrid</td><td class="d">an</td><td class="w">Koordinatengitter mit Achsenbeschriftung</td></tr>
@@ -1319,11 +1319,13 @@
             <tr><td class="k">map.markerMode / colorMode</td><td class="d">POINTS / DIMENSION</td><td class="w">Werden von der unteren Leiste der Karte gesetzt</td></tr>
             <tr><td class="k">map.sessionCenter… / allCenter…</td><td class="d">—</td><td class="w">Die gemerkte Ansicht je Umfang</td></tr>
             <tr><td class="k">map.filterBiomeFamily</td><td class="d">null</td><td class="w">Die in der unteren Leiste gewählte Biomfamilie. Als Familienname gespeichert, nicht als angezeigte Beschriftung &mdash; die kommt aus einer Übersetzung und würde einen Sprachwechsel nicht überleben</td></tr>
+            <tr><td class="k">map.filterSearch</td><td class="d">null</td><td class="w">Der Inhalt des Suchfelds im Kopf der Karte. Wird wie der übrige Filter nur geschrieben, solange <strong>Filter merken</strong> an ist</td></tr>
             <tr><td class="k">map.filterDimension / &hellip;Region / &hellip;CaptureMode</td><td class="d">null</td><td class="w">Der gemerkte Filter der unteren Kartenleiste; <code>null</code> hei&szlig;t <em>alle</em>. Geschrieben, solange <strong>Filter merken</strong> an ist</td></tr>
             <tr><td class="k">map.filterSessions / &hellip;Active</td><td class="d">leer / aus</td><td class="w">Die in der Sessionliste angehakten Sitzungen und ob &uuml;berhaupt eingegrenzt wird. Beides n&ouml;tig: eine leere Liste mit gesetztem Schalter hei&szlig;t <em>keine anzeigen</em>, was nicht dasselbe ist wie <em>kein Sessionfilter</em></td></tr>
             <tr><td class="k">map.scope</td><td class="d">SESSION</td><td class="w">Umfang, mit dem <code>M</code> die Karte aufmacht: <code>SESSION</code> oder <code>ALL</code>. Umgestellt wird er im Kopf der Karte, und die Einstellung bleibt bis zur nächsten Umstellung</td></tr>
             <tr><td class="k">map.sidebarFraction</td><td class="d">0,28</td><td class="w">Höhe der Sessionliste in der Seitenleiste, als Anteil der Panelhöhe</td></tr>
             <tr><td class="k">map.panelLeftFraction / …Right…</td><td class="d">0,24 / 0,26</td><td class="w">Breite der Seitenpanels als Anteil der Fensterbreite</td></tr>
+            <tr><td class="k">map.panelMode</td><td class="d">BOTH</td><td class="w">Welche Seitenpanels die Karte aufmacht: <code>BOTH</code> &middot; <code>LEFT_ONLY</code> (nur Statistik) &middot; <code>RIGHT_ONLY</code> (nur Liste) &middot; <code>NONE</code> (nur Karte). Gesetzt von <code>Tab</code> und der Panel-Taste, und seit 1.6.15 gespeichert &mdash; vorher stand jede Karte wieder auf <em>beide</em>. Ein zu schmales Fenster zeigt weniger Panels als gewählt, schreibt das aber nicht zurück</td></tr>
             <tr><td class="k">regions[]</td><td class="d">Preset</td><td class="w">Muster und Befehl je Region</td></tr>
             <tr><td class="k">serverRegionHost</td><td class="d">donutsmp</td><td class="w">Teil des Servernamens, der das Serverregionen-Raster ausl&ouml;st. Leer schaltet es ganz ab</td></tr>
             <tr><td class="k">guards.netherBorderRadius / …end…</td><td class="d">0 / 0</td><td class="w">Eigene Grenze f&uuml;r Nether und End; 0 = Radius der Oberwelt. DonutSMP: 28&nbsp;500 und 87&nbsp;500</td></tr>
@@ -1379,7 +1381,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.14 · Minecraft 1.21.11 · Stand 06.09.2026 — dieselbe Liste liegt
+    RTPBuddy 1.6.15 · Minecraft 1.21.11 · Stand 08.09.2026 — dieselbe Liste liegt
     als <code>SETTINGS.md</code> im Projektordner, die englische Fassung als
     <code>RTPBuddy-Settings.html</code>.
   </footer>
