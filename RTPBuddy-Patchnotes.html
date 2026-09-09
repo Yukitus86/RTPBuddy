@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.18</span>
+    <span class="span">1.5.8 &rarr; 1.6.19</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Neunzehn
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Zwanzig
       Auslieferungen an f&uuml;nf Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1619">1.6.19 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1618">1.6.18 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1616">1.6.16 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1615">1.6.15 <span class="n">2 Punkte</span></a></li>
@@ -381,6 +382,56 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.19 -->
+    <section class="release" id="v1619">
+      <div class="rel-head">
+        <h2>1.6.19</h2>
+        <span class="date">09.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Ein K&auml;stchen, das &uuml;ber zwei Regionen liegt, beantwortet die Frage nicht,
+        die es stellt.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Die gez&auml;hlten Kacheln lagen &uuml;ber Regionslinien und &uuml;ber dem Weltrand</h3>
+          <div class="body">
+            <p>
+              Die Kacheln sa&szlig;en auf Vielfachen von 0,0 und waren 8&nbsp;000 Bl&ouml;cke
+              gro&szlig;. Eine Server-Region ist 50&nbsp;000 Bl&ouml;cke breit, gemessen von der
+              Ecke der Weltgrenze bei &minus;225&nbsp;000, ihre Kanten liegen also auf
+              &minus;175&nbsp;000, &minus;125&nbsp;000 und so weiter. 8&nbsp;000 teilt davon
+              nichts: jede Zelle wurde in sechseinviertel Kacheln zerlegt und das
+              &uuml;brige Viertel hing in die Nachbarregion hin&uuml;ber. Am Rand kam
+              dasselbe heraus &mdash; die &auml;u&szlig;erste Kachelreihe endete bei
+              232&nbsp;000 und stand damit 7&nbsp;000 Bl&ouml;cke weit in Boden, den keine
+              Landung je erreichen kann.
+            </p>
+            <p>
+              Gez&auml;hlt wird jetzt <strong>von der Ecke der Weltgrenze</strong> statt
+              vom Ursprung, und die angebotenen Gr&ouml;&szlig;en teilen eine Zelle glatt:
+              2.500 &middot; 5.000 &middot; 10.000 &middot; 25.000 &middot; 50.000 Bl&ouml;cke.
+              Beides zusammen ist n&ouml;tig, keines allein reicht. Gr&ouml;&szlig;er als eine
+              Zelle geht ebenfalls nicht: zwei Zellen auf einer Kachel legen die
+              Linie zwischen ihnen mitten hindurch, weshalb die Leiter bei einer
+              ganzen Zelle aufh&ouml;rt.
+            </p>
+            <p>
+              Die gehaltene Gr&ouml;&szlig;e ist damit 10&nbsp;000 statt 8&nbsp;000, und ein
+              vorher gespeicherter Wert wird auf die n&auml;chste passende Gr&ouml;&szlig;e
+              gerundet. Zus&auml;tzlich werden Kacheln an einer eckigen Weltgrenze dort
+              beschnitten &mdash; bei diesen Gr&ouml;&szlig;en f&auml;llt nichts mehr weg, aber ein
+              anderer Radius oder ein verschobener Mittelpunkt bleibt so ehrlich.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.18 -->
     <section class="release" id="v1618">
@@ -1763,7 +1814,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.18 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.19 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische

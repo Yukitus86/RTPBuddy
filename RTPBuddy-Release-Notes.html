@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.18</span>
+    <span class="span">1.5.8 &rarr; 1.6.19</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Nineteen releases over five
+      Everything that changed since 1.5.8, newest first. Twenty releases over five
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1619">1.6.19 <span class="n">1 item</span></a></li>
       <li><a href="#v1618">1.6.18 <span class="n">1 item</span></a></li>
       <li><a href="#v1616">1.6.16 <span class="n">2 items</span></a></li>
       <li><a href="#v1615">1.6.15 <span class="n">2 items</span></a></li>
@@ -381,6 +382,54 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.19 -->
+    <section class="release" id="v1619">
+      <div class="rel-head">
+        <h2>1.6.19</h2>
+        <span class="date">9 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A square lying across two regions does not answer the question it asks.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>Counted tiles lay across region lines and past the world border</h3>
+          <div class="body">
+            <p>
+              The tiles sat on multiples of 0,0 and were 8,000 blocks a side. A
+              server region cell is 50,000 blocks measured from the corner of the
+              world border at &minus;225,000, so its edges fall on &minus;175,000,
+              &minus;125,000 and so on. 8,000 divides none of that: every cell was
+              cut into six and a quarter tiles and the leftover quarter hung over
+              into the next region. The border came out the same way &mdash; the
+              outermost row of tiles ended at 232,000, standing 7,000 blocks deep
+              in ground no landing can reach.
+            </p>
+            <p>
+              The grid is now counted <strong>from the corner of the border</strong>
+              rather than from the origin, and every size on offer divides a cell
+              exactly: 2,500 &middot; 5,000 &middot; 10,000 &middot; 25,000 &middot; 50,000
+              blocks. Both halves are needed; neither works alone. Larger than a
+              cell is no good either &mdash; two cells to a tile puts the line
+              between them through its middle &mdash; which is why the ladder stops
+              at one whole cell.
+            </p>
+            <p>
+              The held size is therefore 10,000 rather than 8,000, and a size
+              stored before this is snapped to the nearest one that fits. Tiles are
+              also cut at a square world border now: at these sizes there is
+              nothing left to cut, but an odd radius or a moved centre stays
+              honest.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.18 -->
     <section class="release" id="v1618">
@@ -1721,7 +1770,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.18 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.19 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

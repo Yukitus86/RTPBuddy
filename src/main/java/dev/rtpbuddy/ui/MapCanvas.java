@@ -77,9 +77,19 @@ public class MapCanvas {
     /** Ring detail for a ranked hole. The ring marks a spot, it is not a shape. */
     private static final int HOLE_RING_SEGMENTS = 56;
 
-    /** Tile sizes the gap raster may snap to, in blocks. */
+    /**
+     * Tile sizes the gap raster may snap to, in blocks.
+     *
+     * <p>Every one of them divides a server region cell, which is what keeps a
+     * tile from straddling a region line. A cell is 50 000 blocks measured from
+     * the border corner, so 8 000 - the old default - cut every cell into six
+     * and a quarter and the leftover quarter hung over the line into the next
+     * region. A size larger than a cell is no good either: two cells to a tile
+     * puts the line between them straight through its middle. So the ladder
+     * stops at one whole cell.
+     */
     private static final double[] GAP_TILE_STEPS = {
-            500, 1_000, 2_000, 4_000, 8_000, 16_000, 32_000, 64_000, 128_000
+            500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000
     };
 
     /**
@@ -96,7 +106,7 @@ public class MapCanvas {
      * <p>This is the fallback for a config that names no size of its own;
      * {@link MapConfig#gapRasterTile} is what normally decides.
      */
-    private static final double GAP_TILE_HOLD = 8_000;
+    private static final double GAP_TILE_HOLD = 10_000;
 
     /**
      * The scale bar reading past which the tile is free to grow again.
@@ -313,7 +323,7 @@ public class MapCanvas {
             // nothing was recorded, and that reads as a claim only when what
             // was recorded is visible next to it.
             case GAPS -> {
-                drawGaps(context, samples, config);
+                drawGaps(context, samples, config, guards);
                 drawMarkers(context, samples, config, selectedSample, hoveredIndex, true);
                 drawGapHoles(context);
             }
@@ -1286,16 +1296,38 @@ public class MapCanvas {
      * fixed world tiles carrying their own landing count, because a shape a few
      * pixels across is not a shape and a number is.
      */
-    private void drawGaps(DrawContext context, List<RtpSample> samples, MapConfig config) {
+    private void drawGaps(DrawContext context, List<RtpSample> samples, MapConfig config,
+                          GuardSettings guards) {
+        // Before ensureGapField: the counts are keyed on this corner.
+        double radius = guards.radiusFor(borderDimensions.get(0));
+        gapOriginX = guards.borderCenterX - radius;
+        gapOriginZ = guards.borderCenterZ - radius;
         ensureGapField(samples, config);
         if (rasterGaps()) {
-            drawGapRaster(context);
+            drawGapRaster(context, guards, radius);
         } else {
             gapTexture.draw(context, view.boundsX(), view.boundsY(),
                     gapField.gridWidth() * gapField.cellPixels(),
                     gapField.gridHeight() * gapField.cellPixels());
         }
     }
+
+    /**
+     * The corner the counted raster counts from: the low corner of the world
+     * border, not the world origin.
+     *
+     * <p>Tiles used to sit on multiples of 0,0. DonutSMP's border reaches
+     * 225 000 blocks, and its region cells are 50 000 measured from that edge,
+     * so the cell lines fall on -225 000, -175 000, -125 000 and so on - odd
+     * multiples of 25 000, which a grid counting from zero only meets by
+     * accident. Counting from the corner instead, any tile that divides a cell
+     * lands on every cell line and on the border itself.
+     *
+     * <p>Set once per frame in {@link #drawGaps}, because the counts are keyed
+     * on it and have to be rebuilt when it moves.
+     */
+    private double gapOriginX;
+    private double gapOriginZ;
 
     private boolean rasterGaps() {
         return scaleBarSpan() > GAP_RASTER_SCALE_BLOCKS;
@@ -1348,6 +1380,9 @@ public class MapCanvas {
         hash = 31 * hash + config.gapMaskTile;
         hash = 31 * hash + config.gapTopCount;
         hash = 31 * hash + config.gapRasterTile;
+        // The counts are keyed on the corner, so moving the border rebuilds them.
+        hash = 31 * hash + Double.doubleToLongBits(gapOriginX);
+        hash = 31 * hash + Double.doubleToLongBits(gapOriginZ);
         return hash;
     }
 
@@ -1369,7 +1404,7 @@ public class MapCanvas {
      * so the same square keeps its identity between sittings and can be ticked
      * off a list.
      */
-    private void drawGapRaster(DrawContext context) {
+    private void drawGapRaster(DrawContext context, GuardSettings guards, double radius) {
         double tile = gapCountTile;
         double tilePixels = tile * view.zoom();
         if (tile <= 0 || tilePixels < 3) {
@@ -1403,26 +1438,50 @@ public class MapCanvas {
                 return;
             }
         }
-        long firstX = (long) Math.floor(bounds[0] / tile);
-        long lastX = (long) Math.floor(bounds[2] / tile);
-        long firstZ = (long) Math.floor(bounds[1] / tile);
-        long lastZ = (long) Math.floor(bounds[3] / tile);
+        long firstX = (long) Math.floor((bounds[0] - gapOriginX) / tile);
+        long lastX = (long) Math.floor((bounds[2] - gapOriginX) / tile);
+        long firstZ = (long) Math.floor((bounds[1] - gapOriginZ) / tile);
+        long lastZ = (long) Math.floor((bounds[3] - gapOriginZ) / tile);
+        // A square border is a hard edge in world units, so the tiles that meet
+        // it are cut there rather than drawn whole and left hanging over. With a
+        // size off GAP_TILE_STEPS and the corner anchor there is nothing to cut -
+        // this is what keeps an odd radius or a moved centre honest.
+        boolean clip = guards.squareBorder && radius > 0 && Double.isFinite(radius);
+        double clipMinX = guards.borderCenterX - radius;
+        double clipMinZ = guards.borderCenterZ - radius;
+        double clipMaxX = guards.borderCenterX + radius;
+        double clipMaxZ = guards.borderCenterZ + radius;
         if ((lastX - firstX + 1) * (lastZ - firstZ + 1) > 20_000) {
             return;
         }
 
         for (long tz = firstZ; tz <= lastZ; tz++) {
             for (long tx = firstX; tx <= lastX; tx++) {
-                double left = view.worldToScreenX(tx * tile);
-                double top = view.worldToScreenY(tz * tile);
+                double worldLeft = gapOriginX + tx * tile;
+                double worldTop = gapOriginZ + tz * tile;
+                double worldRight = worldLeft + tile;
+                double worldBottom = worldTop + tile;
+                if (clip) {
+                    worldLeft = Math.max(worldLeft, clipMinX);
+                    worldTop = Math.max(worldTop, clipMinZ);
+                    worldRight = Math.min(worldRight, clipMaxX);
+                    worldBottom = Math.min(worldBottom, clipMaxZ);
+                    if (worldRight <= worldLeft || worldBottom <= worldTop) {
+                        continue;
+                    }
+                }
+                double left = view.worldToScreenX(worldLeft);
+                double top = view.worldToScreenY(worldTop);
                 int x1 = (int) Math.max(view.boundsX(), Math.floor(left));
                 int y1 = (int) Math.max(view.boundsY(), Math.floor(top));
-                int x2 = (int) Math.min(view.right(), Math.ceil(left + tilePixels));
-                int y2 = (int) Math.min(view.bottom(), Math.ceil(top + tilePixels));
+                int x2 = (int) Math.min(view.right(),
+                        Math.ceil(view.worldToScreenX(worldRight)));
+                int y2 = (int) Math.min(view.bottom(),
+                        Math.ceil(view.worldToScreenY(worldBottom)));
                 if (x2 <= x1 || y2 <= y1) {
                     continue;
                 }
-                int count = gapCounts.getOrDefault(tileKey(tx * tile, tz * tile, tile), 0);
+                int count = gapCounts.getOrDefault(tileIndexKey(tx, tz), 0);
                 // Judged on the tile's own middle in world units, never on the
                 // part of it that happens to be on screen: probing the clipped
                 // centre made the outer row and column blink in and out as the
@@ -1434,7 +1493,8 @@ public class MapCanvas {
                 // outside it can still hold landings in a corner - and a marker
                 // sitting on bare ground with no tile under it reads as a bug,
                 // which is exactly what it looked like.
-                if (count == 0 && !gapField.insideWorld((tx + 0.5) * tile, (tz + 0.5) * tile)) {
+                if (count == 0 && !gapField.insideWorld(gapOriginX + (tx + 0.5) * tile,
+                        gapOriginZ + (tz + 0.5) * tile)) {
                     continue;
                 }
                 context.fill(x1, y1, x2, y2, MapPalette.gapBand(count));
@@ -1468,26 +1528,38 @@ public class MapCanvas {
      */
     private double gapRasterTile(MapConfig config) {
         double span = scaleBarSpan();
-        double target = span / 2.0;
-        double best = GAP_TILE_STEPS[0];
-        for (double step : GAP_TILE_STEPS) {
-            if (Math.abs(step - target) < Math.abs(best - target)) {
-                best = step;
-            }
-        }
+        double best = snapToStep(span / 2.0);
         if (span > GAP_TILE_HOLD_SCALE_BLOCKS) {
             return best;
         }
-        double hold = config.gapRasterTile > 0 ? config.gapRasterTile : GAP_TILE_HOLD;
+        // Snapped, not taken as typed: a config written before the ladder
+        // changed still says 8 000, and an unsnapped size is exactly the thing
+        // that puts a tile across a region line.
+        double hold = snapToStep(config.gapRasterTile > 0
+                ? config.gapRasterTile : GAP_TILE_HOLD);
         // Never *bigger* than the automatic size: close in, a held 8k tile
         // would be a third of the screen and the picture would stop being a
         // raster. The hold only ever stops the tile growing.
         return Math.min(best, hold);
     }
 
-    private static long tileKey(double worldX, double worldZ, double tile) {
-        long tx = (long) Math.floor(worldX / tile);
-        long tz = (long) Math.floor(worldZ / tile);
+    /** The step nearest {@code wanted}. Every step fits the region grid. */
+    private static double snapToStep(double wanted) {
+        double best = GAP_TILE_STEPS[0];
+        for (double step : GAP_TILE_STEPS) {
+            if (Math.abs(step - wanted) < Math.abs(best - wanted)) {
+                best = step;
+            }
+        }
+        return best;
+    }
+
+    private long tileKey(double worldX, double worldZ, double tile) {
+        return tileIndexKey((long) Math.floor((worldX - gapOriginX) / tile),
+                (long) Math.floor((worldZ - gapOriginZ) / tile));
+    }
+
+    private static long tileIndexKey(long tx, long tz) {
         return (tx << 32) ^ (tz & 0xFFFFFFFFL);
     }
 

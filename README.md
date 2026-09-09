@@ -79,19 +79,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.18.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.19.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.18.jar` from the
+Download `rtpbuddy-1.6.19.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.18.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.19.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -422,19 +422,31 @@ close in a hole is a shape with edges. Past 5k the same ground is cut into fixed
 world tiles carrying their own landing count in four bands - none, one, two to
 three, four and more - because a shape a few pixels across is not a shape and a
 number is. The switch is the same 5k landmark the sample numbers use, so the map
-has one rule to remember rather than two. Tiles snap to a fixed multiple of the
-world origin, so the same square keeps its identity between sittings and can be
+has one rule to remember rather than two. Tiles are counted from the corner of the world
+border, so the same square keeps its identity between sittings and can be
 ticked off a list.
 
-A tile stands for **8,000 blocks a side** and stays that size however far you
+A tile stands for **10,000 blocks a side** and stays that size however far you
 zoom out, up to a 100k scale bar - so zooming out makes the squares smaller on
-screen rather than making each one stand for more ground. The size was picked to
-keep its width on screen instead, which looked identical at every zoom while the
-ground behind one square quietly grew to 64,000 blocks a side, and a square that
-big has stopped answering anything useful. Change it under **Settings → Map →
-Tile size**; past the 100k scale bar the held tile falls under three pixels and
-cannot be drawn, so out there the growing tile takes back over whatever the
-setting says.
+screen rather than making each one stand for more ground. The size was once
+picked to keep its width on screen instead, which looked identical at every zoom
+while the ground behind one square quietly grew to 64,000 blocks a side, and a
+square that big has stopped answering anything useful. Change it under
+**Settings → Map → Tile size**; past the 100k scale bar the held tile falls
+under three pixels and cannot be drawn, so out there the growing tile takes back
+over whatever the setting says.
+
+Every size on offer - 2,500, 5,000, 10,000, 25,000, 50,000 - divides a server
+region cell exactly, and the grid is counted from the corner of the world border
+rather than from 0,0. Both halves are needed and neither is decoration. A cell is
+50,000 blocks measured from that corner, so its edges fall on -175,000, -125,000
+and so on; a grid counting from zero meets those only by luck, and 8,000 - the
+size shipped before - met them never. What that looked like was a square lying
+across a region line, counting landings from two regions into one number, and a
+row of squares hanging past the world border into ground no teleport can reach.
+A size larger than a cell is no good either: two cells to a tile puts the line
+between them through its middle. So the ladder stops at one whole cell, and a
+size stored before this change is snapped to the nearest one that fits.
 
 Distance on its own would always name the edge of the canvas as the emptiest
 place, since nothing has been recorded past it. The measurement is therefore

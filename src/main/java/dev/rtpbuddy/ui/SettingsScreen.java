@@ -493,7 +493,7 @@ public class SettingsScreen extends Screen {
                 v -> map.gapMaskTile = (int) v,
                 v -> Lang.t("unit.blocks", Math.round(v)));
         cycle("settings.map.gap_raster_tile",
-                new double[]{2_000, 4_000, 8_000, 16_000, 32_000},
+                new double[]{2_500, 5_000, 10_000, 25_000, 50_000},
                 () -> map.gapRasterTile,
                 v -> map.gapRasterTile = (int) v,
                 v -> Lang.t("unit.blocks", Math.round(v)));

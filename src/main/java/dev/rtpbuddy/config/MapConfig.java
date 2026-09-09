@@ -45,7 +45,7 @@ public class MapConfig {
      * cannot be drawn at all, so out there the old growing tile takes over
      * whatever this says.
      */
-    public int gapRasterTile = 8_000;
+    public int gapRasterTile = 10_000;
 
     /**
      * Marker radius in pixels. Three was a fat square at every zoom; the plot is

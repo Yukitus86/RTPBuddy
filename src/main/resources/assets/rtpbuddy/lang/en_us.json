@@ -397,7 +397,7 @@
   "rtpbuddy.settings.map.scale_bar.tip": "The distance scale in the corner of the map.",
   "rtpbuddy.settings.map.density_cell.tip": "Edge length of one density cell. It no longer draws anything; it is the basis of the coverage statistic - cells hit divided by the cells inside the border. Smaller is finer but pushes the percentage down, so pin the size before comparing.",
   "rtpbuddy.settings.map.gap_mask_tile.tip": "Tile size the map uses to mark off where anything has been recorded at all. Bigger lets the search look further past the outermost landings.",
-  "rtpbuddy.settings.map.gap_raster_tile.tip": "How much ground one counted tile covers. The tile used to grow as you zoomed out — it stayed the same size on screen and stood for more and more world. Smaller is more exact; past a 100k scale bar the growing tile takes over again.",
+  "rtpbuddy.settings.map.gap_raster_tile.tip": "How much ground one counted tile covers. Every size divides a server region evenly, and the tiles are counted from the world border — so none of them ever lies across a region line or over the world edge. Smaller is more exact; past a 100k scale bar the growing tile takes over again.",
   "rtpbuddy.settings.map.gap_top.tip": "How many holes the map rings and lists in the column.",
   "rtpbuddy.settings.map.panel_reset.tip": "Puts both side panels back to their default width.",
   "rtpbuddy.map.scope.session": "This session",

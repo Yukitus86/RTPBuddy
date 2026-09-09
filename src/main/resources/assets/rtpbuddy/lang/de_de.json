@@ -397,7 +397,7 @@
   "rtpbuddy.settings.map.scale_bar.tip": "Der Maßstabsbalken in der Ecke der Karte.",
   "rtpbuddy.settings.map.density_cell.tip": "Kantenlänge einer Dichtezelle. Sie zeichnet nichts mehr, sondern ist die Grundlage der Statistik Abdeckung: getroffene Zellen geteilt durch die Zellen innerhalb der Grenze. Kleiner heißt feiner, lässt den Prozentwert aber absacken - für einen Vergleich die Größe festhalten.",
   "rtpbuddy.settings.map.gap_mask_tile.tip": "Kachelgröße, mit der die Karte abgrenzt, wo überhaupt schon aufgezeichnet wurde. Größer heißt, die Suche schaut weiter über die äußersten Landungen hinaus.",
-  "rtpbuddy.settings.map.gap_raster_tile.tip": "Wie viel Boden eine gezählte Kachel abdeckt. Die Kachel wuchs früher beim Herauszoomen mit — sie blieb gleich groß auf dem Schirm und stand dafür für immer mehr Welt. Kleiner heißt genauer; ab 100k Maßstab übernimmt wieder die mitwachsende Kachel.",
+  "rtpbuddy.settings.map.gap_raster_tile.tip": "Wie viel Boden eine gezählte Kachel abdeckt. Jede Größe teilt eine Server-Region glatt auf, und gezählt wird von der Weltgrenze aus — so liegt keine Kachel je über einer Regionslinie oder über dem Weltrand. Kleiner heißt genauer; ab 100k Maßstab übernimmt wieder die mitwachsende Kachel.",
   "rtpbuddy.settings.map.gap_top.tip": "Wie viele Löcher die Karte einkreist und in der Spalte auflistet.",
   "rtpbuddy.settings.map.panel_reset.tip": "Setzt beide Seitenpanels auf ihre Standardbreite zurück.",
   "rtpbuddy.map.scope.session": "Diese Session",
