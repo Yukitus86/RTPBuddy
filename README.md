@@ -79,19 +79,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.16.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.18.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.16.jar` from the
+Download `rtpbuddy-1.6.18.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.16.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.18.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -271,6 +271,23 @@ stopped on every launch. A run stops on:
 - **damage** taken
 - the **run timer** running out
 - the **teleport cap** being reached
+- **another player** coming inside the radius, once the run has moved you
+
+**Stop on nearby player** is the one stop that is about who is there rather
+than about what happened. Switch it on in the tab, pick a radius - 16 to 256
+blocks, measured in three dimensions - and a run ends the moment another
+player is that close, with a bell and the distance in chat, because a stop
+that only reaches a screen you were not watching warns nobody.
+
+It takes effect only once the run has teleported you away from where you
+started it, and that is the part that makes it usable. It fires because a
+landing put someone next to you - and that someone is still there afterwards.
+Live from the first tick, the run you start to get away would die on the very
+player you are getting away from, and that spot would have no exit at all.
+Whoever is next to you when you press start is your business; whoever is next
+to you where the loop dropped you is the loop's. The client only sees the
+players the server sends it, so this is a reason to stop, never a promise that
+you are alone.
 
 The interval is measured between *landings*, not between attempts, so a slow
 teleport does not stack up commands. Jitter keeps the spacing from being
@@ -581,8 +598,8 @@ a few seconds.
 
 ### The search order
 
-Auto-RTP stops for damage, for the run timer, for the session cap and for a
-guard - every one of them a reason to give up. A search order is the other kind:
+Auto-RTP stops for damage, for the run timer, for the session cap, for a guard
+and for another player coming close - every one of them a reason to give up. A search order is the other kind:
 a reason to stop because the run found what it was sent out for. Under
 **Auto-RTP → Search order**, switch it on and pick conditions:
 

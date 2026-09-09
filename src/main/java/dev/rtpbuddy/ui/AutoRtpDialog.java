@@ -107,6 +107,9 @@ public class AutoRtpDialog extends Screen {
         if (auto.maxPerSession > 0) {
             lines.add(Lang.t("auto_dialog.cap", auto.maxPerSession).trim());
         }
+        if (auto.stopOnPlayerNearby) {
+            lines.add(Lang.t("auto_dialog.on_player", auto.playerNearbyRadius).trim());
+        }
         // A search order changes what the run is for, so it belongs on the
         // screen that asks whether to start it, not only in the settings.
         if (dev.rtpbuddy.capture.FindRule.armed(auto)) {

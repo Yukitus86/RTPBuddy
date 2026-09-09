@@ -340,6 +340,13 @@ public class SettingsScreen extends Screen {
         toggle("settings.auto.on_damage", () -> auto.stopOnDamage, v -> auto.stopOnDamage = v);
         toggle("settings.auto.on_guards", () -> auto.stopOnGuardViolation,
                 v -> auto.stopOnGuardViolation = v);
+        toggle("settings.auto.on_player", () -> auto.stopOnPlayerNearby,
+                v -> auto.stopOnPlayerNearby = v);
+        cycle("settings.auto.player_radius",
+                new double[]{16, 32, 64, 128, 256},
+                () -> auto.playerNearbyRadius,
+                v -> auto.playerNearbyRadius = (int) v,
+                v -> Lang.t("unit.blocks", Math.round(v)));
 
         buildFindSection(auto);
     }

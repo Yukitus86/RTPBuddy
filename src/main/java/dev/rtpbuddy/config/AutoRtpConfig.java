@@ -52,6 +52,27 @@ public class AutoRtpConfig {
     public boolean stopOnGuardViolation = false;
 
     /**
+     * Stop as soon as another player is within {@link #playerNearbyRadius}.
+     *
+     * <p>This reads the client's own entity list, which holds only the players
+     * the server chose to send. Anyone outside the server's player tracking
+     * range, and anyone the server is deliberately hiding, is invisible to it.
+     * So it is a reason to stop, never a promise that nobody is there - and it
+     * is written that way in the tooltip too, because a safety switch that is
+     * trusted further than it reaches is worse than no switch.
+     */
+    public boolean stopOnPlayerNearby = false;
+
+    /**
+     * How close another player has to be to count, in blocks, measured in
+     * three dimensions.
+     *
+     * <p>Past the server's tracking range a larger number buys nothing: the
+     * client is never told about those players in the first place.
+     */
+    public int playerNearbyRadius = 64;
+
+    /**
      * Every teleport waits for a key press instead of the clock.
      *
      * <p>The run is still a run: the rotation, the counters, the caps, the run

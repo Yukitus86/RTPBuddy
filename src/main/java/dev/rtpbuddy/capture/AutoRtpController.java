@@ -5,6 +5,7 @@ import dev.rtpbuddy.config.AutoRtpConfig;
 import dev.rtpbuddy.config.RTPBuddyConfig;
 import dev.rtpbuddy.config.RegionPreset;
 import dev.rtpbuddy.util.Lang;
+import dev.rtpbuddy.util.Worlds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 
@@ -28,7 +29,8 @@ import java.util.function.Supplier;
  *       does not shorten or bypass any server cooldown; if the server rejects a
  *       teleport, the next attempt simply waits out the same interval again.</li>
  *   <li>It stops itself on damage, on the session cap, on the run timer and -
- *       optionally - on a guard violation.</li>
+ *       optionally - on a guard violation or on another player coming close
+ *       once the run has teleported away from where it started.</li>
  *   <li>It can be <b>held</b> instead of stopped: {@link #pause()} freezes both
  *       clocks and sends nothing, and {@link #resume()} continues with the same
  *       wait, counters and rotation position. That is for stopping to look at
@@ -66,6 +68,16 @@ public class AutoRtpController {
 
     /** Position in the region rotation. Runtime-only, like {@link #running}. */
     private int cursor;
+
+    /**
+     * Where the run was started, and whether it has been teleported away from
+     * there yet. Only the nearby-player stop reads these; see
+     * {@link #leftTheStartingSpot}. Runtime-only, like {@link #running}.
+     */
+    private double startX;
+    private double startZ;
+    private String startDimension = "";
+    private boolean nearbyArmed;
 
     /** Landings this run has seen that did not match the search order. */
     private int missedThisRun;
@@ -263,6 +275,79 @@ public class AutoRtpController {
                 false);
     }
 
+    /**
+     * True once this run has actually been teleported somewhere else.
+     *
+     * <p>The nearby-player stop waits for this, and the reason is the state it
+     * leaves behind: it fires because a landing put someone next to you, and
+     * the thing you want next is another teleport, out. Live from the first
+     * tick, the run you start to get away would die on the very player you are
+     * getting away from, and that spot would have no exit at all.
+     *
+     * <p>So it arms only after the run has moved you - a jump past the capture
+     * threshold, or a change of dimension - and stays armed for the rest of the
+     * run. Whoever is standing next to you when you press start is your
+     * business; whoever is standing next to you where the loop dropped you is
+     * the loop's.
+     */
+    private boolean leftTheStartingSpot(MinecraftClient client, ClientPlayerEntity player) {
+        if (!Worlds.dimensionId(client.world).equals(startDimension)) {
+            return true;
+        }
+        double dx = player.getX() - startX;
+        double dz = player.getZ() - startZ;
+        double threshold = config.get().capture.teleportDistanceThreshold;
+        return dx * dx + dz * dz >= threshold * threshold;
+    }
+
+    /**
+     * Distance to the closest other player inside {@code radius}, or -1 when
+     * there is none - which is also what a radius of 0 always answers.
+     *
+     * <p>Reads {@code world.getPlayers()}, so it sees exactly what the client
+     * has been told about and nothing else: no player outside the server's
+     * tracking range, and no player the server is hiding. Spectators are
+     * skipped because a spectator cannot do anything to you.
+     *
+     * <p>Cheap enough to run every tick - the client player list is short and
+     * this is squared distances - and it has to be, because the answer is only
+     * useful while it is still current.
+     */
+    private double nearestOtherPlayer(MinecraftClient client, double radius) {
+        if (radius <= 0 || client.world == null || client.player == null) {
+            return -1;
+        }
+        double limit = radius * radius;
+        double best = -1;
+        for (net.minecraft.entity.player.PlayerEntity other : client.world.getPlayers()) {
+            if (other == client.player || other.isSpectator() || other.isRemoved()) {
+                continue;
+            }
+            double squared = other.squaredDistanceTo(client.player);
+            if (squared <= limit && (best < 0 || squared < best)) {
+                best = squared;
+            }
+        }
+        return best < 0 ? -1 : Math.sqrt(best);
+    }
+
+    /**
+     * Says out loud that the run ended because someone is close.
+     *
+     * <p>Unconditional, unlike the search order's sound: the reason for this
+     * stop is that you may be about to be attacked, and a warning that only
+     * reaches a screen you were not watching is not a warning.
+     */
+    private void announcePlayerNearby(MinecraftClient client, double distance) {
+        if (client.player == null) {
+            return;
+        }
+        client.player.playSound(
+                net.minecraft.sound.SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), 0.9f, 0.7f);
+        client.player.sendMessage(net.minecraft.text.Text.literal(
+                Lang.t("chat.player_nearby", Math.round(distance))), false);
+    }
+
     public long runningForMillis() {
         if (!running) {
             return 0L;
@@ -375,6 +460,10 @@ public class AutoRtpController {
         foundMessage = "";
         cursor = 0;
         lastHealth = client.player.getHealth();
+        startX = client.player.getX();
+        startZ = client.player.getZ();
+        startDimension = Worlds.dimensionId(client.world);
+        nearbyArmed = false;
         // A manual run is ready at once: making the first press wait out a
         // jitter nobody asked for would just look broken.
         if (config.get().autoRtp.manualStep) {
@@ -435,6 +524,20 @@ public class AutoRtpController {
             return;
         }
         lastHealth = player.getHealth();
+
+        if (auto.stopOnPlayerNearby) {
+            if (!nearbyArmed) {
+                nearbyArmed = leftTheStartingSpot(client, player);
+            }
+            if (nearbyArmed) {
+                double distance = nearestOtherPlayer(client, auto.playerNearbyRadius);
+                if (distance >= 0) {
+                    stop("reason.player_nearby", Math.round(distance));
+                    announcePlayerNearby(client, distance);
+                    return;
+                }
+            }
+        }
 
         if (auto.maxPerSession > 0 && sentThisRun >= auto.maxPerSession) {
             stop("reason.session_limit", auto.maxPerSession);

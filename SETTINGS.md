@@ -231,6 +231,33 @@ Hält an, wenn eine Landung außerhalb des Border-Puffers oder innerhalb des
 Spawn-Puffers liegt. Nur einschalten, wenn die Werte im Tab **Schutzzonen**
 wirklich zu deinem Server passen — sonst stoppt die Schleife grundlos.
 
+### Stopp bei Spieler in der Nähe — `autoRtp.stopOnPlayerNearby` (Standard: aus)
+
+Beendet den Lauf, sobald ein anderer Spieler innerhalb des Radius auftaucht.
+Dazu ein Glockenton und die Entfernung im Chat — ein Stopp, der nur auf einem
+Bildschirm steht, den du gerade nicht ansiehst, warnt niemanden.
+
+Greift erst, wenn der Lauf dich einmal weggeteleportiert hat: ein Sprung über
+die Aufnahme-Schwelle oder ein Dimensionswechsel. Das ist keine Einschränkung,
+sondern das, was die Einstellung benutzbar macht. Sie hält an, weil eine
+Landung dich neben jemanden gesetzt hat — und dieser Jemand steht danach immer
+noch da. Ab dem ersten Tick scharf würde genau der Lauf, mit dem du wegkommen
+willst, an dem Spieler sterben, vor dem du weg willst, und diese Stelle hätte
+keinen Ausgang mehr. Wer neben dir steht, wenn du Start drückst, ist deine
+Sache; wer da steht, wo die Schleife dich hingeworfen hat, ist ihre.
+
+Gelesen wird die Spielerliste des Clients, also genau das, was der Server
+geschickt hat. Wer außerhalb der Server-Sichtweite steht oder versteckt ist,
+taucht hier nicht auf. Ein Grund zum Anhalten — keine Garantie, dass du allein
+bist.
+
+### Spieler-Radius — `autoRtp.playerNearbyRadius` (Standard: 64 Blöcke)
+
+Ab welcher Entfernung ein anderer Spieler als nah gilt, in drei Dimensionen
+gemessen: 16 · 32 · 64 · 128 · 256 Blöcke. Größer als die Sichtweite deines
+Servers bringt nichts — weiter entfernte Spieler kommen gar nicht erst beim
+Client an. Zuschauer zählen nicht.
+
 **Immer und ohne Schalter stoppt die Schleife bei:** Verbindungstrennung,
 Weltwechsel, `End`-Taste, `/rtpbuddy auto stop`. `H` gehört nicht dazu: solange
 ein Lauf auf der Uhr läuft, hält es ihn an statt ihn zu beenden — die eine nicht
@@ -252,7 +279,7 @@ Läufe, die einfach nur eine Karte füllen.
 
 | Einstellung | Schlüssel | Standard | Wirkung |
 |---|---|---|---|
-| Suchauftrag | `autoRtp.findEnabled` | aus | Hauptschalter. Aus heißt: der Lauf hält nur aus den üblichen Gründen an — Schaden, Zeitlimit, Anzahl, Schutzzone |
+| Suchauftrag | `autoRtp.findEnabled` | aus | Hauptschalter. Aus heißt: der Lauf hält nur aus den üblichen Gründen an — Schaden, Zeitlimit, Anzahl, Schutzzone, Spieler in der Nähe |
 | Neue Zelle | `autoRtp.findNewCell` | aus | Hält bei der ersten Landung in einer Zelle, in der noch nie eine aufgezeichnete Landung lag. Das ist die Bedingung, die das Zellenbrett füllt — genau die Würfe, die dich weiterbringen |
 | Bestimmte Zellen | `autoRtp.findCells` | leer | Eine getippte Liste wie `11 12 20`. Trenner sind egal; alles, was keine Zahl von 1 bis 81 ist, wird verworfen statt abgelehnt — das Feld wird getippt, und ein halbfertiger Eintrag darf nicht den ganzen Auftrag lahmlegen |
 | Distanz ab / bis | `autoRtp.findMinDistance` / `…MaxDistance` | 0 / 0 | Ein Band, gemessen vom Weltursprung. 0 schaltet die jeweilige Grenze ab |

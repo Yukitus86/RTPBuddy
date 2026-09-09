@@ -836,6 +836,52 @@
 
         <article class="entry">
           <div class="entry-head">
+            <h3>Stopp bei Spieler in der N&auml;he</h3>
+            <span class="key">autoRtp.stopOnPlayerNearby</span>
+            <span class="val">aus</span>
+          </div>
+          <p>
+            Beendet den Lauf, sobald ein anderer Spieler innerhalb des Radius
+            auftaucht. Dazu ein Glockenton und die Entfernung im Chat &mdash; ein
+            Stopp, der nur auf einem Bildschirm steht, den du gerade nicht
+            ansiehst, warnt niemanden.
+          </p>
+          <p>
+            Greift erst, wenn der Lauf dich einmal weggeteleportiert hat: ein
+            Sprung &uuml;ber die Aufnahme-Schwelle oder ein Dimensionswechsel. Das
+            ist keine Einschr&auml;nkung, sondern das, was die Einstellung benutzbar
+            macht. Sie h&auml;lt an, weil eine Landung dich neben jemanden gesetzt
+            hat &mdash; und dieser Jemand steht danach immer noch da. Ab dem ersten
+            Tick scharf w&uuml;rde genau der Lauf, mit dem du wegkommen willst, an dem
+            Spieler sterben, vor dem du weg willst. Wer neben dir steht, wenn du
+            Start dr&uuml;ckst, ist deine Sache; wer da steht, wo die Schleife dich
+            hingeworfen hat, ist ihre.
+          </p>
+          <p>
+            Gelesen wird die Spielerliste des Clients, also genau das, was der
+            Server geschickt hat. Wer au&szlig;erhalb der Server-Sichtweite steht oder
+            versteckt ist, taucht hier nicht auf. Ein Grund zum Anhalten &mdash;
+            keine Garantie, dass du allein bist.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Spieler-Radius</h3>
+            <span class="key">autoRtp.playerNearbyRadius</span>
+            <span class="val">64 Bl&ouml;cke</span>
+          </div>
+          <p>
+            Ab welcher Entfernung ein anderer Spieler als nah gilt, in drei
+            Dimensionen gemessen: 16 &middot; 32 &middot; 64 &middot; 128 &middot; 256 Bl&ouml;cke.
+            Gr&ouml;&szlig;er als die Sichtweite deines Servers bringt nichts &mdash; weiter
+            entfernte Spieler kommen gar nicht erst beim Client an. Zuschauer
+            z&auml;hlen nicht.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
             <h3>Suchauftrag</h3>
             <span class="key">autoRtp.findEnabled</span>
             <span class="val">aus</span>
@@ -1383,7 +1429,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.16 · Minecraft 1.21.11 · Stand 08.09.2026 — dieselbe Liste liegt
+    RTPBuddy 1.6.18 · Minecraft 1.21.11 · Stand 09.09.2026 — dieselbe Liste liegt
     als <code>SETTINGS.md</code> im Projektordner, die englische Fassung als
     <code>RTPBuddy-Settings.html</code>.
   </footer>

@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.16</span>
+    <span class="span">1.5.8 &rarr; 1.6.18</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Eighteen releases over four
+      Everything that changed since 1.5.8, newest first. Nineteen releases over five
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1618">1.6.18 <span class="n">1 item</span></a></li>
       <li><a href="#v1616">1.6.16 <span class="n">2 items</span></a></li>
       <li><a href="#v1615">1.6.15 <span class="n">2 items</span></a></li>
       <li><a href="#v1614">1.6.14 <span class="n">2 items</span></a></li>
@@ -380,6 +381,52 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.18 -->
+    <section class="release" id="v1618">
+      <div class="rel-head">
+        <h2>1.6.18</h2>
+        <span class="date">9 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A stop that pins you to the spot it fired on is not protection.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>The run halts when another player comes close</h3>
+          <div class="body">
+            <p>
+              New under <strong>Auto-RTP &rarr; Stops</strong>: <em>Stop on nearby
+              player</em>, with a radius of 16 &middot; 32 &middot; 64 &middot; 128 &middot; 256
+              blocks, measured in three dimensions. When it fires the run ends, a
+              bell plays and the distance goes to chat. An unattended run is worth
+              nothing if the warning only reaches a screen nobody is looking at.
+            </p>
+            <p>
+              The check takes effect only once the run has teleported you away
+              &mdash; a jump past the capture threshold, or a change of dimension.
+              That sounds like a limitation and is in fact what makes the setting
+              usable at all: it fires because a landing put someone next to you
+              &mdash; and that someone is still there afterwards. Live from the
+              first tick, the run you start to get away would die on the very
+              player you are getting away from, and that spot would have no exit
+              left. Whoever is next to you when you press start is your business;
+              whoever is next to you where the loop dropped you is the loop&rsquo;s.
+            </p>
+            <p>
+              It reads the client&rsquo;s own player list, which is exactly what the
+              server sent. Anyone outside the server&rsquo;s tracking range, and anyone
+              it is hiding, is not seen; spectators do not count. A reason to
+              stop, not a promise that you are alone. Off by default.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.16 -->
     <section class="release" id="v1616">
@@ -1674,7 +1721,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.16 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.18 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

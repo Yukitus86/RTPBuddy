@@ -823,6 +823,49 @@
 
         <article class="entry">
           <div class="entry-head">
+            <h3>Stop on nearby player</h3>
+            <span class="key">autoRtp.stopOnPlayerNearby</span>
+            <span class="val">off</span>
+          </div>
+          <p>
+            Ends the run as soon as another player turns up inside the radius,
+            with a bell and the distance in chat &mdash; a stop that only reaches a
+            screen you were not watching warns nobody.
+          </p>
+          <p>
+            It takes effect only once the run has teleported you away: a jump
+            past the capture threshold, or a change of dimension. That is not a
+            limitation, it is what makes the setting usable. It fires because a
+            landing put someone next to you &mdash; and that someone is still there
+            afterwards. Live from the first tick, the run you start to get away
+            would die on the very player you are getting away from. Whoever is
+            next to you when you press start is your business; whoever is next to
+            you where the loop dropped you is the loop&rsquo;s.
+          </p>
+          <p>
+            It reads the client&rsquo;s own player list, which is exactly what the
+            server sent. Anyone outside the server&rsquo;s tracking range, and anyone
+            it is hiding, does not show up here. A reason to stop, not a promise
+            that you are alone.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
+            <h3>Player radius</h3>
+            <span class="key">autoRtp.playerNearbyRadius</span>
+            <span class="val">64 blocks</span>
+          </div>
+          <p>
+            How close another player has to be to count, measured in three
+            dimensions: 16 &middot; 32 &middot; 64 &middot; 128 &middot; 256 blocks. Setting it
+            beyond your server&rsquo;s tracking range buys nothing &mdash; players
+            further out never reach the client at all. Spectators do not count.
+          </p>
+        </article>
+
+        <article class="entry">
+          <div class="entry-head">
             <h3>Search order</h3>
             <span class="key">autoRtp.findEnabled</span>
             <span class="val">off</span>
@@ -1367,7 +1410,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.16 &middot; Minecraft 1.21.11 &middot; 8 September 2026 &mdash; the same
+    RTPBuddy 1.6.18 &middot; Minecraft 1.21.11 &middot; 9 September 2026 &mdash; the same
     list lives as <code>SETTINGS.md</code> in the project folder, and the German
     version as <code>RTPBuddy-Einstellungen.html</code>.
   </footer>
