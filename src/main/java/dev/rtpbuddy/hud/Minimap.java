@@ -1,10 +1,12 @@
 package dev.rtpbuddy.hud;
 
 import dev.rtpbuddy.RTPBuddyClient;
+import dev.rtpbuddy.config.GuardSettings;
 import dev.rtpbuddy.config.MapConfig;
 import dev.rtpbuddy.data.RtpSample;
 import dev.rtpbuddy.region.ServerRegions;
 import dev.rtpbuddy.ui.ArgbTexture;
+import dev.rtpbuddy.ui.GapScheme;
 import dev.rtpbuddy.ui.MapPalette;
 import dev.rtpbuddy.ui.MapViewState;
 import dev.rtpbuddy.ui.Theme;
@@ -34,8 +36,9 @@ import java.util.List;
  * and redrawn as a single quad. A minimap is on screen for the entire session,
  * so a rectangle per landing would be a thousand {@code fill} calls in every
  * frame of every fight - the mistake the gap map very nearly shipped with, made
- * permanent. What stays live is only what actually moves: the player marker, the
- * cell numbers and the caption.
+ * permanent. What stays live is only what actually moves or is made of text:
+ * the player marker, the numbers written into the cells or the counted tiles,
+ * and the caption.
  */
 public class Minimap implements HudElement {
 
@@ -133,7 +136,13 @@ public class Minimap implements HudElement {
         // not in the texture. Scissored, so a cell number half off the plate is
         // cut at the edge rather than spilling onto the game's own HUD.
         context.enableScissor(x + 1, y + 1, x + size - 1, y + size - 1);
-        if (map.minimapShowRegions && map.minimapShowCellNumbers) {
+        boolean counts = map.minimapShowGapTiles && map.minimapGapNumbers
+                && drawGapCounts(context, map, x, y, size);
+        // Both sets of numbers want the middle of the same square, and two
+        // numbers in one square is neither of them. The count wins where they
+        // meet - the caption still names the cell the player is standing in,
+        // which is the part of the cell number worth having.
+        if (!counts && map.minimapShowRegions && map.minimapShowCellNumbers) {
             drawCellNumbers(context, x, y, size, here);
         }
         drawFlash(context, x, y, size);
@@ -183,8 +192,12 @@ public class Minimap implements HudElement {
         stamp = stamp * 31 + (here == null ? 0 : here.number());
         stamp = stamp * 31 + java.util.Objects.hashCode(RTPBuddyClient.sessions().currentId());
         stamp = stamp * 31 + java.util.Objects.hashCode(map.minimapScope);
+        stamp = stamp * 31 + GapScheme.of(map.gapScheme).ordinal();
         stamp = stamp * 31 + flags(map);
         stamp = stamp * 31 + fallbackKey();
+        // Walking into the nether moves the border, and the counted tiles are
+        // keyed on its corner.
+        stamp = stamp * 31 + Double.hashCode(borderRadius(RTPBuddyClient.config().guards));
 
         if (stamp == signature && bakedSize == size && TEXTURE.ready()) {
             return;
@@ -195,15 +208,38 @@ public class Minimap implements HudElement {
         MinecraftClient client = MinecraftClient.getInstance();
         double px = client.player == null ? 0 : client.player.getX();
         double pz = client.player == null ? 0 : client.player.getZ();
+        GuardSettings guards = RTPBuddyClient.config().guards;
+        double radius = borderRadius(guards);
         TEXTURE.update(PLATE.bake(size, samples(map), here,
                 map.minimapShowRegions, map.minimapShowAxes, map.minimapShowLastLeg,
+                map.minimapShowGapTiles, map.minimapGapNumbers,
+                GapScheme.of(map.gapScheme),
+                guards.borderCenterX - radius, guards.borderCenterZ - radius,
+                guards.squareBorder ? radius * 2 : 0,
                 MapConfig.clampMinimapOpacity(map.minimapOpacity), px, pz), size, size);
+    }
+
+    /**
+     * The border radius that applies where the player is standing.
+     *
+     * <p>The counted tiles count from the low corner of this border, exactly as
+     * the map screen's raster does, so the two pictures sit on one grid. The
+     * dimensions rarely share a radius - DonutSMP gives all three a different
+     * one - and a corner taken from the wrong dimension would put every tile
+     * line in the wrong place.
+     */
+    private static double borderRadius(GuardSettings guards) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        return guards.radiusFor(client.world == null
+                ? null : Worlds.dimensionId(client.world));
     }
 
     private static int flags(MapConfig map) {
         return (map.minimapShowRegions ? 1 : 0)
                 | (map.minimapShowAxes ? 2 : 0)
-                | (map.minimapShowLastLeg ? 4 : 0);
+                | (map.minimapShowLastLeg ? 4 : 0)
+                | (map.minimapShowGapTiles ? 8 : 0)
+                | (map.minimapGapNumbers ? 16 : 0);
     }
 
     /**
@@ -255,6 +291,66 @@ public class Minimap implements HudElement {
                     mine ? cell.zone().color() : MapPalette.withAlpha(cell.zone().color(), 0.45),
                     false);
         }
+    }
+
+    /**
+     * The landing count written into each counted tile.
+     *
+     * <p>The tiles are baked into the plate; only the digits are live, because
+     * text cannot be written into a pixel array. Switched on they cost squares -
+     * see {@link MapConfig#minimapGapNumbers} - so this method only ever runs
+     * when the plate has already been baked with tiles big enough to hold them,
+     * and draws nothing otherwise.
+     *
+     * <p>The ink comes off the band under it, the same rule the map screen uses:
+     * one grey cannot be read on four colours.
+     *
+     * @return whether anything was written, which is what makes the cell numbers
+     *         stand aside
+     */
+    private static boolean drawGapCounts(DrawContext context, MapConfig map,
+                                         int x, int y, int size) {
+        double tile = PLATE.gapTile();
+        if (tile <= 0) {
+            return false;
+        }
+        MapViewState view = PLATE.view();
+        double tilePixels = tile * view.zoom();
+        TextRenderer font = UiDraw.font();
+        if (tilePixels < font.fontHeight + 2) {
+            return false;
+        }
+        GapScheme scheme = GapScheme.of(map.gapScheme);
+        double originX = PLATE.gapOriginX();
+        double originZ = PLATE.gapOriginZ();
+        long firstX = (long) Math.floor((view.screenToWorldX(0) - originX) / tile);
+        long lastX = (long) Math.floor((view.screenToWorldX(size) - originX) / tile);
+        long firstZ = (long) Math.floor((view.screenToWorldZ(0) - originZ) / tile);
+        long lastZ = (long) Math.floor((view.screenToWorldZ(size) - originZ) / tile);
+
+        boolean drew = false;
+        for (long tz = firstZ; tz <= lastZ; tz++) {
+            for (long tx = firstX; tx <= lastX; tx++) {
+                Integer held = PLATE.gapCounts().get(MinimapPlate.tileIndexKey(tx, tz));
+                int count = held == null ? 0 : held;
+                String text = String.valueOf(count);
+                int width = font.getWidth(text);
+                if (width + 2 > tilePixels) {
+                    continue;
+                }
+                // The tile's own middle in world units, never the part of it
+                // that happens to be on the plate: probing the clipped centre
+                // makes the outer row walk about as the frame moves.
+                double cx = view.worldToScreenX(originX + (tx + 0.5) * tile);
+                double cz = view.worldToScreenY(originZ + (tz + 0.5) * tile);
+                context.drawText(font, text,
+                        x + (int) Math.round(cx) - width / 2,
+                        y + (int) Math.round(cz) - font.fontHeight / 2,
+                        scheme.bandInk(count), true);
+                drew = true;
+            }
+        }
+        return drew;
     }
 
     /**

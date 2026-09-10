@@ -149,6 +149,30 @@ public final class ServerRegions {
         return CELLS.clone();
     }
 
+    /**
+     * Tile sizes a counted raster may snap to, in blocks.
+     *
+     * <p>Every one of them divides {@link #CELL_SIZE} exactly, which is what
+     * keeps a tile from straddling a region line once the raster counts from
+     * the border corner. 8 000 - the old default - cut a cell into six and a
+     * quarter and the leftover quarter hung over the line into the next region.
+     * A size larger than a cell is no good either: two cells to a tile puts the
+     * line between them straight through its middle. So the ladder stops at one
+     * whole cell.
+     *
+     * <p>It lives here rather than beside either raster because the map screen
+     * and the minimap both snap to it, and two copies of a number that has to
+     * divide a cell exactly is precisely how the wrong one gets shipped.
+     */
+    private static final double[] TILE_STEPS = {
+            500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000
+    };
+
+    /** The ladder, ascending. */
+    public static double[] tileSteps() {
+        return TILE_STEPS.clone();
+    }
+
     /** The zone with this id, or null - so a hand-configured region wins over it. */
     public static Zone zone(String id) {
         if (id == null) {

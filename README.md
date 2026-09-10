@@ -81,19 +81,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.20.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.21.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.20.jar` from the
+Download `rtpbuddy-1.6.21.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.20.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.21.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -411,7 +411,8 @@ off.
 ![The gap tiles past the 2k scale](docs/img/gap-map-tiles.png)
 
 *Zoomed out past the 2k scale: the ground is cut into fixed world tiles, each
-carrying its own landing count in four bands.*
+carrying its own landing count in four bands. Green has never been landed in;
+yellow, orange and red count up from there.*
 
 ![The gap field under the 2k scale](docs/img/gap-map-field.png)
 
@@ -439,6 +440,26 @@ square that big has stopped answering anything useful. Change it under
 **Settings → Map → Tile size**; past the 100k scale bar the held tile falls
 under three pixels and cannot be drawn, so out there the growing tile takes back
 over whatever the setting says.
+
+The four bands come in two colour schemes, switched under **Settings → Map →
+Tile colours**. **Traffic light**, the default, runs green - yellow - orange -
+red as the count rises: read the other way round from a heat map on purpose,
+because the square worth going to is the one nothing has ever landed in.
+**Amber** is the original - one bright colour for the holes and three quiet ones
+for the rest, which leaves the landings drawn on top standing out more. The
+scheme reaches both places counted tiles are drawn, the map here and the minimap
+on the HUD, because they are one picture at two sizes. The shading below the 2k
+scale is a different picture and is not affected.
+
+![Choosing the tile colours](docs/img/settings-gap-scheme.png)
+
+*The scheme is one row on the Map tab, and it reaches the minimap too.*
+
+The count written into a tile takes its ink from the band underneath it - near
+black on a light band, near white on a dark one, with a shadow - rather than one
+grey for all four. One grey was fine while three of the four bands were dark;
+the moment a scheme gave all four real weight, the same grey could not be read
+on gold and on brick at once, and it was not read on either.
 
 Every size on offer - 2,500, 5,000, 10,000, 25,000, 50,000 - divides a server
 region cell exactly, and the grid is counted from the corner of the world border
@@ -554,9 +575,32 @@ full map, with your own marker moving about inside it.
 It is not a terrain minimap and does not try to be one. What it draws is the
 recording: the server's 50,000 block cells tinted by the region that owns them,
 their numbers written in where they fit, your landings as single pixels, the red
-leg into the newest one, and the world axes. Underneath sits a strip naming the
+leg into the newest one, the world axes, and the map screen's counted tiles in
+the same colours on the same grid. Underneath sits a strip naming the
 cell you are standing in — region and server number, in that region's colour —
 and how much ground the plate covers.
+
+The **counted tiles** are the same measurement the map screen draws past a 2k
+scale bar, at a tenth the size: fixed world squares counting from the corner of
+the world border, coloured by how many of the framed landings fell in each. On a
+plate framing the whole world one tile is about half a server cell, which makes
+the picture a coverage map of the grid at a glance. The plate picks the size
+itself - about twenty-two tiles across the framed ground, rounded to a size that
+divides a region cell, at least three pixels wide. It is picked from the ground
+and not from the plate on purpose: sized to the biggest square the plate could
+draw, a well-travelled frame came out as one flat block, because at that size
+every tile held four landings or more and they all got the same colour. Two
+dozen across splits the same ground finely enough for the bands to separate, and
+shrinking the minimap then gives the same map smaller rather than a coarser one.
+
+The counts themselves are **off by default** on the plate, under **Settings →
+HUD → Counts in the tiles**. A digit needs about thirteen pixels of tile, which
+on a 128 pixel plate means six tiles across where the same plate carries twenty
+without them - so the picture goes coarse to make room for the counting. Which
+of the two is worth more depends on what you are reading the plate for, and that
+is why it is a switch rather than a rule. While the counts are on, the cell
+numbers stand aside: both want the middle of the same square, and the cell you
+are standing in is named in the caption anyway.
 
 The frame is **fixed**. It holds the chosen landings and does not scroll with
 you, because a frame that recentres on every step tells you nothing about where
@@ -572,8 +616,9 @@ gap map very nearly shipped with — made permanent, because a minimap is on scr
 the whole session. The picture is repainted only when it actually changes: a new
 landing, a different sitting, a switch flipped, or the player crossing into
 another server cell. A repaint measures under 3 ms with two thousand landings on
-it. What is redrawn per frame is your marker, up to sixteen cell numbers and the
-caption — some fifty rectangles, about what one vanilla HUD widget costs.
+it. What is redrawn per frame is your marker, the caption, and up to sixteen
+numbers — the cell numbers, or the tile counts when those are switched on — some
+fifty rectangles, about what one vanilla HUD widget costs.
 
 ![The minimap's content switches](docs/img/settings-minimap.png)
 

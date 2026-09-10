@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.20</span>
+    <span class="span">1.5.8 &rarr; 1.6.21</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Twenty-one releases over six
+      Everything that changed since 1.5.8, newest first. Twenty-two releases over seven
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1621">1.6.21 <span class="n">4 items</span></a></li>
       <li><a href="#v1620">1.6.20 <span class="n">1 item</span></a></li>
       <li><a href="#v1619">1.6.19 <span class="n">1 item</span></a></li>
       <li><a href="#v1618">1.6.18 <span class="n">1 item</span></a></li>
@@ -383,6 +384,113 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.21 -->
+    <section class="release" id="v1621">
+      <div class="rel-head">
+        <h2>1.6.21</h2>
+        <span class="date">11 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        The counted tiles on the minimap too, in colours you can choose.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Counted tiles on the minimap</h3>
+          <div class="body">
+            <p>
+              The same measurement the map screen draws past a 2k scale bar, at a tenth
+              the size: fixed world squares counting from the corner of the world border,
+              coloured in four bands and cut at the border. On a plate framing the whole
+              world one tile stands for about half a server cell, which makes the picture
+              a coverage map of the grid at a glance. Under <strong>HUD &rarr; Minimap
+              content &rarr; Counted tiles</strong>, on by default.
+            </p>
+            <p>
+              The plate picks the tile size itself: about 22 tiles across the framed
+              ground, rounded to a size that divides a server region exactly, at least
+              three pixels wide. From the ground and not from the plate, which is the
+              whole point &mdash; sized to the biggest square a plate can still draw, a
+              well-travelled frame came out as one flat block, because at that size every
+              tile holds four landings or more and they all get the same colour. Two
+              dozen across splits the same ground finely enough for the bands to
+              separate, and shrinking the minimap then gives the same map smaller instead
+              of a coarser one.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Tile colours: traffic light or amber</h3>
+          <div class="body">
+            <p>
+              <strong>Traffic light</strong>, new and the default: green where nothing has
+              ever landed, then yellow, orange and red as the count rises. Read the other
+              way round from a heat map, because green here is the square still worth
+              going to. <strong>Amber</strong> is the previous scheme &mdash; one bright
+              colour for the holes and three quiet ones for the rest, which leaves the
+              markers on top standing out more. Under <strong>Map &rarr; Tile
+              colours</strong>.
+            </p>
+            <p>
+              Muted rather than saturated: four signal colours at full strength turn the
+              plate into a poster and leave nothing quiet enough to read the landings,
+              the route and the player against. The scheme applies to both places counted
+              tiles are drawn &mdash; map screen and minimap &mdash; because that is one
+              picture at two sizes. The shading below 2k is unaffected.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>Counts in the minimap tiles, if you want them</h3>
+          <div class="body">
+            <p>
+              Write each tile's landing count into it on the plate, the way the map
+              screen does. Under <strong>HUD &rarr; Minimap content &rarr; Counts in the
+              tiles</strong>, off by default &mdash; not out of caution but because of the
+              price: a digit needs about 13 pixels of tile, so six to twelve fit across
+              the plate instead of a good twenty. Which is worth more depends on what you
+              are reading the plate for, and that is why it is a switch rather than a
+              rule.
+            </p>
+            <p>
+              While the counts are on the cell numbers stand aside &mdash; both want the
+              middle of the same square, and the cell you are in is named in the caption
+              anyway. When no size on the ladder can hold a digit, the whole world on a
+              small plate for instance, the fine squares stay rather than the layer
+              disappearing.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The count in a tile was barely readable on some bands</h3>
+          <div class="body">
+            <p>
+              One grey for every band, plus a dark brown for the zero, and no shadow.
+              That was fine while three of the four bands were dark. The moment a scheme
+              gives all four real weight, the same grey cannot be read on gold and on
+              brick at once &mdash; and it was read on neither.
+            </p>
+            <p>
+              The digit now takes its ink from the band under it: near black on a light
+              one, near white on a dark one, with a text shadow. What gets measured is
+              not the colour named in the scheme but what ends up on screen &mdash; the tile
+              is translucent and the map's dark ground drags every one of them down.
+              Measured, the worst contrast is now 4.6&nbsp;:&nbsp;1 rather than under it.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.20 -->
     <section class="release" id="v1620">
@@ -1815,7 +1923,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.20 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.21 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

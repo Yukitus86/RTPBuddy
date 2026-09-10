@@ -501,6 +501,11 @@ public class SettingsScreen extends Screen {
                 () -> map.gapTopCount,
                 v -> map.gapTopCount = (int) v,
                 v -> String.valueOf(Math.round(v)));
+        cycle("settings.map.gap_scheme",
+                new double[]{GapScheme.CLASSIC.ordinal(), GapScheme.TRAFFIC.ordinal()},
+                () -> GapScheme.of(map.gapScheme).ordinal(),
+                v -> map.gapScheme = GapScheme.values()[(int) v].name(),
+                v -> Lang.t(GapScheme.values()[(int) v].key()));
         note(Lang.t("settings.map.gap_note"));
 
         section("settings.section.performance");
@@ -594,6 +599,10 @@ public class SettingsScreen extends Screen {
                 v -> map.minimapShowRegions = v);
         toggle("settings.minimap.cell_numbers", () -> map.minimapShowCellNumbers,
                 v -> map.minimapShowCellNumbers = v);
+        toggle("settings.minimap.gap_tiles", () -> map.minimapShowGapTiles,
+                v -> map.minimapShowGapTiles = v);
+        toggle("settings.minimap.gap_numbers", () -> map.minimapGapNumbers,
+                v -> map.minimapGapNumbers = v);
         toggle("settings.minimap.axes", () -> map.minimapShowAxes,
                 v -> map.minimapShowAxes = v);
         toggle("settings.minimap.last_leg", () -> map.minimapShowLastLeg,

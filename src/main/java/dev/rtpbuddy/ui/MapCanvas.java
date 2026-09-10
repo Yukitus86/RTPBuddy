@@ -83,19 +83,14 @@ public class MapCanvas {
     private static final int HOLE_RING_SEGMENTS = 56;
 
     /**
-     * Tile sizes the gap raster may snap to, in blocks.
+     * Tile sizes the gap raster may snap to, in blocks - every one of them a
+     * divisor of a server region cell. Fetched once at class load rather than
+     * per call, because {@link ServerRegions#tileSteps()} hands out a copy and
+     * this is read on the frame path.
      *
-     * <p>Every one of them divides a server region cell, which is what keeps a
-     * tile from straddling a region line. A cell is 50 000 blocks measured from
-     * the border corner, so 8 000 - the old default - cut every cell into six
-     * and a quarter and the leftover quarter hung over the line into the next
-     * region. A size larger than a cell is no good either: two cells to a tile
-     * puts the line between them straight through its middle. So the ladder
-     * stops at one whole cell.
+     * @see ServerRegions#tileSteps()
      */
-    private static final double[] GAP_TILE_STEPS = {
-            500, 1_000, 2_500, 5_000, 10_000, 25_000, 50_000
-    };
+    private static final double[] GAP_TILE_STEPS = ServerRegions.tileSteps();
 
     /**
      * The largest piece of ground one raster tile may stand for while the
@@ -1307,6 +1302,7 @@ public class MapCanvas {
         double radius = guards.radiusFor(borderDimensions.get(0));
         gapOriginX = guards.borderCenterX - radius;
         gapOriginZ = guards.borderCenterZ - radius;
+        gapScheme = GapScheme.of(config.gapScheme);
         ensureGapField(samples, config);
         if (rasterGaps()) {
             drawGapRaster(context, guards, radius);
@@ -1333,6 +1329,13 @@ public class MapCanvas {
      */
     private double gapOriginX;
     private double gapOriginZ;
+
+    /**
+     * The colour scheme the raster loop paints with, read once per frame in
+     * {@link #drawGaps} rather than per tile - the lookup walks the enum's
+     * values comparing strings, and there are up to twenty thousand tiles.
+     */
+    private GapScheme gapScheme = GapScheme.TRAFFIC;
 
     private boolean rasterGaps() {
         return scaleBarSpan() > GAP_RASTER_SCALE_BLOCKS;
@@ -1385,6 +1388,7 @@ public class MapCanvas {
         hash = 31 * hash + config.gapMaskTile;
         hash = 31 * hash + config.gapTopCount;
         hash = 31 * hash + config.gapRasterTile;
+        hash = 31 * hash + gapScheme.ordinal();
         // The counts are keyed on the corner, so moving the border rebuilds them.
         hash = 31 * hash + Double.doubleToLongBits(gapOriginX);
         hash = 31 * hash + Double.doubleToLongBits(gapOriginZ);
@@ -1502,7 +1506,7 @@ public class MapCanvas {
                         gapOriginZ + (tz + 0.5) * tile)) {
                     continue;
                 }
-                context.fill(x1, y1, x2, y2, MapPalette.gapBand(count));
+                context.fill(x1, y1, x2, y2, gapScheme.band(count));
                 // Tile edges only when a tile is big enough for the edge to say
                 // something. Packed tighter they are two more rectangles each
                 // for a line the eye reads off the colour change anyway.
@@ -1518,9 +1522,12 @@ public class MapCanvas {
                     if (width + 2 > tilePixels) {
                         continue;
                     }
+                    // With a shadow, and the ink picked off the band: a
+                    // single grey read on some of the four colours and
+                    // disappeared into the others.
                     context.drawText(font, text, (x1 + x2 - width) / 2,
                             (y1 + y2 - font.fontHeight) / 2,
-                            count == 0 ? 0xFF4A3708 : MapPalette.TEXT_DIM, false);
+                            gapScheme.bandInk(count), true);
                 }
             }
         }

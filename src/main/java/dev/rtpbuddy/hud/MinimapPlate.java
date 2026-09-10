@@ -2,11 +2,14 @@ package dev.rtpbuddy.hud;
 
 import dev.rtpbuddy.data.RtpSample;
 import dev.rtpbuddy.region.ServerRegions;
+import dev.rtpbuddy.ui.GapScheme;
 import dev.rtpbuddy.ui.MapPalette;
 import dev.rtpbuddy.ui.MapViewState;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The picture on the minimap, painted into a grid of ARGB pixels.
@@ -44,12 +47,102 @@ public final class MinimapPlate {
 
     private static final int AXIS_ALPHA = 96;
 
+    /**
+     * Tile sizes the counted layer may snap to. Held in a field rather than
+     * fetched per bake because {@link ServerRegions#tileSteps()} hands out a
+     * copy, and the ladder never changes.
+     */
+    private static final double[] GAP_TILE_STEPS = ServerRegions.tileSteps();
+
+    /**
+     * Tiles the picker aims to fit across the plate.
+     *
+     * <p>What makes the layer readable is not how big one square is but how
+     * many different answers are on the plate at once. Sized to the biggest
+     * square the plate can comfortably draw, a well-travelled frame comes out
+     * as one flat block, because at that size every tile holds four landings or
+     * more and they all get the same colour - the picture is technically there
+     * and says nothing. Two dozen across splits the same ground finely enough
+     * for the bands to separate, which is the pattern that can be read.
+     *
+     * <p>Aiming at a count rather than at a pixel size also makes the tile a
+     * property of the ground rather than of the plate: shrinking the minimap
+     * then gives the same map smaller, instead of a coarser and emptier one.
+     */
+    private static final int GAP_TILES_ACROSS = 22;
+
+    /**
+     * Under this a tile cannot be drawn as a square at all, at any count. Three
+     * pixels is the same floor the map screen's raster refuses below.
+     */
+    private static final double GAP_TILE_MIN_PIXELS = 3.0;
+
+    /**
+     * The floor instead when the counts are to be written in: the font height
+     * plus a pixel of air on each side, so a digit is not sitting on the tile's
+     * own edge.
+     */
+    private static final double GAP_NUMBER_MIN_PIXELS = 13.0;
+
+    /**
+     * The share of the plate one tile may cover before the layer is dropped.
+     *
+     * <p>Three or four squares across is not a raster, it is a stripe pattern
+     * with no information in it - and that is what a plate zoomed right in gets
+     * with the smallest tile on the ladder. Better nothing than a picture that
+     * looks like it says something.
+     */
+    private static final double GAP_TILE_MAX_SHARE = 0.34;
+
+    /**
+     * How much of the map screen's tile colour survives here, out of 255.
+     *
+     * <p>The map screen paints the counted raster as the picture. On the plate
+     * it is one layer under the landings, the last leg and the player, all of
+     * which have to stay readable on top of it - and the empty-tile yellow is
+     * loud enough at full strength to bury every one of them.
+     */
+    private static final int GAP_TILE_ALPHA = 150;
+
+    /**
+     * Tile edges, once a tile is wide enough for the line to say something.
+     *
+     * <p>Packed tighter than this the edge is a third of the square and the
+     * grid reads as the picture instead of the colours doing - and the colour
+     * change is the boundary anyway.
+     */
+    private static final int GAP_EDGE_MIN_PIXELS = 10;
+    private static final int GAP_EDGE_ALPHA = 70;
+
+    /** Guard against a pathological frame asking for a raster of everything. */
+    private static final long GAP_TILE_BUDGET = 4_000;
+
     /** Span framed when there is nothing recorded to frame, and its snap grid. */
     static final double FALLBACK_SPAN = 40_000;
     static final double FALLBACK_SNAP = 5_000;
 
     private final MapViewState view = new MapViewState();
     private double spanBlocks;
+
+    /**
+     * The counted layer's tile size in blocks, or 0 when it was not drawn, and
+     * the corner it counted from.
+     *
+     * <p>Read back by {@link Minimap} so the counts can be written on top in
+     * the same squares: text cannot go into a pixel array, so the digits are
+     * the one part of this layer drawn live.
+     */
+    private double gapTile;
+    private double gapOriginX;
+    private double gapOriginZ;
+
+    /**
+     * Landings per counted tile, reused between bakes rather than reallocated.
+     *
+     * <p>Read by {@link Minimap} when the counts are switched on, which is the
+     * only reason it outlives the bake.
+     */
+    private final Map<Long, Integer> gapCounts = new HashMap<>();
 
     /** The projection the last bake used, so the live layer plots on the same map. */
     public MapViewState view() {
@@ -61,14 +154,43 @@ public final class MinimapPlate {
         return spanBlocks;
     }
 
+    /** Edge length of one counted tile in blocks, or 0 when none was drawn. */
+    public double gapTile() {
+        return gapTile;
+    }
+
+    public double gapOriginX() {
+        return gapOriginX;
+    }
+
+    public double gapOriginZ() {
+        return gapOriginZ;
+    }
+
+    /** Landings per tile from the last bake, keyed by {@link #tileIndexKey}. */
+    public Map<Long, Integer> gapCounts() {
+        return gapCounts;
+    }
+
     /**
      * Paints one plate.
      *
      * @param here      the cell the player is standing in, or null off the grid
      * @param playerX   used only to frame the plate when nothing is recorded yet
+     * @param gapOriginX the low corner of the world border, which the counted
+     *                  tiles count from - the same corner the map screen uses,
+     *                  and the reason a tile lands on a region line instead of
+     *                  across one
+     * @param gapNumbers whether the counts are to be written in, which forces a
+     *                  tile big enough to hold a digit
+     * @param gapScheme the four colours the counted tiles take
+     * @param gapSpan   edge length of the square border, or 0 for no border to
+     *                  clip against
      */
     public int[] bake(int size, List<RtpSample> samples, ServerRegions.Cell here,
                       boolean showRegions, boolean showAxes, boolean showLastLeg,
+                      boolean showGapTiles, boolean gapNumbers, GapScheme gapScheme,
+                      double gapOriginX, double gapOriginZ, double gapSpan,
                       int opacityPercent, double playerX, double playerZ) {
         int[] px = new int[size * size];
         Arrays.fill(px, GROUND);
@@ -80,6 +202,10 @@ public final class MinimapPlate {
         if (showRegions) {
             paintRegions(px, size, here);
         }
+        // Over the region tints and under everything that moves: the tiles are
+        // ground, the landings and the player are what stands on it.
+        paintGapTiles(px, size, showGapTiles ? samples : List.of(),
+                gapNumbers, gapScheme, gapOriginX, gapOriginZ, gapSpan);
         if (showAxes) {
             paintAxes(px, size);
         }
@@ -136,6 +262,155 @@ public final class MinimapPlate {
             vLine(px, size, z0, z1, x0, color, edge);
             vLine(px, size, z0, z1, x1 - 1, color, edge);
         }
+    }
+
+    /**
+     * The map screen's counted tiles, at plate size.
+     *
+     * <p>Fixed world squares counting from the border corner, each carrying how
+     * many of the framed landings fell inside it, coloured on the same four
+     * bands the map screen uses. Every size on the ladder divides a region
+     * cell, so a tile never lies across a region line - and the tiles are cut
+     * at the border rather than drawn whole and left hanging over it.
+     *
+     * <p>Called with an empty list when the layer is switched off, which keeps
+     * the switch in one place and clears the counts on the way past instead of
+     * leaving the last set of them in the map.
+     */
+    private void paintGapTiles(int[] px, int size, List<RtpSample> samples,
+                               boolean numbers, GapScheme scheme, double originX,
+                               double originZ, double span) {
+        gapCounts.clear();
+        gapTile = 0;
+        gapOriginX = originX;
+        gapOriginZ = originZ;
+        if (samples.isEmpty()) {
+            return;
+        }
+        // Asking for numbers raises the floor, and on a wide frame the ladder
+        // can top out below it - a whole-world plate at 128 pixels has nothing
+        // bigger than a region cell to offer and a cell is twelve pixels there.
+        // Falling back to the plain floor keeps the squares; the digits are
+        // dropped by the live layer on their own when they do not fit.
+        double tile = numbers ? pickGapTile(view.zoom(), size, GAP_NUMBER_MIN_PIXELS) : 0;
+        if (tile <= 0) {
+            tile = pickGapTile(view.zoom(), size, GAP_TILE_MIN_PIXELS);
+        }
+        if (tile <= 0) {
+            return;
+        }
+
+        double left = view.screenToWorldX(0);
+        double top = view.screenToWorldZ(0);
+        double right = view.screenToWorldX(size);
+        double bottom = view.screenToWorldZ(size);
+        boolean clip = span > 0 && Double.isFinite(span);
+        if (clip) {
+            left = Math.max(left, originX);
+            top = Math.max(top, originZ);
+            right = Math.min(right, originX + span);
+            bottom = Math.min(bottom, originZ + span);
+            if (right <= left || bottom <= top) {
+                return;
+            }
+        }
+        long firstX = (long) Math.floor((left - originX) / tile);
+        long lastX = (long) Math.floor((right - originX) / tile);
+        long firstZ = (long) Math.floor((top - originZ) / tile);
+        long lastZ = (long) Math.floor((bottom - originZ) / tile);
+        if ((lastX - firstX + 1) * (lastZ - firstZ + 1) > GAP_TILE_BUDGET) {
+            return;
+        }
+
+        gapTile = tile;
+        for (RtpSample sample : samples) {
+            gapCounts.merge(tileKey(sample.x(), sample.z(), tile, originX, originZ),
+                    1, Integer::sum);
+        }
+
+        boolean edges = tile * view.zoom() >= GAP_EDGE_MIN_PIXELS;
+        for (long tz = firstZ; tz <= lastZ; tz++) {
+            for (long tx = firstX; tx <= lastX; tx++) {
+                double worldLeft = originX + tx * tile;
+                double worldTop = originZ + tz * tile;
+                double worldRight = worldLeft + tile;
+                double worldBottom = worldTop + tile;
+                if (clip) {
+                    worldLeft = Math.max(worldLeft, originX);
+                    worldTop = Math.max(worldTop, originZ);
+                    worldRight = Math.min(worldRight, originX + span);
+                    worldBottom = Math.min(worldBottom, originZ + span);
+                    if (worldRight <= worldLeft || worldBottom <= worldTop) {
+                        continue;
+                    }
+                }
+                int x0 = (int) Math.round(view.worldToScreenX(worldLeft));
+                int x1 = (int) Math.round(view.worldToScreenX(worldRight));
+                int z0 = (int) Math.round(view.worldToScreenY(worldTop));
+                int z1 = (int) Math.round(view.worldToScreenY(worldBottom));
+                if (x1 <= 0 || z1 <= 0 || x0 >= size || z0 >= size || x1 <= x0 || z1 <= z0) {
+                    continue;
+                }
+                int band = scheme.band(gapCounts.getOrDefault(
+                        tileIndexKey(tx, tz), 0));
+                rect(px, size, x0, z0, x1, z1, band & 0x00FFFFFF,
+                        ((band >>> 24) & 0xFF) * GAP_TILE_ALPHA / 255);
+                if (edges) {
+                    hLine(px, size, x0, x1, z0, MapPalette.GRID_MAJOR, GAP_EDGE_ALPHA);
+                    vLine(px, size, z0, z1, x0, MapPalette.GRID_MAJOR, GAP_EDGE_ALPHA);
+                }
+            }
+        }
+    }
+
+    /**
+     * The ladder step nearest {@link #GAP_TILES_ACROSS} tiles across the framed
+     * ground, raised until the plate can actually draw it.
+     *
+     * <p>The map screen sizes its tiles off the scale bar and then holds them,
+     * because out there the question is how much ground one square stands for.
+     * A plate has no scale bar and about a tenth of the room, so it aims at the
+     * count instead and lets the pixels fall where they fall - down to the
+     * point where a square stops being one, which is the only floor left.
+     *
+     * <p>The floor is handed in because it is not always the same one: a plate
+     * that has to hold a written count needs four times the tile a plain
+     * coloured square does, and that is the whole cost of switching the numbers
+     * on.
+     *
+     * @return 0 when nothing fits - the frame is so tight that even the finest
+     *         step swallows the plate, or so wide that no step reaches the floor
+     */
+    private static double pickGapTile(double zoom, int size, double floor) {
+        double wanted = size / zoom / GAP_TILES_ACROSS;
+        double best = GAP_TILE_STEPS[0];
+        for (double step : GAP_TILE_STEPS) {
+            if (Math.abs(step - wanted) < Math.abs(best - wanted)) {
+                best = step;
+            }
+        }
+        // A tile picked off the ground can still be too few pixels to draw on a
+        // small plate, so the wanted size is a starting point and the first
+        // step at or above it that the plate can render is what gets used.
+        double most = size * GAP_TILE_MAX_SHARE;
+        for (double step : GAP_TILE_STEPS) {
+            if (step >= best && step * zoom >= floor) {
+                return step * zoom <= most ? step : 0;
+            }
+        }
+        return 0;
+    }
+
+    /** The tile a world position falls in. */
+    private static long tileKey(double worldX, double worldZ, double tile,
+                                double originX, double originZ) {
+        return tileIndexKey((long) Math.floor((worldX - originX) / tile),
+                (long) Math.floor((worldZ - originZ) / tile));
+    }
+
+    /** The key a tile index pair takes in {@link #gapCounts()}. */
+    public static long tileIndexKey(long tx, long tz) {
+        return (tx << 32) ^ (tz & 0xFFFFFFFFL);
     }
 
     private void paintAxes(int[] px, int size) {

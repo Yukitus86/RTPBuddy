@@ -48,6 +48,22 @@ public class MapConfig {
     public int gapRasterTile = 10_000;
 
     /**
+     * Which four colours the counted gap tiles take: {@code CLASSIC} or
+     * {@code TRAFFIC}.
+     *
+     * <p>Held as a string rather than as the enum so a config written by a
+     * later version naming a scheme this one has never heard of loads as the
+     * default instead of failing, and so {@code config} keeps no dependency on
+     * the drawing code.
+     *
+     * <p>It applies to both places the counted tiles are drawn - the map
+     * screen past a 2k scale bar and the minimap - because they are one picture
+     * at two sizes and a scheme that only reached one of them would be a
+     * setting you have to remember the reach of.
+     */
+    public String gapScheme = "TRAFFIC";
+
+    /**
      * Marker radius in pixels. Three was a fat square at every zoom; the plot is
      * about where the landings are, not how much ink each one can claim.
      */
@@ -315,6 +331,37 @@ public class MapConfig {
 
     /** The strip under the plate naming the cell the player is standing in. */
     public boolean minimapShowCaption = true;
+
+    /**
+     * Write each tile's landing count into it on the minimap too.
+     *
+     * <p>Costs squares. A digit needs about thirteen pixels of tile, and on a
+     * plate that is six or seven tiles across where the same plate carries
+     * twenty-odd without them - so the counted picture goes coarse to make room
+     * for the counting. Which of the two is worth more is a matter of what you
+     * are reading the plate for, and that is why it is a switch rather than a
+     * rule: off, the plate is a shape you glance at; on, it is a table you read.
+     *
+     * <p>Off by default, because the fine grid is what makes the layer legible
+     * at a glance and a glance is what a HUD element is for.
+     */
+    public boolean minimapGapNumbers = false;
+
+    /**
+     * The map screen's counted tiles, on the plate.
+     *
+     * <p>Same measurement, same colours and the same grid: fixed world squares
+     * counting from the border corner, yellow where nothing has ever landed and
+     * darkening as the count rises. The count is the colour and nothing else -
+     * a plate is a tenth of the map screen's size and has no room for a written
+     * number. On a plate framing the whole world a tile is one region cell, so
+     * what it draws is a coverage map of the 81 sectors at a glance.
+     *
+     * <p>On by default, and turned off with one switch: it was asked for as
+     * something to see, so a version that ships it hidden behind a setting
+     * would not be the thing that was asked for.
+     */
+    public boolean minimapShowGapTiles = true;
 
     public static int clampMinimapSize(int size) {
         return Math.max(MIN_MINIMAP_SIZE, Math.min(MAX_MINIMAP_SIZE, size));

@@ -329,10 +329,10 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.20</span>
+    <span class="span">1.5.8 &rarr; 1.6.21</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Einundzwanzig
-      Auslieferungen an sechs Tagen &mdash; fast jede davon aus einer Sache, die
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Zweiundzwanzig
+      Auslieferungen an sieben Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
   </header>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1621">1.6.21 <span class="n">4 Punkte</span></a></li>
       <li><a href="#v1620">1.6.20 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1619">1.6.19 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1618">1.6.18 <span class="n">1 Punkt</span></a></li>
@@ -383,6 +384,114 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.21 -->
+    <section class="release" id="v1621">
+      <div class="rel-head">
+        <h2>1.6.21</h2>
+        <span class="date">11.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Die gez&auml;hlten Kacheln auch auf der Minikarte, und in Farben, die man w&auml;hlen kann.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Gez&auml;hlte Kacheln auf der Minikarte</h3>
+          <div class="body">
+            <p>
+              Dieselbe Messung, die die gro&szlig;e Karte ab 2k Ma&szlig;stab zeichnet, auf der
+              Platte: feste Weltquadrate, von der Ecke der Weltgrenze aus gez&auml;hlt, in
+              vier B&auml;ndern gef&auml;rbt und am Weltrand geschnitten. Rahmt die Platte die
+              ganze Welt ein, steht eine Kachel f&uuml;r rund ein halbes Serverfeld &mdash; das
+              Bild ist dann eine Abdeckungskarte des Gitters auf einen Blick. Unter
+              <strong>HUD &rarr; Minikarte-Inhalt &rarr; Gez&auml;hlte Kacheln</strong>, standardm&auml;&szlig;ig an.
+            </p>
+            <p>
+              Die Kachelgr&ouml;&szlig;e w&auml;hlt die Platte selbst: rund 22 Kacheln &uuml;ber den
+              eingerahmten Boden, gerundet auf eine Gr&ouml;&szlig;e, die eine Serverregion glatt
+              teilt, mindestens drei Pixel breit. Nach dem Boden und nicht nach der
+              Platte, und das ist der eigentliche Punkt: an der gr&ouml;&szlig;ten Kachel
+              ausgerichtet, die eine Platte noch zeichnen kann, kam ein gut bereister
+              Ausschnitt als ein einziger flacher Block heraus &mdash; bei der Gr&ouml;&szlig;e hat
+              jede Kachel vier Landungen oder mehr und bekommt dieselbe Farbe. Zwei
+              Dutzend nebeneinander teilen denselben Boden fein genug, dass sich die
+              B&auml;nder trennen &mdash; und eine kleinere Minikarte zeigt damit dieselbe Karte
+              kleiner statt eine gr&ouml;bere.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Kachelfarben umschaltbar: Ampel oder Bernstein</h3>
+          <div class="body">
+            <p>
+              <strong>Ampel</strong>, neu und Standard: gr&uuml;n, wo noch nie etwas gelandet
+              ist, dann gelb, orange und rot, je h&auml;ufiger. Umgekehrt zur Hitzekarte
+              gelesen, weil gr&uuml;n hier das Quadrat ist, das noch etwas hergibt.
+              <strong>Bernstein</strong> ist das bisherige Schema &mdash; eine helle Farbe f&uuml;r
+              die L&ouml;cher, drei leise f&uuml;r den Rest, wovon sich die Marker obendrauf
+              st&auml;rker abheben. Unter <strong>Karte &rarr; Kachelfarben</strong>.
+            </p>
+            <p>
+              Ged&auml;mpft statt ges&auml;ttigt: vier Signalfarben in voller St&auml;rke machen aus
+              der Platte ein Plakat und lassen nichts leise genug, um die Landungen, die
+              Route und den Spieler dagegen zu lesen. Das Schema gilt an beiden Stellen mit
+              gez&auml;hlten Kacheln &mdash; gro&szlig;e Karte und Minikarte &mdash;, weil das ein Bild in
+              zwei Gr&ouml;&szlig;en ist. Die Schattierung unter 2k bleibt unber&uuml;hrt.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag new">Neu</span>
+          <h3>Zahlen in den Kacheln der Minikarte, auf Wunsch</h3>
+          <div class="body">
+            <p>
+              Die Trefferzahl in jede Kachel der Platte schreiben, wie auf der gro&szlig;en
+              Karte. Unter <strong>HUD &rarr; Minikarte-Inhalt &rarr; Zahlen in den Kacheln</strong>,
+              standardm&auml;&szlig;ig aus &mdash; und das ist kein Zaudern, sondern der Preis: eine
+              Ziffer braucht rund 13&nbsp;Pixel Kachel, also passen sechs bis zw&ouml;lf statt
+              gut zwanzig &uuml;ber die Platte. Was mehr wert ist, h&auml;ngt davon ab, wof&uuml;r man
+              gerade hinsieht, und deshalb ist es ein Schalter und keine Regel.
+            </p>
+            <p>
+              Solange die Zahlen an sind, treten die Feldnummern zur&uuml;ck &mdash; beide
+              wollen die Mitte desselben Quadrats, und das eigene Feld steht ohnehin in
+              der Beschriftung. Reicht keine Gr&ouml;&szlig;e der Leiter f&uuml;r eine Ziffer, etwa
+              bei der ganzen Welt auf einer kleinen Platte, bleiben die feinen Quadrate
+              stehen, statt dass die Ebene verschwindet.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Die Zahl in der Kachel war teils kaum zu lesen</h3>
+          <div class="body">
+            <p>
+              Ein einziges Grau f&uuml;r alle B&auml;nder, dazu ein dunkles Braun f&uuml;r die Null,
+              ohne Schatten. Das ging, solange drei der vier B&auml;nder dunkel waren. In dem
+              Moment, in dem ein Schema allen vieren Gewicht gibt, l&auml;sst sich dasselbe
+              Grau nicht auf Altgold und auf Ziegelrot lesen &mdash; und wurde auf keinem von
+              beiden gelesen.
+            </p>
+            <p>
+              Die Ziffer holt ihre Farbe jetzt aus dem Band unter ihr: fast schwarz auf
+              einem hellen, fast wei&szlig; auf einem dunklen, dazu Textschatten. Gerechnet
+              wird dabei nicht mit der genannten Farbe, sondern mit dem, was am Ende auf
+              dem Schirm steht &mdash; die Kachel ist durchscheinend und der dunkle Grund der
+              Karte zieht jede von ihnen herunter. Gemessen liegt der schlechteste
+              Kontrast damit bei 4,6&nbsp;:&nbsp;1 statt darunter.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.20 -->
     <section class="release" id="v1620">
@@ -1860,7 +1969,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.20 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.21 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische

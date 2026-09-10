@@ -114,19 +114,13 @@ public final class MapPalette {
         return (alpha << 24) | (r << 16) | (g << 8) | b;
     }
 
-    /** The four bands the gap raster uses when the view is too wide to shade. */
-    public static int gapBand(int count) {
-        if (count <= 0) {
-            return 0xE6FFCB55;
-        }
-        if (count == 1) {
-            return 0xCC9C7F3A;
-        }
-        if (count <= 3) {
-            return 0xB341506A;
-        }
-        return 0x991E2735;
-    }
+    /**
+     * The four bands the gap raster uses when the view is too wide to shade
+     * live in {@link GapScheme}, because which four colours they are is a
+     * setting and the band edges are not.
+     *
+     * @see GapScheme#band(int)
+     */
 
     /** Fades an existing colour toward transparent. */
     public static int withAlpha(int argb, double alphaFactor) {
