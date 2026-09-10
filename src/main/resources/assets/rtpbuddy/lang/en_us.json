@@ -253,7 +253,7 @@
   "rtpbuddy.settings.map.gap_mask_tile": "Gap search area",
   "rtpbuddy.settings.map.gap_raster_tile": "Tile size",
   "rtpbuddy.settings.map.gap_top": "Listed gaps",
-  "rtpbuddy.settings.map.gap_note": "Gap mode shades up to the 5k scale and counts tiles beyond it. The tile size holds to 100k, then grows again.",
+  "rtpbuddy.settings.map.gap_note": "Gap mode shades up to the 2k scale and counts tiles beyond it. The tile size holds to 100k, then grows again.",
   "rtpbuddy.settings.map.panel_reset": "Reset panel widths",
   "rtpbuddy.auto_dialog.start": "Start auto-RTP",
   "rtpbuddy.auto_dialog.cancel": "Cancel",

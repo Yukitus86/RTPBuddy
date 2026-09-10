@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.19</span>
+    <span class="span">1.5.8 &rarr; 1.6.20</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Twenty releases over five
+      Everything that changed since 1.5.8, newest first. Twenty-one releases over six
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1620">1.6.20 <span class="n">1 item</span></a></li>
       <li><a href="#v1619">1.6.19 <span class="n">1 item</span></a></li>
       <li><a href="#v1618">1.6.18 <span class="n">1 item</span></a></li>
       <li><a href="#v1616">1.6.16 <span class="n">2 items</span></a></li>
@@ -382,6 +383,50 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.20 -->
+    <section class="release" id="v1620">
+      <div class="rel-head">
+        <h2>1.6.20</h2>
+        <span class="date">10 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        By a 5k scale bar the squares already say more than the shading does.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The gap map counts tiles from a 2k scale bar, not a 5k one</h3>
+          <div class="body">
+            <p>
+              Advanced mode draws two pictures of one measurement: the shading up
+              close, where a hole is a shape with edges, and counted tiles further
+              out, where a hole is a statistic. The switch was at a 5k scale bar
+              and is now at <strong>2k</strong>.
+            </p>
+            <p>
+              It sat at 5k because that is the same landmark the sample numbers
+              use, on the argument that one number is easier to remember than two.
+              Watching it in use settled it the other way: at 5k each tile stands
+              for 2,500 blocks and is 45 pixels wide, comfortably big enough to
+              carry its count, while the shading there has already flattened into a
+              wash with no edge left to read. The two landmarks are simply
+              different numbers now &mdash; and they answer different questions
+              anyway: one is whether a number fits beside a marker, this one is
+              which of two pictures is worth drawing.
+            </p>
+            <p>
+              In the new 2k to 5k band the tiles are 1,000 to 2,500 blocks a side
+              and 36 to 45 pixels wide. Both sizes divide a server region cell
+              exactly, so no tile lies across a region line there either.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.19 -->
     <section class="release" id="v1619">
@@ -1770,7 +1815,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.19 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.20 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

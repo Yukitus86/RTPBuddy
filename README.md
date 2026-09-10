@@ -21,7 +21,7 @@ server; on DonutSMP it is. Check your server's rules.
 
 ![The all-sessions map](docs/img/map-all-sessions.png)
 
-*One sitting's landings over DonutSMP's grid of 81 server cells. Past the 5k
+*One sitting's landings over DonutSMP's grid of 81 server cells. Past the 2k
 scale every square carries its own landing count, and each one sits inside a
 single cell rather than across the line between two. The board bottom left
 tracks which cells have been reached, and the red leg points at the newest
@@ -81,19 +81,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.19.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.20.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.19.jar` from the
+Download `rtpbuddy-1.6.20.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.19.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.20.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -408,25 +408,27 @@ nothing on screen to tell them apart. Measuring the distance to the nearest
 landing turns the absence itself into a value that can be shaded, ranked and read
 off.
 
-![The gap tiles past the 5k scale](docs/img/gap-map-tiles.png)
+![The gap tiles past the 2k scale](docs/img/gap-map-tiles.png)
 
-*Zoomed out past the 5k scale: the ground is cut into fixed world tiles, each
+*Zoomed out past the 2k scale: the ground is cut into fixed world tiles, each
 carrying its own landing count in four bands.*
 
-![The gap field under the 5k scale](docs/img/gap-map-field.png)
+![The gap field under the 2k scale](docs/img/gap-map-field.png)
 
 *Zoomed in under it: the field itself is shaded by distance to the nearest
 landing, dark where they are dense, amber where nothing has ever come up. The
 eight biggest holes are ringed and listed with their coordinates.*
 
-Two pictures, one measurement. Up to the 5k scale the field is shaded, because
-close in a hole is a shape with edges. Past 5k the same ground is cut into fixed
+Two pictures, one measurement. Up to the 2k scale the field is shaded, because
+close in a hole is a shape with edges. Past 2k the same ground is cut into fixed
 world tiles carrying their own landing count in four bands - none, one, two to
 three, four and more - because a shape a few pixels across is not a shape and a
-number is. The switch is the same 5k landmark the sample numbers use, so the map
-has one rule to remember rather than two. Tiles are counted from the corner of the world
-border, so the same square keeps its identity between sittings and can be
-ticked off a list.
+number is. The switch sat at 5k until 1.6.20, sharing the landmark the sample
+numbers use; it turned out that by a 5k scale bar the squares already say more
+than the shading does, so the survey starts earlier now and the two landmarks
+are different numbers. Tiles are counted from the corner of the world border, so
+the same square keeps its identity between sittings and can be ticked off a
+list.
 
 A tile stands for **10,000 blocks a side** and stays that size however far you
 zoom out, up to a 100k scale bar - so zooming out makes the squares smaller on

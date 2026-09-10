@@ -62,14 +62,19 @@ public class MapCanvas {
      * The scale bar reading above which the gap map switches from shading to
      * counted tiles, in blocks.
      *
-     * <p>Deliberately the same 5k landmark the sample numbers use, so the map
-     * has one rule to remember rather than two: at 5k and closer you get the
-     * detail, further out you get the survey. Shading is the better picture up
-     * close, where a hole is a shape; further out a hole is a statistic, and
-     * four counted bands say more than a smooth wash of amber that never
-     * quite resolves into an edge.
+     * <p>Shading is the better picture up close, where a hole is a shape with
+     * edges; further out a hole is a statistic, and four counted bands say more
+     * than a smooth wash of amber that never quite resolves into an edge.
+     *
+     * <p>This sat on the same 5k landmark as {@link #LABEL_MAX_SCALE_BLOCKS}
+     * until 1.6.20, on the argument that one number is easier to remember than
+     * two. Watching it in use settled it the other way: by a 5k scale bar the
+     * squares already say more than the shading does, so the survey now starts
+     * at 2k and the two landmarks are simply different numbers. They answer
+     * different questions - one is about whether a number fits beside a marker,
+     * this one is about which of two pictures is worth drawing.
      */
-    private static final double GAP_RASTER_SCALE_BLOCKS = 5_000;
+    private static final double GAP_RASTER_SCALE_BLOCKS = 2_000;
 
     /** Steps in the colour key's ramp strip. */
     private static final int GAP_KEY_STEPS = 16;

@@ -406,9 +406,11 @@ gespeicherte Nummer ändert sich so oder so nie.
 Zum **Advanced**-Modus (die Lückenkarte): er beantwortet die umgekehrte Frage — nicht
 wo Landungen liegen, sondern wo keine liegen. Jeder Punkt der Karte wird nach
 dem Abstand zur nächsten Landung eingefärbt, hell heißt weit weg von allem. Bis
-zum 5k-Maßstab schattiert er, darüber zählt er feste Weltkacheln in vier Bändern
-(0 · 1 · 2–3 · 4+) — dieselbe 5k-Marke wie bei den Sample-Nummern, damit es eine
-Regel bleibt statt zwei. Die größten Löcher stehen mit Koordinate und Radius in
+zum 2k-Maßstab schattiert er, darüber zählt er feste Weltkacheln in vier Bändern
+(0 · 1 · 2–3 · 4+). Die Marke lag bis 1.6.20 bei 5k, gemeinsam mit der für die
+Sample-Nummern — bei 5k sagen die Kästchen aber schon mehr als die Schattierung,
+also fängt die Übersicht jetzt früher an und die beiden Marken sind zwei
+verschiedene Zahlen. Die größten Löcher stehen mit Koordinate und Radius in
 der Statistik-Spalte, der Radius immer abgerundet: die Fläche ist *mindestens*
 so leer.
 

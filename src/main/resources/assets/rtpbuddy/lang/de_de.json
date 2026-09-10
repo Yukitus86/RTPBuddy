@@ -253,7 +253,7 @@
   "rtpbuddy.settings.map.gap_mask_tile": "Lücken-Suchfeld",
   "rtpbuddy.settings.map.gap_raster_tile": "Kachelgröße",
   "rtpbuddy.settings.map.gap_top": "Gelistete Lücken",
-  "rtpbuddy.settings.map.gap_note": "Der Lücken-Modus schattiert bis 5k Maßstab und zählt darüber Kacheln. Die Kachelgröße hält bis 100k, danach wächst sie wieder mit.",
+  "rtpbuddy.settings.map.gap_note": "Der Lücken-Modus schattiert bis 2k Maßstab und zählt darüber Kacheln. Die Kachelgröße hält bis 100k, danach wächst sie wieder mit.",
   "rtpbuddy.settings.map.panel_reset": "Seitenbreiten zurücksetzen",
   "rtpbuddy.auto_dialog.start": "Auto-RTP starten",
   "rtpbuddy.auto_dialog.cancel": "Abbrechen",

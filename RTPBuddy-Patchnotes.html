@@ -329,10 +329,10 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.19</span>
+    <span class="span">1.5.8 &rarr; 1.6.20</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Zwanzig
-      Auslieferungen an f&uuml;nf Tagen &mdash; fast jede davon aus einer Sache, die
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Einundzwanzig
+      Auslieferungen an sechs Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
   </header>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1620">1.6.20 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1619">1.6.19 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1618">1.6.18 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1616">1.6.16 <span class="n">2 Punkte</span></a></li>
@@ -382,6 +383,51 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.20 -->
+    <section class="release" id="v1620">
+      <div class="rel-head">
+        <h2>1.6.20</h2>
+        <span class="date">10.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Bei 5k Ma&szlig;stab sagen die K&auml;stchen schon mehr als die Schattierung.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag chg">Ge&auml;ndert</span>
+          <h3>Die L&uuml;ckenkarte z&auml;hlt Kacheln ab 2k statt ab 5k</h3>
+          <div class="body">
+            <p>
+              Der Advanced-Modus zeichnet zwei Bilder derselben Messung: nah dran
+              die Schattierung, weil ein Loch dort eine Form mit Kanten ist, weiter
+              drau&szlig;en gez&auml;hlte Kacheln, weil ein Loch dort eine Zahl ist. Der
+              Umschaltpunkt lag bei 5k Ma&szlig;stab und liegt jetzt bei <strong>2k</strong>.
+            </p>
+            <p>
+              Er lag auf 5k, weil das dieselbe Marke ist, ab der die Sample-Nummern
+              erscheinen &mdash; eine Zahl zu merken statt zwei. Im Gebrauch hat sich
+              das anders entschieden: bei 5k tr&auml;gt jede Kachel 2&nbsp;500 Bl&ouml;cke und
+              ist 45 Pixel breit, also gro&szlig; genug f&uuml;r ihre Zahl, w&auml;hrend die
+              Schattierung dort schon zu einem gleichm&auml;&szlig;igen Verlauf wird, aus dem
+              sich keine Kante mehr lesen l&auml;sst. Die beiden Marken sind damit zwei
+              verschiedene Zahlen &mdash; sie beantworten auch zwei verschiedene
+              Fragen: die eine, ob eine Nummer neben einen Marker passt, diese, welches
+              der beiden Bilder überhaupt etwas aussagt.
+            </p>
+            <p>
+              Im neuen Bereich zwischen 2k und 5k sind die Kacheln 1&nbsp;000 bis
+              2&nbsp;500 Bl&ouml;cke gro&szlig; und 36 bis 45 Pixel breit. Beide Gr&ouml;&szlig;en teilen
+              eine Server-Region glatt, es liegt also weiterhin keine Kachel &uuml;ber
+              einer Regionslinie.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.19 -->
     <section class="release" id="v1619">
@@ -1814,7 +1860,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.19 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.20 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische
