@@ -21,9 +21,11 @@ server; on DonutSMP it is. Check your server's rules.
 
 ![The all-sessions map](docs/img/map-all-sessions.png)
 
-*Every landing ever recorded, over DonutSMP's grid of 81 server cells. The
-board bottom left tracks which cells have been reached, the red leg points at
-the newest landing, and the open menu filters by biome.*
+*One sitting's landings over DonutSMP's grid of 81 server cells. Past the 5k
+scale every square carries its own landing count, and each one sits inside a
+single cell rather than across the line between two. The board bottom left
+tracks which cells have been reached, and the red leg points at the newest
+landing.*
 
 ## Contents
 
