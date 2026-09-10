@@ -81,19 +81,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.21.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.22.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.21.jar` from the
+Download `rtpbuddy-1.6.22.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.21.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.22.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -437,7 +437,8 @@ screen rather than making each one stand for more ground. The size was once
 picked to keep its width on screen instead, which looked identical at every zoom
 while the ground behind one square quietly grew to 64,000 blocks a side, and a
 square that big has stopped answering anything useful. Change it under
-**Settings → Map → Tile size**; past the 100k scale bar the held tile falls
+**Settings → Map → Tile size**, where the row shows the rounded size the
+map actually draws with rather than whatever the file happens to say; past the 100k scale bar the held tile falls
 under three pixels and cannot be drawn, so out there the growing tile takes back
 over whatever the setting says.
 

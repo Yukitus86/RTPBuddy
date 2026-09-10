@@ -173,6 +173,29 @@ public final class ServerRegions {
         return TILE_STEPS.clone();
     }
 
+    /**
+     * The ladder step nearest {@code wanted}.
+     *
+     * <p>Lives beside the ladder rather than beside either raster, and reads
+     * {@link #TILE_STEPS} directly rather than through {@link #tileSteps()},
+     * because it is called on the frame path and the accessor hands out a copy.
+     *
+     * <p>The rounding is not only for the drawing. A config written before the
+     * ladder changed still names a size that is not on it - 8 000, which fits
+     * neither a region cell nor the border - and a settings row showing that
+     * number while the map draws something else is a row that lies. Everything
+     * reading the setting reads it through here.
+     */
+    public static double snapTile(double wanted) {
+        double best = TILE_STEPS[0];
+        for (double step : TILE_STEPS) {
+            if (Math.abs(step - wanted) < Math.abs(best - wanted)) {
+                best = step;
+            }
+        }
+        return best;
+    }
+
     /** The zone with this id, or null - so a hand-configured region wins over it. */
     public static Zone zone(String id) {
         if (id == null) {

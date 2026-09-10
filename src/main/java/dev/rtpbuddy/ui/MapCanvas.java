@@ -1540,14 +1540,14 @@ public class MapCanvas {
      */
     private double gapRasterTile(MapConfig config) {
         double span = scaleBarSpan();
-        double best = snapToStep(span / 2.0);
+        double best = ServerRegions.snapTile(span / 2.0);
         if (span > GAP_TILE_HOLD_SCALE_BLOCKS) {
             return best;
         }
         // Snapped, not taken as typed: a config written before the ladder
         // changed still says 8 000, and an unsnapped size is exactly the thing
         // that puts a tile across a region line.
-        double hold = snapToStep(config.gapRasterTile > 0
+        double hold = ServerRegions.snapTile(config.gapRasterTile > 0
                 ? config.gapRasterTile : GAP_TILE_HOLD);
         // Never *bigger* than the automatic size: close in, a held 8k tile
         // would be a third of the screen and the picture would stop being a
@@ -1555,16 +1555,6 @@ public class MapCanvas {
         return Math.min(best, hold);
     }
 
-    /** The step nearest {@code wanted}. Every step fits the region grid. */
-    private static double snapToStep(double wanted) {
-        double best = GAP_TILE_STEPS[0];
-        for (double step : GAP_TILE_STEPS) {
-            if (Math.abs(step - wanted) < Math.abs(best - wanted)) {
-                best = step;
-            }
-        }
-        return best;
-    }
 
     private long tileKey(double worldX, double worldZ, double tile) {
         return tileIndexKey((long) Math.floor((worldX - gapOriginX) / tile),

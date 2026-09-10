@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.21</span>
+    <span class="span">1.5.8 &rarr; 1.6.22</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Zweiundzwanzig
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Dreiundzwanzig
       Auslieferungen an sieben Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1622">1.6.22 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1621">1.6.21 <span class="n">4 Punkte</span></a></li>
       <li><a href="#v1620">1.6.20 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1619">1.6.19 <span class="n">1 Punkt</span></a></li>
@@ -384,6 +385,43 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.22 -->
+    <section class="release" id="v1622">
+      <div class="rel-head">
+        <h2>1.6.22</h2>
+        <span class="date">11.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Eine Einstellungszeile zeigte eine Zahl, mit der die Karte nie gezeichnet hat.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Kachelgr&ouml;&szlig;e zeigte den rohen Wert statt des gerundeten</h3>
+          <div class="body">
+            <p>
+              Seit 1.6.19 muss eine gez&auml;hlte Kachel eine Serverregion glatt teilen, und
+              ein Wert, der das nicht tut, wird beim Zeichnen auf die n&auml;chste passende
+              Gr&ouml;&szlig;e gerundet. Eine <code>config.json</code>, die von vor der &Auml;nderung stammt,
+              nennt aber weiter 8&nbsp;000 &mdash; und die Einstellungszeile zeigte genau das,
+              w&auml;hrend die Karte mit 10&nbsp;000 zeichnete.
+            </p>
+            <p>
+              Die Zeile liest jetzt durch dieselbe Rundung wie die Karte. Gespeichert
+              bleibt, was gespeichert war &mdash; eine Konfiguration aus einer sp&auml;teren
+              Version mit einer anderen Leiter soll ein Downgrade &uuml;berleben; nur angezeigt
+              wird ab jetzt das, womit auch gezeichnet wird. Die Rundung selbst liegt
+              seitdem an genau einer Stelle, neben der Leiter, und beide Raster lesen
+              sie von dort.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.21 -->
     <section class="release" id="v1621">
@@ -1969,7 +2007,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.21 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.22 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische

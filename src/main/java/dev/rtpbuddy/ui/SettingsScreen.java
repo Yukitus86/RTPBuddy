@@ -9,6 +9,7 @@ import dev.rtpbuddy.config.RegionPreset;
 import dev.rtpbuddy.data.RtpSample;
 import dev.rtpbuddy.hud.CaptureHud;
 import dev.rtpbuddy.hud.HudAnchor;
+import dev.rtpbuddy.region.ServerRegions;
 import dev.rtpbuddy.util.BiomeCatalog;
 import dev.rtpbuddy.util.Biomes;
 import dev.rtpbuddy.util.Lang;
@@ -494,7 +495,10 @@ public class SettingsScreen extends Screen {
                 v -> Lang.t("unit.blocks", Math.round(v)));
         cycle("settings.map.gap_raster_tile",
                 new double[]{2_500, 5_000, 10_000, 25_000, 50_000},
-                () -> map.gapRasterTile,
+                // Read through the same snap the map draws through. A config
+                // written before the ladder changed still says 8 000, and a row
+                // showing that while the map uses 10 000 is a row that lies.
+                () -> ServerRegions.snapTile(map.gapRasterTile),
                 v -> map.gapRasterTile = (int) v,
                 v -> Lang.t("unit.blocks", Math.round(v)));
         cycle("settings.map.gap_top", new double[]{3, 5, 8, 12},

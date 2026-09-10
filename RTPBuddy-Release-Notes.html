@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.21</span>
+    <span class="span">1.5.8 &rarr; 1.6.22</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Twenty-two releases over seven
+      Everything that changed since 1.5.8, newest first. Twenty-three releases over seven
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1622">1.6.22 <span class="n">1 item</span></a></li>
       <li><a href="#v1621">1.6.21 <span class="n">4 items</span></a></li>
       <li><a href="#v1620">1.6.20 <span class="n">1 item</span></a></li>
       <li><a href="#v1619">1.6.19 <span class="n">1 item</span></a></li>
@@ -384,6 +385,42 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.22 -->
+    <section class="release" id="v1622">
+      <div class="rel-head">
+        <h2>1.6.22</h2>
+        <span class="date">11 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A settings row was showing a number the map has never drawn with.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>Tile size showed the raw value instead of the rounded one</h3>
+          <div class="body">
+            <p>
+              Since 1.6.19 a counted tile has to divide a server region exactly, and a
+              value that does not is rounded to the nearest size that does when the map
+              is drawn. A <code>config.json</code> written before that change still names
+              8,000 &mdash; and the settings row showed exactly that while the map drew
+              with 10,000.
+            </p>
+            <p>
+              The row now reads through the same rounding the map does. What is stored
+              stays stored &mdash; a config from a later version with a different ladder
+              should survive a downgrade &mdash; only what is shown is now what is drawn
+              with. The rounding itself has since moved to exactly one place, beside the
+              ladder, and both rasters read it from there.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.21 -->
     <section class="release" id="v1621">
@@ -1923,7 +1960,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.21 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.22 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is
