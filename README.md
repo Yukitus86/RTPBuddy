@@ -581,6 +581,12 @@ the same colours on the same grid. Underneath sits a strip naming the
 cell you are standing in — region and server number, in that region's colour —
 and how much ground the plate covers.
 
+![The minimap with the counted tiles](docs/img/minimap-tiles.png)
+
+*The plate with the counted tiles and their counts switched on. Green is ground
+no landing has fallen in, up to red where several have; the strip underneath
+names the cell the player is standing in and how much ground the plate covers.*
+
 The **counted tiles** are the same measurement the map screen draws past a 2k
 scale bar, at a tenth the size: fixed world squares counting from the corner of
 the world border, coloured by how many of the framed landings fell in each. On a
