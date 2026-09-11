@@ -19,6 +19,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
+import org.joml.Matrix3x2fStack;
 
 import java.util.List;
 
@@ -317,9 +318,6 @@ public class Minimap implements HudElement {
         MapViewState view = PLATE.view();
         double tilePixels = tile * view.zoom();
         TextRenderer font = UiDraw.font();
-        if (tilePixels < font.fontHeight + 2) {
-            return false;
-        }
         GapScheme scheme = GapScheme.of(map.gapScheme);
         double originX = PLATE.gapOriginX();
         double originZ = PLATE.gapOriginZ();
@@ -328,29 +326,68 @@ public class Minimap implements HudElement {
         long firstZ = (long) Math.floor((view.screenToWorldZ(0) - originZ) / tile);
         long lastZ = (long) Math.floor((view.screenToWorldZ(size) - originZ) / tile);
 
-        boolean drew = false;
+        int most = 0;
+        for (long tz = firstZ; tz <= lastZ; tz++) {
+            for (long tx = firstX; tx <= lastX; tx++) {
+                Integer held = PLATE.gapCounts().get(MinimapPlate.tileIndexKey(tx, tz));
+                if (held != null && held > most) {
+                    most = held;
+                }
+            }
+        }
+        float scale = numberScale(font.getWidth(String.valueOf(most)),
+                font.fontHeight, tilePixels);
+        if (scale <= 0) {
+            return false;
+        }
+
+        Matrix3x2fStack matrices = context.getMatrices();
         for (long tz = firstZ; tz <= lastZ; tz++) {
             for (long tx = firstX; tx <= lastX; tx++) {
                 Integer held = PLATE.gapCounts().get(MinimapPlate.tileIndexKey(tx, tz));
                 int count = held == null ? 0 : held;
                 String text = String.valueOf(count);
-                int width = font.getWidth(text);
-                if (width + 2 > tilePixels) {
-                    continue;
-                }
                 // The tile's own middle in world units, never the part of it
                 // that happens to be on the plate: probing the clipped centre
                 // makes the outer row walk about as the frame moves.
                 double cx = view.worldToScreenX(originX + (tx + 0.5) * tile);
                 double cz = view.worldToScreenY(originZ + (tz + 0.5) * tile);
-                context.drawText(font, text,
-                        x + (int) Math.round(cx) - width / 2,
-                        y + (int) Math.round(cz) - font.fontHeight / 2,
-                        scheme.bandInk(count), true);
-                drew = true;
+                // Translated to the centre and scaled about it, rather than
+                // drawn at a scaled coordinate: the digits then sit on the exact
+                // middle of their tile instead of drifting by up to a pixel
+                // each, which across a plateful of them reads as a crooked grid.
+                matrices.pushMatrix();
+                matrices.translate((float) (x + cx), (float) (y + cz));
+                matrices.scale(scale, scale);
+                context.drawText(font, text, -font.getWidth(text) / 2,
+                        -font.fontHeight / 2, scheme.bandInk(count), true);
+                matrices.popMatrix();
             }
         }
-        return drew;
+        return true;
+    }
+
+    /**
+     * How far the digits have to be shrunk to fit the tile, or zero if no size
+     * worth reading does.
+     *
+     * <p>One size for every count on the plate, taken from the widest of them.
+     * Fitting each count to its own tile is what used to leave holes: a
+     * two-figure number is twice the width of a one-figure number, so on a plate
+     * whose tiles sat between the two, every tile that had been landed in ten
+     * times or more came out blank - which reads as no landings rather than as
+     * many, the exact opposite of what is there.
+     */
+    private static float numberScale(int widest, int fontHeight, double tilePixels) {
+        double room = tilePixels - MinimapPlate.GAP_NUMBER_PADDING * 2;
+        if (room <= 0 || widest <= 0) {
+            return 0;
+        }
+        double fit = Math.min(room / widest, room / fontHeight);
+        if (fit < MinimapPlate.GAP_NUMBER_MIN_SCALE) {
+            return 0;
+        }
+        return (float) Math.min(fit, MinimapPlate.GAP_NUMBER_SCALE);
     }
 
     /**

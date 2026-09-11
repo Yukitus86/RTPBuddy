@@ -271,7 +271,7 @@
 
   <header class="masthead">
     <h1>RTPBuddy Changelog</h1>
-    <span class="span">1.5.8 &rarr; 1.6.22</span>
+    <span class="span">1.5.8 &rarr; 1.6.23</span>
     <p class="lede">
       Just the items, no explanations &mdash; made to forward. The full release
       notes say why each one works the way it does, and every setting is
@@ -284,10 +284,14 @@
     <section class="lang" id="en">
       <div class="lang-head">
         <h2>All changes since 1.5.8</h2>
-        <span class="count">52 items, 23 releases</span>
+        <span class="count">54 items, 24 releases</span>
       </div>
 
       <ol class="log">
+        <li class="rel"><span class="v">1.6.23</span><span class="d">11 Sep 2026</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">The two-figure counts were the ones missing from the minimap tiles: each count was measured against its own tile, so every square landed in ten times or more came out blank &mdash; which reads as never landed in</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The counts in the minimap tiles are drawn at three quarters of the font size, all at one size, which also lets a tile of eleven pixels carry a count where it used to take thirteen</span></li>
+
         <li class="rel"><span class="v">1.6.22</span><span class="d">11 Sep 2026</span></li>
         <li><span class="tag fix">Fixed</span><span class="t">The tile size row showed the raw config value where the map rounds it to a size that divides a region cell, so a config from before 1.6.19 read 8,000 while the map drew 10,000</span></li>
 
@@ -391,7 +395,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.22 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.23 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. In full:
     <code>RTPBuddy-Release-Notes.html</code>. Every setting:
     <code>RTPBuddy-Settings.html</code>.

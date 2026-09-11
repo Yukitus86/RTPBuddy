@@ -78,11 +78,33 @@ public final class MinimapPlate {
     private static final double GAP_TILE_MIN_PIXELS = 3.0;
 
     /**
-     * The floor instead when the counts are to be written in: the font height
-     * plus a pixel of air on each side, so a digit is not sitting on the tile's
-     * own edge.
+     * How big the digits written into the tiles are drawn, as a share of the
+     * font's own size.
+     *
+     * <p>At full size a two-figure count is twelve pixels wide in a tile that
+     * is fourteen, which reads as a number with a square around it rather than
+     * as a square with a number in it. Three quarters leaves the count legible
+     * and gives the colour under it room to be seen.
      */
-    private static final double GAP_NUMBER_MIN_PIXELS = 13.0;
+    public static final float GAP_NUMBER_SCALE = 0.75f;
+
+    /**
+     * The smallest the digits may be squeezed to before the layer is dropped
+     * instead. Only ever reached by a three-figure count in a tile near the
+     * floor below; two figures fit at full {@link #GAP_NUMBER_SCALE} anywhere
+     * the tiles are drawn at all.
+     */
+    public static final float GAP_NUMBER_MIN_SCALE = 0.5f;
+
+    /** A pixel of air on each side, so a digit never sits on the tile's edge. */
+    public static final int GAP_NUMBER_PADDING = 1;
+
+    /**
+     * The floor instead when the counts are to be written in: what a two-figure
+     * count needs at {@link #GAP_NUMBER_SCALE}, twelve pixels of font at three
+     * quarters plus the air on both sides.
+     */
+    private static final double GAP_NUMBER_MIN_PIXELS = 11.0;
 
     /**
      * The share of the plate one tile may cover before the layer is dropped.

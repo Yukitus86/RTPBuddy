@@ -570,7 +570,7 @@
   "rtpbuddy.settings.minimap.gap_tiles": "Counted tiles",
   "rtpbuddy.settings.minimap.gap_tiles.tip": "The map screen's black and yellow squares, on the plate. Fixed world tiles counting from the corner of the world border: yellow where nothing has ever landed, darker the more often it has. On a plate framing the whole world one tile is exactly one server cell. The count shows as the tile's colour and nothing else - a plate has no room for a written number, which is what the map screen is for.",
   "rtpbuddy.settings.minimap.gap_numbers": "Counts in the tiles",
-  "rtpbuddy.settings.minimap.gap_numbers.tip": "Write each tile's landing count into it, the way the map screen does. It costs squares: a digit needs about 13 pixels of tile, so only six to twelve fit across the plate instead of a good twenty. While the counts are on the cell numbers stand aside - both want the same middle. The cell you are standing in is still named in the caption.",
+  "rtpbuddy.settings.minimap.gap_numbers.tip": "Write each tile's landing count into it, the way the map screen does. It costs squares: a two-figure count needs about 11 pixels of tile, so only six to twelve fit across the plate instead of a good twenty. The digits are drawn at three quarters of their size and all at one size, taken from the widest count on the plate - sized tile by tile, it was exactly the two-figure counts that came out blank. While the counts are on the cell numbers stand aside - both want the same middle. The cell you are standing in is still named in the caption.",
   "rtpbuddy.settings.minimap.axes": "Zero axes",
   "rtpbuddy.settings.minimap.axes.tip": "The two lines through x = 0 and z = 0.",
   "rtpbuddy.settings.minimap.last_leg": "Last leg",

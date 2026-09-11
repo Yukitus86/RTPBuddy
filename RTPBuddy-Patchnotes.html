@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.22</span>
+    <span class="span">1.5.8 &rarr; 1.6.23</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Dreiundzwanzig
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Vierundzwanzig
       Auslieferungen an sieben Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1623">1.6.23 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1622">1.6.22 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1621">1.6.21 <span class="n">4 Punkte</span></a></li>
       <li><a href="#v1620">1.6.20 <span class="n">1 Punkt</span></a></li>
@@ -385,6 +386,63 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.23 -->
+    <section class="release" id="v1623">
+      <div class="rel-head">
+        <h2>1.6.23</h2>
+        <span class="date">11.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Die Zahlen auf der Minikarte: kleiner, und keine, die fehlt.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Auf der Minikarte fehlten ausgerechnet die zweistelligen Zahlen</h3>
+          <div class="body">
+            <p>
+              Jede Zahl wurde einzeln gegen ihre Kachel gepr&uuml;ft und weggelassen, wenn
+              sie nicht hineinpasste. Eine zweistellige Zahl ist doppelt so breit wie eine
+              einstellige &mdash; auf einer Platte, deren Kacheln zwischen beiden lagen,
+              blieb also jede Kachel leer, in der zehnmal oder &ouml;fter gelandet wurde.
+              Leer hei&szlig;t auf dieser Karte &bdquo;nie etwas gelandet&ldquo;, dort stand
+              also das Gegenteil dessen, was gemessen war. Bei 160&nbsp;Pixeln Platte war
+              das der Normalfall.
+            </p>
+            <p>
+              Die Gr&ouml;&szlig;e entscheidet jetzt die ganze Ebene auf einmal, nach der
+              breitesten Zahl im Bild: entweder stehen alle Zahlen da oder keine.
+              Nachgerechnet &uuml;ber Plattengr&ouml;&szlig;en von 64 bis 256&nbsp;Pixeln
+              und beide Ansichten &mdash; keine ausgelassene Zahl mehr.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Ge&auml;ndert</span>
+          <h3>Die Zahlen in den Kacheln sind kleiner</h3>
+          <div class="body">
+            <p>
+              Drei Viertel der Schriftgr&ouml;&szlig;e. In voller Gr&ouml;&szlig;e war eine
+              zweistellige Zahl zw&ouml;lf Pixel breit in einer Kachel von vierzehn &mdash;
+              das liest sich als Zahl mit einem Kasten darum statt als Kachel mit einer
+              Zahl darin, und von der Farbe darunter blieb wenig &uuml;brig.
+            </p>
+            <p>
+              Nebenbei sinkt damit, was eine Kachel f&uuml;r eine Zahl mitbringen muss, von
+              dreizehn auf elf Pixel: eine Platte, die vorher keine Zahlen halten konnte,
+              zeigt jetzt welche. Reicht es auch daf&uuml;r nicht &mdash; dreistellige
+              Zahlen in einer knappen Kachel &mdash;, werden sie so weit gestaucht, wie sie
+              noch lesbar sind, und darunter bleibt die Ebene aus.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.22 -->
     <section class="release" id="v1622">
@@ -2007,7 +2065,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.22 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.23 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische

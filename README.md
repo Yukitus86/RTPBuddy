@@ -81,19 +81,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.22.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.23.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.22.jar` from the
+Download `rtpbuddy-1.6.23.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.22.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.23.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -595,13 +595,20 @@ dozen across splits the same ground finely enough for the bands to separate, and
 shrinking the minimap then gives the same map smaller rather than a coarser one.
 
 The counts themselves are **off by default** on the plate, under **Settings →
-HUD → Counts in the tiles**. A digit needs about thirteen pixels of tile, which
-on a 128 pixel plate means six tiles across where the same plate carries twenty
-without them - so the picture goes coarse to make room for the counting. Which
-of the two is worth more depends on what you are reading the plate for, and that
-is why it is a switch rather than a rule. While the counts are on, the cell
-numbers stand aside: both want the middle of the same square, and the cell you
-are standing in is named in the caption anyway.
+HUD → Counts in the tiles**. A two-figure count needs about eleven pixels of
+tile, which on a 128 pixel plate means six tiles across where the same plate
+carries twenty without them - so the picture goes coarse to make room for the
+counting. Which of the two is worth more depends on what you are reading the
+plate for, and that is why it is a switch rather than a rule. While the counts
+are on, the cell numbers stand aside: both want the middle of the same square,
+and the cell you are standing in is named in the caption anyway.
+
+The digits are drawn at three quarters of the font's size, and all of them at
+one size, taken from the widest count on the plate. Fitting each count to its
+own tile is what used to leave holes: a two-figure number is twice the width of
+a one-figure number, so a plate whose tiles sat between the two came out blank
+in exactly the squares that had been landed in ten times or more - which reads
+as no landings rather than as many.
 
 The frame is **fixed**. It holds the chosen landings and does not scroll with
 you, because a frame that recentres on every step tells you nothing about where

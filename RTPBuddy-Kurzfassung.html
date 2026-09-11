@@ -271,7 +271,7 @@
 
   <header class="masthead">
     <h1>RTPBuddy Kurzfassung</h1>
-    <span class="span">1.5.8 &rarr; 1.6.22</span>
+    <span class="span">1.5.8 &rarr; 1.6.23</span>
     <p class="lede">
       Nur die Punkte, ohne Erklärung &mdash; zum Weiterschicken. Die ausführliche
       Fassung erklärt zu jedem, warum er so gebaut ist.
@@ -286,10 +286,14 @@
     <section class="lang" id="de">
       <div class="lang-head">
         <h2>Deutsch</h2>
-        <span class="count">52 Punkte, 23 Versionen</span>
+        <span class="count">54 Punkte, 24 Versionen</span>
       </div>
 
       <ol class="log">
+        <li class="rel"><span class="v">1.6.23</span><span class="d">11.09.2026</span></li>
+        <li><span class="tag fix">Behoben</span><span class="t">Auf der Minikarte fehlten ausgerechnet die zweistelligen Zahlen: jede wurde einzeln gegen ihre Kachel gepr&uuml;ft, also blieb jede Kachel leer, in der zehnmal oder &ouml;fter gelandet wurde &mdash; und leer hei&szlig;t dort &bdquo;nie etwas gelandet&ldquo;</span></li>
+        <li><span class="tag chg">Ge&auml;ndert</span><span class="t">Die Zahlen in den Kacheln der Minikarte werden auf drei Viertel der Schriftgr&ouml;&szlig;e gezeichnet und alle gleich gro&szlig;; damit tr&auml;gt schon eine Kachel von elf statt dreizehn Pixeln eine Zahl</span></li>
+
         <li class="rel"><span class="v">1.6.22</span><span class="d">11.09.2026</span></li>
         <li><span class="tag fix">Behoben</span><span class="t">Die Zeile <em>Kachelgr&ouml;&szlig;e</em> zeigte den rohen Config-Wert, obwohl die Karte auf eine Gr&ouml;&szlig;e rundet, die eine Regionszelle teilt &mdash; eine Konfiguration von vor 1.6.19 las 8.000, gezeichnet wurde mit 10.000</span></li>
 
@@ -393,10 +397,14 @@
     <section class="lang" id="en">
       <div class="lang-head">
         <h2>English</h2>
-        <span class="count">52 items, 23 releases</span>
+        <span class="count">54 items, 24 releases</span>
       </div>
 
       <ol class="log">
+        <li class="rel"><span class="v">1.6.23</span><span class="d">11 Sep 2026</span></li>
+        <li><span class="tag fix">Fixed</span><span class="t">The two-figure counts were the ones missing from the minimap tiles: each count was measured against its own tile, so every square landed in ten times or more came out blank &mdash; which reads as never landed in</span></li>
+        <li><span class="tag chg">Changed</span><span class="t">The counts in the minimap tiles are drawn at three quarters of the font size, all at one size, which also lets a tile of eleven pixels carry a count where it used to take thirteen</span></li>
+
         <li class="rel"><span class="v">1.6.22</span><span class="d">11 Sep 2026</span></li>
         <li><span class="tag fix">Fixed</span><span class="t">The tile size row showed the raw config value where the map rounds it to a size that divides a region cell, so a config from before 1.6.19 read 8,000 while the map drew 10,000</span></li>
 
@@ -500,7 +508,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.22 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only.
+    RTPBuddy 1.6.23 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only.
     <span class="sep">&middot;</span>
     Ausführlich: <code>RTPBuddy-Patchnotes.html</code> &mdash; in full:
     <code>RTPBuddy-Release-Notes.html</code>.

@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.22</span>
+    <span class="span">1.5.8 &rarr; 1.6.23</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Twenty-three releases over seven
+      Everything that changed since 1.5.8, newest first. Twenty-four releases over seven
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1623">1.6.23 <span class="n">2 items</span></a></li>
       <li><a href="#v1622">1.6.22 <span class="n">1 item</span></a></li>
       <li><a href="#v1621">1.6.21 <span class="n">4 items</span></a></li>
       <li><a href="#v1620">1.6.20 <span class="n">1 item</span></a></li>
@@ -385,6 +386,61 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.23 -->
+    <section class="release" id="v1623">
+      <div class="rel-head">
+        <h2>1.6.23</h2>
+        <span class="date">11 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        The counts on the minimap: smaller, and none of them missing.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The two-figure counts were the ones missing from the minimap</h3>
+          <div class="body">
+            <p>
+              Each count was measured against its own tile and left out when it did not
+              fit. A two-figure number is twice the width of a one-figure number &mdash; so
+              on a plate whose tiles sat between the two, every square that had been landed
+              in ten times or more came out blank. Blank means &ldquo;nothing ever landed
+              here&rdquo; on this map, so those squares said the opposite of what was
+              measured. At a 160&nbsp;pixel plate that was the normal case.
+            </p>
+            <p>
+              The size is now decided for the whole layer at once, from the widest count on
+              the plate: either every count is written or none is. Checked across plate
+              sizes from 64 to 256&nbsp;pixels and both views &mdash; nothing dropped.
+            </p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <span class="tag chg">Changed</span>
+          <h3>The counts in the tiles are smaller</h3>
+          <div class="body">
+            <p>
+              Three quarters of the font's size. At full size a two-figure count was twelve
+              pixels wide in a tile of fourteen, which reads as a number with a box around
+              it rather than a tile with a number in it, and left little of the colour
+              underneath to be seen.
+            </p>
+            <p>
+              It also drops what a tile has to bring to hold a count, from thirteen pixels
+              to eleven: a plate that could not carry counts before now does. Where even
+              that is not enough &mdash; three-figure counts in a tight tile &mdash; they
+              are squeezed as far as they stay readable, and below that the layer stays
+              off.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.22 -->
     <section class="release" id="v1622">
@@ -1960,7 +2016,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.22 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.23 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is
