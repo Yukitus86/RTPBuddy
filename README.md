@@ -82,19 +82,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.25.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.26.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.25.jar` from the
+Download `rtpbuddy-1.6.26.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.25.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.26.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -344,7 +344,7 @@ loop running the map shut on every single landing; RTPBuddy declines that one
 swap instead, and the same screen stays up with its filter, zoom, scroll position
 and selection intact. Only the game's transient loading screens are refused -
 anything you or the server opens on purpose comes through, and escape still means
-closed. It is **Settings → Map → Hold the map open through a teleport**.
+closed. It is **Settings → Map → Hold map open on teleport**.
 
 Your own position is drawn as a ring with a dark collar around it, a short
 one-pixel stub from its centre for the direction you face, and a slow ripple that
@@ -829,10 +829,10 @@ play on one server, and two of them under one run of numbers would be a lie.
 
 A teleport that crosses worlds makes the client swap in its own loading screen,
 and that throws away whatever was open - so with the auto loop running, the map
-closed on every landing. It is now put back once the world is there, at the same
-scope and the same pan and zoom. Escape still closes it for good; only what the
-game itself took away comes back. **Settings → Map → Reopen the map after a
-teleport** switches it off.
+closed on every landing. The map now declines that swap and stays up, at the same
+scope and the same pan and zoom; should a loading screen get past anyway, the
+same map is put back once the world is there. Escape still closes it for good.
+**Settings → Map → Hold map open on teleport** switches it off.
 
 While the map is open the frame rate is capped (60 by default, **Frame cap on
 the map** in the settings). Minecraft does not throttle a screen that has a

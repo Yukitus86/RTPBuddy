@@ -204,11 +204,17 @@ public class MapConfig {
     public static final double MAX_SIDEBAR_FRACTION = 0.72;
 
     /**
-     * Put the map back after a teleport tore it down.
+     * Hold the map open through a teleport.
      *
      * <p>A cross-world teleport makes the client swap in its own loading screen,
-     * which throws away whatever was open - so every landing closed the map. The
-     * screen is restored once the world is back, at the same scope and view.
+     * which throws away whatever was open - so every landing closed the map. With
+     * this on, that swap is declined and the same map stays up; a screen that gets
+     * past anyway is replaced by the same map once the world is back. The rules
+     * are in {@code ScreenKeeper}.
+     *
+     * <p>The field keeps the name of the old behaviour on purpose: it is the key in
+     * every existing {@code config.json}, and renaming it would quietly switch the
+     * setting back to its default for everyone who had turned it off.
      */
     public boolean reopenAfterTeleport = true;
 

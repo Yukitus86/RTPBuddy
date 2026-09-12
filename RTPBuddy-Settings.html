@@ -1144,7 +1144,7 @@
             <tr><td>Tile size</td><td class="k">map.gapRasterTile</td><td class="d">10,000 blocks</td><td class="w">Ground <em>one</em> counted tile stands for: 2,500 &middot; 5,000 &middot; 10,000 &middot; 25,000 &middot; 50,000. Every size divides a server region cell (50,000 blocks) exactly, and the grid is counted from the corner of the world border &mdash; so no tile ever lies across a region line or hangs past the world edge. Larger than a cell is no good either: two cells to a tile puts the line between them through its middle. Past a 100k scale bar the growing tile takes over again, because the held one falls under three pixels there. Since 1.6.22 the row shows the rounded value &mdash; the one the map actually draws with</td></tr>
             <tr><td>Listed gaps</td><td class="k">map.gapTopCount</td><td class="d">5</td><td class="w">How many holes the Advanced mode rings, numbers and lists with coordinates and radius in the metrics column: 3 &middot; 5 &middot; 8 &middot; 12</td></tr>
             <tr><td>Tile colours</td><td class="k">map.gapScheme</td><td class="d">Traffic light</td><td class="w">Which four colours a counted tile can take. <strong>Traffic light</strong>: green where nothing has ever landed, then yellow, orange and red as the count rises &mdash; read the other way round from a heat map, because green here is the square still worth going to. <strong>Amber</strong>: one bright colour for the holes and three quiet ones for the rest, which leaves the markers on top standing out more. It applies to both places counted tiles are drawn &mdash; the map past a 2k scale bar and the minimap; the shading below 2k is unaffected. The count written in a tile takes its ink from the band under it, so it reads on all four</td></tr>
-            <tr><td>Hold the map open through a teleport</td><td class="k">map.reopenAfterTeleport</td><td class="d">on</td><td class="w">A teleport across worlds brings up the game's own loading screen, which throws away whatever was open &mdash; so with the auto loop running the map closed on every landing. This declines that one swap: the same map stays up, with no blink and no rebuild, keeping its filter, zoom, scroll position and selection. Anything you or the server opens on purpose &mdash; a disconnect screen above all &mdash; still comes through, and escape still closes it for good</td></tr>
+            <tr><td>Hold map open on teleport</td><td class="k">map.reopenAfterTeleport</td><td class="d">on</td><td class="w">A teleport across worlds brings up the game's own loading screen, which throws away whatever was open &mdash; so with the auto loop running the map closed on every landing. This declines that one swap: the same map stays up, with no blink and no rebuild, keeping its filter, zoom, scroll position and selection. Anything you or the server opens on purpose &mdash; a disconnect screen above all &mdash; still comes through, and escape still closes it for good</td></tr>
             <tr><td>Reset panel widths</td><td class="k">&mdash;</td><td class="d">Action</td><td class="w">Both side panels back to 24 % / 26 % of the window width</td></tr>
           </tbody>
         </table>
@@ -1415,7 +1415,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.25 &middot; Minecraft 1.21.11 &middot; 12 September 2026 &mdash; the same
+    RTPBuddy 1.6.26 &middot; Minecraft 1.21.11 &middot; 12 September 2026 &mdash; the same
     list lives as <code>SETTINGS.md</code> in the project folder, and the German
     version as <code>RTPBuddy-Einstellungen.html</code>.
   </footer>
