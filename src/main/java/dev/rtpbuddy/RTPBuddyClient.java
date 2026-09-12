@@ -72,6 +72,10 @@ public class RTPBuddyClient implements ClientModInitializer {
 
         runLegacyImportOnce(legacyDir);
 
+        // After the store and the controllers, before the first landing can be
+        // recorded: a partner mod registering a listener here never misses one.
+        dev.rtpbuddy.integration.RTPBuddyApiImpl.start();
+
         RTPBuddyKeys.register();
         dev.rtpbuddy.command.RTPBuddyCommands.register();
         registerEvents();
@@ -216,6 +220,11 @@ public class RTPBuddyClient implements ClientModInitializer {
         }
 
         autoRtp.onLanding(sample, coverage, number);
+
+        // Last: a partner mod sees the landing only once the mod's own work on
+        // it is done, so what it reads back is the finished state and not a
+        // half-updated one.
+        dev.rtpbuddy.integration.RTPBuddyApiImpl.fireLanding(sample);
     }
 
     public static boolean anythingRunning() {
@@ -230,12 +239,12 @@ public class RTPBuddyClient implements ClientModInitializer {
      * running rather than a fixed message, so pressing it when nothing is active
      * says so instead of implying something was stopped.
      */
-    public static void panicStop(String reasonKey) {
+    public static void panicStop(String reasonKey, Object... reasonArgs) {
         java.util.List<String> stopped = new java.util.ArrayList<>();
 
         if (autoRtp.running()) {
             stopped.add(Lang.t("chat.panic.auto", autoRtp.sentThisRun()));
-            autoRtp.stop(reasonKey);
+            autoRtp.stop(reasonKey, reasonArgs);
         }
 
         MinecraftClient client = MinecraftClient.getInstance();

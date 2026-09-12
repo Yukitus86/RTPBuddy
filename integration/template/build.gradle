@@ -1,0 +1,77 @@
+plugins {
+    id 'fabric-loom' version '1.17.20'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+// RTPBuddy's own jar. It is not on any maven, so it lives in libs/ and is put
+// there by integration/install-rtpbuddy-jar.py. Failing here with the fix in
+// the message beats failing later on "package dev.rtpbuddy.api does not exist".
+def rtpbuddyJar = file("libs/rtpbuddy-${project.rtpbuddy_version}.jar")
+if (!rtpbuddyJar.exists()) {
+    throw new GradleException(
+            "RTPBuddy's jar is missing:\n  ${rtpbuddyJar}\n\n" +
+            "Build RTPBuddy once, then run:\n" +
+            "  python ../install-rtpbuddy-jar.py\n\n" +
+            "or drop the jar into libs/ by hand. The version expected here is set by\n" +
+            "rtpbuddy_version in gradle.properties.")
+}
+
+repositories {
+    maven {
+        name = 'Fabric'
+        url = 'https://maven.fabricmc.net/'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Compile against RTPBuddy, never ship it. At runtime the api classes come
+    // from the RTPBuddy mod itself; a second copy inside this jar is the classic
+    // way to end up with two versions of the same interface and an error that
+    // says a class is not an instance of itself.
+    modCompileOnly files(rtpbuddyJar)
+
+    // ...and load it in this mod's own dev client, so `gradlew runClient` here
+    // actually exercises the link instead of only the half that works alone.
+    // Comment this one line out to see what this mod does without RTPBuddy.
+    modLocalRuntime files(rtpbuddyJar)
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'minecraft_version', project.minecraft_version
+    inputs.property 'loader_version', project.loader_version
+    inputs.property 'rtpbuddy_version', project.rtpbuddy_version
+
+    filesMatching('fabric.mod.json') {
+        expand(
+            version: project.version,
+            minecraft_version: project.minecraft_version,
+            loader_version: project.loader_version,
+            rtpbuddy_version: project.rtpbuddy_version
+        )
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:deprecation'
+}

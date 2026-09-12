@@ -271,7 +271,7 @@
 
   <header class="masthead">
     <h1>RTPBuddy Changelog</h1>
-    <span class="span">1.5.8 &rarr; 1.6.23</span>
+    <span class="span">1.5.8 &rarr; 1.6.24</span>
     <p class="lede">
       Just the items, no explanations &mdash; made to forward. The full release
       notes say why each one works the way it does, and every setting is
@@ -284,10 +284,13 @@
     <section class="lang" id="en">
       <div class="lang-head">
         <h2>All changes since 1.5.8</h2>
-        <span class="count">54 items, 24 releases</span>
+        <span class="count">55 items, 25 releases</span>
       </div>
 
       <ol class="log">
+        <li class="rel"><span class="v">1.6.24</span><span class="d">12 Sep 2026</span></li>
+        <li><span class="tag new">New</span><span class="t">An interface a second mod can read the recorded landings through: it declares a class under the <code>rtpbuddy</code> entrypoint, needs no dependency on RTPBuddy and keeps running without it &mdash; the contract, a template and the how-to live in <code>integration/</code></span></li>
+
         <li class="rel"><span class="v">1.6.23</span><span class="d">11 Sep 2026</span></li>
         <li><span class="tag fix">Fixed</span><span class="t">The two-figure counts were the ones missing from the minimap tiles: each count was measured against its own tile, so every square landed in ten times or more came out blank &mdash; which reads as never landed in</span></li>
         <li><span class="tag chg">Changed</span><span class="t">The counts in the minimap tiles are drawn at three quarters of the font size, all at one size, which also lets a tile of eleven pixels carry a count where it used to take thirteen</span></li>
@@ -395,7 +398,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.23 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.24 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. In full:
     <code>RTPBuddy-Release-Notes.html</code>. Every setting:
     <code>RTPBuddy-Settings.html</code>.

@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.23</span>
+    <span class="span">1.5.8 &rarr; 1.6.24</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Twenty-four releases over seven
+      Everything that changed since 1.5.8, newest first. Twenty-five releases over eight
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1624">1.6.24 <span class="n">1 item</span></a></li>
       <li><a href="#v1623">1.6.23 <span class="n">2 items</span></a></li>
       <li><a href="#v1622">1.6.22 <span class="n">1 item</span></a></li>
       <li><a href="#v1621">1.6.21 <span class="n">4 items</span></a></li>
@@ -386,6 +387,57 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.24 -->
+    <section class="release" id="v1624">
+      <div class="rel-head">
+        <h2>1.6.24</h2>
+        <span class="date">12 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        A second mod can read along without depending on RTPBuddy.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag new">New</span>
+          <h3>An interface for other mods</h3>
+          <div class="body">
+            <p>
+              RTPBuddy now hands its recorded landings to any other client-side mod that
+              asks for them. The partner mod declares a class under the
+              <code>rtpbuddy</code> entrypoint in its own <code>fabric.mod.json</code>;
+              RTPBuddy asks the loader for that entrypoint at startup and hands each class
+              it finds the interface: the landings and sittings on record, the live state,
+              a listener for every new landing, and a stop for the auto-RTP loop.
+            </p>
+            <p>
+              The entrypoint is the whole trick. The loader only loads such a class when
+              something asks for that entrypoint &mdash; and the only mod that ever asks
+              for <code>rtpbuddy</code> is RTPBuddy. With RTPBuddy absent the class is
+              never loaded, its imports are never looked up, and there is no error to
+              guard against. The second mod therefore needs no dependency on RTPBuddy, no
+              check and no reflection, and keeps running unchanged without it.
+            </p>
+            <p>
+              What is deliberately missing: any way to send a command, move the player or
+              <em>start</em> the auto-RTP loop. The loop being off until the player starts
+              it by hand is the point of it. Stopping is allowed, because stopping is
+              always safe &mdash; and the second mod gives a reason that goes in the chat.
+            </p>
+            <p>
+              A partner mod that trips over itself while connecting or inside a listener is
+              logged by name and skipped; it can neither take RTPBuddy down nor stop a
+              landing from being recorded. The <code>integration/</code> folder in the
+              repository holds the contract, a buildable template for the second mod and
+              the script that turns it into a project of its own.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.23 -->
     <section class="release" id="v1623">
@@ -2016,7 +2068,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.23 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.24 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

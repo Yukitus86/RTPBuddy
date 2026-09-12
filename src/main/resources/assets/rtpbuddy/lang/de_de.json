@@ -303,6 +303,8 @@
   "rtpbuddy.auto.sent": "/%s gesendet (%s)",
   "rtpbuddy.reason.hotkey": "Tastenkürzel",
   "rtpbuddy.reason.panic_key": "Not-Aus-Taste",
+  "rtpbuddy.reason.api": "von einer anderen Mod",
+  "rtpbuddy.reason.api_with": "von einer anderen Mod: %s",
   "rtpbuddy.reason.disconnect": "Verbindungsabbruch",
   "rtpbuddy.reason.left_world": "Welt verlassen",
   "rtpbuddy.reason.damage": "Schaden genommen",

@@ -1,0 +1,6 @@
+{
+  "rtpcompanion.status.alone": "RTPBuddy is not installed - this mod is running on its own.",
+  "rtpcompanion.status.connected": "Connected to RTPBuddy %s.",
+  "rtpcompanion.status.seen": "Seen %s landings since startup.",
+  "rtpcompanion.status.last": "Last: %s"
+}

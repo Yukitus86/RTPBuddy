@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "rtpcompanion",
+  "version": "${version}",
+  "name": "RTP Companion",
+  "description": "Starting point for a second client-side mod that connects to RTPBuddy. Runs on its own when RTPBuddy is not installed.",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.rtpcompanion.RTPCompanionClient"
+    ],
+    "rtpbuddy": [
+      "dev.rtpcompanion.RTPBuddyLink"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "rtpbuddy": ">=${rtpbuddy_version}"
+  }
+}

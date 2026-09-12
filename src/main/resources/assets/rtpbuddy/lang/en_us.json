@@ -303,6 +303,8 @@
   "rtpbuddy.auto.sent": "sent /%s (%s)",
   "rtpbuddy.reason.hotkey": "hotkey",
   "rtpbuddy.reason.panic_key": "panic key",
+  "rtpbuddy.reason.api": "by another mod",
+  "rtpbuddy.reason.api_with": "by another mod: %s",
   "rtpbuddy.reason.disconnect": "disconnect",
   "rtpbuddy.reason.left_world": "left the world",
   "rtpbuddy.reason.damage": "took damage",

@@ -56,6 +56,7 @@ landing.*
   - [World borders](#world-borders)
   - [What the metrics column reports](#what-the-metrics-column-reports)
 - [Data storage](#data-storage)
+- [Connecting another mod](#connecting-another-mod)
 
 ---
 
@@ -81,19 +82,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.23.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.24.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.23.jar` from the
+Download `rtpbuddy-1.6.24.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.23.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.24.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]
@@ -906,3 +907,38 @@ the schema-3 fields appended after them:
 ```csv
 sample,x,y,z,distance_from_origin,dimension,timestamp,requested_region,session_id,category,from_x,from_y,from_z,from_dimension,travel_distance,latency_ms,biome,surface_y,capture_mode,server,note
 ```
+
+---
+
+## Connecting another mod
+
+RTPBuddy hands its recorded landings to any other client-side mod that asks for
+them. The partner mod implements `dev.rtpbuddy.api.RTPBuddyPlugin` and declares
+it under the `rtpbuddy` entrypoint in its own `fabric.mod.json`:
+
+```json
+"entrypoints": {
+  "client":   [ "dev.example.ExampleClient" ],
+  "rtpbuddy": [ "dev.example.RTPBuddyLink" ]
+}
+```
+
+RTPBuddy asks the loader for that entrypoint at startup and hands each one an
+`RTPBuddyApi`: the landings and sittings on record, the live state, a listener
+for landings as they happen, and a stop for the auto-RTP loop.
+
+The entrypoint is the whole trick. The loader only loads an entrypoint class
+when something asks for that entrypoint, and the only mod that ever asks for
+`rtpbuddy` is RTPBuddy - so with RTPBuddy absent the class is never loaded, its
+`dev.rtpbuddy.api` imports are never looked up, and there is no
+`NoClassDefFoundError` to guard against. The partner mod needs no dependency on
+RTPBuddy, no `isModLoaded` check and no reflection; the one rule is that every
+mention of `dev.rtpbuddy.api` stays in the classes reached from that entrypoint.
+
+There is deliberately no way to send a command, move the player or *start* the
+auto-RTP loop. The loop being off until the player starts it by hand is the
+point of it. Stopping it is allowed, because stopping is always safe.
+
+The api is in the shipped JAR under `dev.rtpbuddy.api`. Everything needed on the
+other side - the contract, a buildable template for a second mod and the script
+that generates a project from it - is in [`integration/`](integration/README.md).
