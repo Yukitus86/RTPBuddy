@@ -940,10 +940,3 @@ auto-RTP loop. The loop being off until the player starts it by hand is the
 point of it. Stopping it is allowed, because stopping is always safe.
 
 The api is in the shipped JAR under `dev.rtpbuddy.api`.
-
-`integration/` is a different thing and answers a different question: how to
-move this mod *into* another Fabric project rather than beside it. It holds a
-byte-exact copy of the source tree, checksums for it, and a self-contained brief
-that names every path, every hurdle and every conflict to check first - written
-so the receiving project needs nothing from this repository. See
-[`integration/README.md`](integration/README.md).
