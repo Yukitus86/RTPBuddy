@@ -1,6 +1,0 @@
-{
-  "rtpcompanion.status.alone": "RTPBuddy ist nicht installiert - diese Mod läuft allein.",
-  "rtpcompanion.status.connected": "Mit RTPBuddy %s verbunden.",
-  "rtpcompanion.status.seen": "%s Landungen seit dem Start gesehen.",
-  "rtpcompanion.status.last": "Zuletzt: %s"
-}
