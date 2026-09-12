@@ -82,19 +82,19 @@ On Windows:
 ```
 
 Build with Java 21 (`JAVA_HOME` pointing at a Java 21 install). The remapped
-production JAR lands in `build/libs/` as `rtpbuddy-1.6.24.jar`.
+production JAR lands in `build/libs/` as `rtpbuddy-1.6.25.jar`.
 
 ---
 
 ## Install
 
-Download `rtpbuddy-1.6.24.jar` from the
+Download `rtpbuddy-1.6.25.jar` from the
 [Releases page](https://github.com/Yukitus86/RTPBuddy/releases/latest),
 or build it yourself with the step above.
 
 1. Install Fabric Loader for Minecraft 1.21.11.
 2. Put Fabric API for 1.21.11 in the instance's `mods` folder.
-3. Put `rtpbuddy-1.6.24.jar` in the same `mods` folder.
+3. Put `rtpbuddy-1.6.25.jar` in the same `mods` folder.
 4. Start Minecraft with the Fabric profile.
 
 > [!NOTE]

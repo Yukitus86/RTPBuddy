@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Release Notes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.24</span>
+    <span class="span">1.5.8 &rarr; 1.6.25</span>
     <p class="lede">
-      Everything that changed since 1.5.8, newest first. Twenty-five releases over eight
+      Everything that changed since 1.5.8, newest first. Twenty-six releases over eight
       days &mdash; nearly every one of them came out of something that showed up
       while actually playing on donutsmp.net.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versions">
     <h2>Versions</h2>
     <ol>
+      <li><a href="#v1625">1.6.25 <span class="n">1 item</span></a></li>
       <li><a href="#v1624">1.6.24 <span class="n">1 item</span></a></li>
       <li><a href="#v1623">1.6.23 <span class="n">2 items</span></a></li>
       <li><a href="#v1622">1.6.22 <span class="n">1 item</span></a></li>
@@ -387,6 +388,43 @@
         you happen to have picked.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.25 -->
+    <section class="release" id="v1625">
+      <div class="rel-head">
+        <h2>1.6.25</h2>
+        <span class="date">12 Sep 2026</span>
+      </div>
+      <p class="rel-lede">
+        The map now stays open through the terrain loading screen as well.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Fixed</span>
+          <h3>The map closed on every dimension change</h3>
+          <div class="body">
+            <p>
+              The map holds itself open through a teleport by declining the game's
+              between-worlds screens while it is up. One of them was missing from the list:
+              the terrain loading screen, which the game shows on 1.21.11 on every change of
+              dimension and whenever the server puts the player into a world afresh. That
+              one replaced the map &mdash; and the fallback that otherwise brings it back
+              took it for a screen opened on purpose and gave up. Both safeguards failed at
+              the same spot.
+            </p>
+            <p>
+              It is on the list now. Declining it is harmless: the screen only watches the
+              loading, it does not drive it, and closing it sends nothing to the server. The
+              world builds up behind the map as it would behind the loading screen. Escape
+              still closes the map.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.24 -->
     <section class="release" id="v1624">
@@ -2066,7 +2104,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.24 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
+    RTPBuddy 1.6.25 &middot; Minecraft 1.21.11 &middot; Fabric, client-side only &mdash;
     the mod does not belong on the server. Every setting is explained one by one in
     <code>SETTINGS.md</code> and on the page <code>RTPBuddy-Settings.html</code> in
     the project folder; the German version is

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.MessageScreen;
 import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.gui.screen.ReconfiguringScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.world.LevelLoadingScreen;
 
 /**
  * Keeps the map on screen across a teleport.
@@ -130,11 +131,27 @@ public final class ScreenKeeper {
      * The client's own between-worlds screens: shown while a teleport or a
      * reconfiguration is in flight, and cleared again by the client itself.
      * Nothing the player opened is in this set.
+     *
+     * <p>{@link LevelLoadingScreen} is the one that matters most and the one
+     * that was missing. On 1.21.11 it is what took over from the old terrain
+     * screen: {@code ClientPlayNetworkHandler.startWorldLoading} puts it up on
+     * every dimension change and every respawn - a shard switch on a server
+     * included - through {@code setScreenAndRender}, which goes via
+     * {@code setScreen} and so past the mixin. Left out of this set, both halves
+     * of the keeper failed at once: the refusal let it replace the map, and the
+     * fallback took it for a screen opened on purpose and gave up.
+     *
+     * <p>Declining it is safe because it only watches. The load progress belongs
+     * to the network handler, the screen's tick reads it for the bar and closes
+     * the screen when it is done, and its close sends nothing to the server - so
+     * the world goes on loading behind the map exactly as it would behind the
+     * loading screen.
      */
     private static boolean transitional(Screen screen) {
         return screen == null
                 || screen instanceof MessageScreen
                 || screen instanceof ProgressScreen
-                || screen instanceof ReconfiguringScreen;
+                || screen instanceof ReconfiguringScreen
+                || screen instanceof LevelLoadingScreen;
     }
 }

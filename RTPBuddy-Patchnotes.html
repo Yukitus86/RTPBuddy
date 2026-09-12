@@ -329,9 +329,9 @@
 
   <header class="masthead">
     <h1>RTPBuddy Patchnotes</h1>
-    <span class="span">1.5.8 &rarr; 1.6.24</span>
+    <span class="span">1.5.8 &rarr; 1.6.25</span>
     <p class="lede">
-      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. F&uuml;nfundzwanzig
+      Alles, was sich seit 1.5.8 geändert hat, neueste Version zuerst. Sechsundzwanzig
       Auslieferungen an acht Tagen &mdash; fast jede davon aus einer Sache, die
       beim echten Spielen auf donutsmp.net aufgefallen ist.
     </p>
@@ -340,6 +340,7 @@
   <nav class="index" aria-label="Versionen">
     <h2>Versionen</h2>
     <ol>
+      <li><a href="#v1625">1.6.25 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1624">1.6.24 <span class="n">1 Punkt</span></a></li>
       <li><a href="#v1623">1.6.23 <span class="n">2 Punkte</span></a></li>
       <li><a href="#v1622">1.6.22 <span class="n">1 Punkt</span></a></li>
@@ -387,6 +388,44 @@
         gewählte Ansicht.
       </p>
     </div>
+
+    <!-- =============================================================== 1.6.25 -->
+    <section class="release" id="v1625">
+      <div class="rel-head">
+        <h2>1.6.25</h2>
+        <span class="date">12.09.2026</span>
+      </div>
+      <p class="rel-lede">
+        Die Karte bleibt jetzt auch &uuml;ber den Ladebildschirm f&uuml;r das Gel&auml;nde offen.
+      </p>
+
+      <div class="entries">
+
+        <article class="entry">
+          <span class="tag fix">Behoben</span>
+          <h3>Die Karte ging bei jedem Dimensionswechsel zu</h3>
+          <div class="body">
+            <p>
+              Die Karte h&auml;lt sich &uuml;ber einen Teleport offen, indem sie die
+              Zwischenbildschirme des Spiels ablehnt, solange sie oben ist. Einer davon
+              fehlte in der Liste: der Ladebildschirm f&uuml;r das Gel&auml;nde, den das Spiel
+              auf 1.21.11 bei jedem Wechsel der Dimension zeigt und immer dann, wenn der
+              Server den Spieler neu in eine Welt setzt. Genau der ersetzte die Karte
+              &mdash; und die R&uuml;ckfallebene, die sie sonst zur&uuml;ckholt, hielt ihn
+              f&uuml;r einen absichtlich ge&ouml;ffneten Bildschirm und gab auf. Beide
+              Sicherungen versagten also an derselben Stelle.
+            </p>
+            <p>
+              Jetzt steht er mit in der Liste. Das Ablehnen ist gefahrlos: der Bildschirm
+              schaut dem Laden nur zu, er treibt es nicht, und beim Schlie&szlig;en schickt
+              er nichts an den Server. Die Welt baut sich hinter der Karte auf wie sonst
+              hinter dem Ladebildschirm. Escape schlie&szlig;t die Karte weiterhin.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </section>
 
     <!-- =============================================================== 1.6.24 -->
     <section class="release" id="v1624">
@@ -2119,7 +2158,7 @@
   </main>
 
   <footer>
-    RTPBuddy 1.6.24 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
+    RTPBuddy 1.6.25 &middot; Minecraft 1.21.11 &middot; Fabric, rein clientseitig &mdash;
     die Mod gehört nicht auf den Server. Jede Einstellung ist einzeln erklärt in
     <code>SETTINGS.md</code> und auf der Seite
     <code>RTPBuddy-Einstellungen.html</code> im Projektordner, die englische
